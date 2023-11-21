@@ -1,0 +1,33 @@
+mat-toolbar-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+
+  button:hover {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .routes {
+    // border: 3px dotted white;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+
+    .active-link {
+      text-underline-position: under;
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .auth {
+    // border: 3px dotted yellow;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .email {
+      font-size: medium;
+    }
+  }
+}
