@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@crown/data": ["libs/data/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],
       "@crown/money": ["libs/money/src/index.ts"],
       "@crown/ui": ["libs/shared/src/index.ts"]
