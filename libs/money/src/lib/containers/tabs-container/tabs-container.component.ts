@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,16 +16,16 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',
 })
-export class TabsContainerComponent {
+export class TabsContainerComponent implements OnInit {
   dataSource!: MatTableDataSource<Money>;
   // dataSourceGroups!: MatTableDataSource<MoneyGroup>;
-  money$ = this.moneyService.money$.pipe(
+  money$ /* = this.moneyService.money$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     })
-  );
+  );*/
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[1];
@@ -41,7 +41,30 @@ export class TabsContainerComponent {
     'userId',
     /*'updatedAt'*/ 'action',
   ];
-  constructor(private dialog: MatDialog, private moneyService: MoneyService) {}
+  constructor(private dialog: MatDialog, private moneyService: MoneyService) {
+    this.money$ = this.moneyService.money$.pipe(
+      tap((data) => {
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      })
+    );
+  }
+
+  ngOnInit(): void {
+    console.log('[this.ngOnInit]', this.paginator);
+
+    if(this.paginator === undefined) {
+      console.log('[this.ngOnInit HERE]', this.paginator);
+      this.money$ = this.moneyService.money$.pipe(
+        tap((data) => {
+          this.dataSource = new MatTableDataSource(data);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        })
+      );
+    }
+  }
 
   add() {
     console.log('add');
