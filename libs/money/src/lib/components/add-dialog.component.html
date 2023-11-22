@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<!-- <loading></loading>
+
+<messages></messages> -->
+
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      [matDatepicker]="myDatepicker"
+      #searchInput
+      formControlName="createdAt"
+    />
+
+    <mat-datepicker-toggle matSuffix [for]="myDatepicker">
+    </mat-datepicker-toggle>
+
+    <mat-datepicker #myDatepicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Cena</mat-label>
+    <input matInput formControlName="price" dotNumber/>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Sklep</mat-label>
+    <input matInput formControlName="fromWho" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Kategoria</mat-label>
+    <input matInput formControlName="type" />
+  </mat-form-field>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Close</button>
+
+  <button mat-raised-button color="primary" #saveButton (click)="save()">
+    Save
+  </button>
+</mat-dialog-actions>

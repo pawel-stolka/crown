@@ -4,10 +4,11 @@ import { MaterialModule } from '@crown/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MoneyService, compareBy } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Colors, Money, MoneyGroup } from '@crown/data';
-import { map, tap } from 'rxjs';
+import { Colors, Money, MoneyGroup, dialogConfig } from '@crown/data';
+import { filter, map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { AddDialogComponent } from '../../components/add-dialog.component';
 
 @Component({
   selector: 'crown-tabs-container',
@@ -142,12 +143,12 @@ export class TabsContainerComponent implements OnInit {
 
   add() {
     console.log('add');
-    // const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
 
-    // dialogRef
-    //   .afterClosed()
-    //   .pipe(filter((val) => !!val))
-    //   .subscribe();
+    dialogRef
+      .afterClosed()
+      .pipe(filter((val) => !!val))
+      .subscribe();
   }
 
   edit(money: Money) {

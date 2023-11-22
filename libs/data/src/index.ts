@@ -3,3 +3,4 @@ export * from './lib/interfaces/MoneyGroup';
 export * from './lib/interfaces/User';
 export * from './lib/configs/constants';
 export * from './lib/configs/Colors'
+export * from './lib/configs/dialogConfig'

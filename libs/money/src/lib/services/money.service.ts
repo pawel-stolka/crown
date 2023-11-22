@@ -18,6 +18,7 @@ export class MoneyService {
       console.log('--moneyGroups--', moneyGroups)
     )
   );
+  headers!: { Authorization: string; };
 
   constructor(private http: HttpClient, private authService: AuthService) {
     console.log('money service CTOR');
@@ -38,10 +39,10 @@ export class MoneyService {
 
   fetchAll$(token: string | null) {
     // TODO: CLEAN IT
-    const headers = { Authorization: `Bearer ${token}` };
-    console.log('[headers]', headers);
+    this.headers = { Authorization: `Bearer ${token}` };
+    console.log('[headers]', this.headers);
 
-    return this.http.get<Money[]>(this.URL, { headers }).pipe(
+    return this.http.get<Money[]>(this.URL, { headers: this.headers }).pipe(
       catchError((err) => {
         const message = 'Something wrong...';
         // this.messages.showErrors(message);
@@ -49,6 +50,16 @@ export class MoneyService {
         return throwError(err);
       }),
       tap((money: Money[]) => this._moneySubj.next(money))
+    );
+  }
+
+  create(changes?: Partial<Money>) {
+    // console.log('create changes', changes);
+    return this.http.post<Money>(this.URL, changes, { headers: this.headers }).pipe(
+      tap((money) => {
+        const update: Money[] = [...this._moneySubj.value, money];
+        this._moneySubj.next(update);
+      })
     );
   }
 
