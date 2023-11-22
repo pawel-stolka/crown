@@ -21,5 +21,32 @@
         simple-list
       </button>
     </div>
+
+    <div class="auth">
+      <button
+        *ngIf="isLoggedOut$ | async"
+        mat-flat-button
+        color="basic"
+        routerLink="auth/login"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Login
+      </button>
+      
+      <ng-container *ngIf="isLoggedIn$ | async">
+        <ng-container *ngIf="user$ | async as user">
+          <div class="email">{{ user.email }}</div>
+          <img
+            *ngIf="user?.pictureUrl"
+            [src]="user.pictureUrl"
+            alt="pictureUrl"
+          />
+          <button mat-flat-button color="basic" (click)="logout()">
+            Logout
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>

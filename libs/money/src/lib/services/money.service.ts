@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
-import { Money, MoneyURL as URL } from "@crown/data";
+import { Money, API_URL } from "@crown/data";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoneyService {
+  private URL = `${API_URL}/api/money`
   private _moneySubj = new BehaviorSubject<Money[]>([]);
   money$ = this._moneySubj.asObservable();
 
@@ -19,7 +20,7 @@ export class MoneyService {
     let bearer = 'Bearer ...'
     const headers = { 'Authorization': bearer }
     return this.http
-      .get<Money[]>(URL, { headers })
+      .get<Money[]>(this.URL, { headers })
       .pipe(tap((money: Money[]) => this._moneySubj.next(money)));
   }
 }

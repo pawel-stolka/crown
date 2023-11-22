@@ -5,7 +5,11 @@ export const appRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    component: HomeComponent
+    component: HomeComponent,
+  },
+  {
+    path: 'auth/login',
+    loadComponent: () => import('@crown/auth').then((m) => m.LoginComponent),
   },
   {
     path: 'money',
