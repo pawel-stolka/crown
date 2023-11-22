@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog } from '@angular/material/dialog';
-import { MoneyService } from '../../services/money.service';
+import { MoneyService, compareBy } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Money } from '@crown/data';
-import { tap } from 'rxjs';
+import { Colors, Money, MoneyGroup } from '@crown/data';
+import { map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
@@ -26,6 +26,80 @@ export class TabsContainerComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
     })
   );*/
+
+  moneyGroups$ = this.moneyService.moneyGroups$;
+  moneyGroupsAsc$ = this.moneyService.moneyGroups$.pipe(
+    map((groups) => groups.sort(compareBy('period', true))),
+    // tap((groups) => console.log('%c groups', Colors.dots, groups))
+  );
+
+  monthsData$ = this.moneyGroupsAsc$.pipe(
+    // tap((x) => console.log('just monthsData', x)),
+    map((data) => this.transformData2(data)),
+    // tap((x) => console.log('%c PS.FIN monthsData', Colors.RED, x))
+  );
+
+  categories = [
+    'auto',
+    'dentysta',
+    'spożywka',
+    'kuropatnik',
+    'na mieście',
+    'PIT',
+    'VAT',
+    'ZUS',
+  ];
+
+  months = [
+    '2023-01',
+    '2023-02',
+    '2023-03',
+    '2023-04',
+    '2023-05',
+    '2023-06',
+    '2023-07',
+    '2023-08',
+    '2023-09',
+    '2023-10',
+    '2023-11',
+    '2023-12',
+  ];
+
+  headers$ = this.moneyGroupsAsc$.pipe(
+    map((groups: MoneyGroup[]) => groups.map((g) => g.typePrices)),
+    map((tps) => tps.map((tp) => tp.map((x) => x.type))),
+    map((types) => types.reduce((acc, curr) => acc.concat(curr), [])),
+    map((types) => [...new Set(types)]),
+    map((types) => types.sort(compareBy('', true)))
+  );
+
+  private transformData2 = (data: any[]) => {
+  // Transform the data for easier rendering
+    const sums: any = {};
+    this.categories.forEach((category) => {
+      sums[category] = 0;
+    });
+    // console.log('%c [transformData2]', Colors.GREEN, data);
+    const transformedData = data.map((item) => {
+      const categoryPrices: any = {};
+
+      item.typePrices.forEach((typePrice: any) => {
+        categoryPrices[typePrice.type] = typePrice.price;
+        sums[typePrice.type] += typePrice.price;
+      });
+      let fin = { period: item.period, ...categoryPrices };
+      // console.log('%c [transformData2 | FIN]', Colors.GOLDEN, fin);
+      return fin;
+    });
+
+      // Add a row for the column sums
+      const columnSumsRow: any = { period: 'Suma' };
+      this.categories.forEach((category) => {
+        columnSumsRow[category] = sums[category];
+      });
+      transformedData.push(columnSumsRow);
+      return transformedData;
+  };
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[1];
@@ -52,18 +126,18 @@ export class TabsContainerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('[this.ngOnInit]', this.paginator);
+  //   console.log('[this.ngOnInit]', this.paginator);
 
-    if(this.paginator === undefined) {
-      console.log('[this.ngOnInit HERE]', this.paginator);
-      this.money$ = this.moneyService.money$.pipe(
-        tap((data) => {
-          this.dataSource = new MatTableDataSource(data);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        })
-      );
-    }
+  //   if(this.paginator === undefined) {
+  //     console.log('[this.ngOnInit HERE]', this.paginator);
+  //     this.money$ = this.moneyService.money$.pipe(
+  //       tap((data) => {
+  //         this.dataSource = new MatTableDataSource(data);
+  //         this.dataSource.sort = this.sort;
+  //         this.dataSource.paginator = this.paginator;
+  //       })
+  //     );
+  //   }
   }
 
   add() {

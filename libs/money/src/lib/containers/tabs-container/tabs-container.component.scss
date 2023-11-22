@@ -5,16 +5,27 @@ mat-tab-group {
   // border: 5px dotted magenta;
 }
 
-.table {
-  // width: 95%;
-  border: 3px dotted dodgerblue;
+// .table,
 
-  // tr > th {
-  //   border: 2px solid dodgerblue;
-  //   // background-color: aliceblue;
-  // }
-  // tr > td {
-  //   border: 1px dotted dodgerblue;
-  //   // background-color:burlywood;
-  // }
+.next-table {
+  width: 100%;
+  // border: 3px dotted dodgerblue;
+
+  tr > th {
+    border: 2px solid dodgerblue;
+    // background-color: aliceblue;
+  }
+  tr > td {
+    height: 40px;
+    border: 1px dotted dodgerblue;
+    // background-color:burlywood;
+  }
+}
+
+.center-align {
+  text-align: center;
+}
+
+.bold {
+  font-weight: bold;
 }

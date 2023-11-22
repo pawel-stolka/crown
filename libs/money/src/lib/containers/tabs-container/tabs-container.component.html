@@ -1,15 +1,25 @@
-<p>tabs-container works!</p>
+<div class="actions">
+  <button mat-fab color="accent" (click)="add()">
+    <!-- <mat-icon>person_add</mat-icon> -->
+    <mat-icon>add</mat-icon>
+    <!-- Dodaj -->
+  </button>
+</div>
+
 
 <mat-tab-group>
-  <mat-tab label="simpleTable">
+  <mat-tab label="groupy">
+    <ng-container *ngTemplateOutlet="nextMonthGroups"></ng-container>
+  </mat-tab>
+  <mat-tab label="simple">
     <ng-container *ngTemplateOutlet="simpleTable"></ng-container>
   </mat-tab>
   <!-- <mat-tab label="simpleList">
     <ng-container *ngTemplateOutlet="simpleList"></ng-container>
   </mat-tab> -->
-  <mat-tab label="moneyGroups">
+  <!-- <mat-tab label="moneyGroups">
     <ng-container *ngTemplateOutlet="moneyGroups"></ng-container>
-  </mat-tab>
+  </mat-tab> -->
 </mat-tab-group>
 
 <ng-template #simpleList>
@@ -96,4 +106,64 @@
   </ng-container>
 </ng-template>
 
-<ng-template #moneyGroups></ng-template>
+<ng-template #moneyGroups>
+  <ng-container *ngIf="moneyGroupsAsc$ | async as moneyGroups">
+    <!-- <pre>{{ moneyGroups | json }}</pre> -->
+
+    <div class="table">
+      <ng-container *ngIf="headers$ | async as headers">
+        <div class="headers">
+          <span *ngFor="let header of headers">
+            {{ header }}
+          </span>
+        </div>
+
+        <ng-container *ngFor="let month of months; let monthIndex = index">
+          <div class="month">{{ month }}</div>
+          <!-- <div
+            *ngFor="let category of headers; let categoryIndex = index"
+            class="cell"
+          >
+          {{ month | json }}
+            {{ month[monthIndex][categoryIndex] }}
+          </div> -->
+        </ng-container>
+      </ng-container>
+      <!-- <ng-container *ngFor="let month of monthsData$ | async">
+        <div class="month">{{ month | json }}</div>
+        <div class="month">{{ month.period }}</div>
+        <div *ngFor="let category of categories" class="cell">
+          Display data for the corresponding month and category
+        </div>
+      </ng-container> -->
+    </div>
+    </ng-container>
+
+</ng-template>
+
+<ng-template #nextMonthGroups>
+  <ng-container *ngIf="monthsData$ | async as monthsData">
+    <!-- <pre>{{ monthsData | json }}</pre> -->
+    <table class="next-table mat-elevation-z8">
+      <tr>
+        <th>Miesiąc</th>
+        <th *ngFor="let category of categories">
+          {{ category }}
+        </th>
+      </tr>
+      <tr *ngFor="let item of monthsData">
+        <td class="center-align">{{ item.period }}</td>
+        <td class="center-align" *ngFor="let category of categories">
+          {{ item[category]  || '-' }}
+          <!-- | currency:"zł":"" -->
+        </td>
+      </tr>
+      <tr>
+        <!-- <td>Total</td> -->
+        <!-- <td *ngFor="let category of categorySums">
+          {{ categorySums[category]  || '-'  }}
+        </td> -->
+      </tr>
+    </table>
+  </ng-container>
+</ng-template>

@@ -9,5 +9,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideAnimations(),
     provideHttpClient(),
+    // {
+    //   provide: PermissionsService
+    // }
   ],
 };
