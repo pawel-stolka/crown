@@ -12,14 +12,15 @@ import { AuthService } from "libs/auth/src/lib/services/auth.service";
   styleUrl: './nav.component.scss',
 })
 export class NavComponent {
-  user$ = this.auth.user$;
-  isLoggedIn$ = this.auth.isLoggedIn$;
-  isLoggedOut$ = this.auth.isLoggedOut$;
+  token$ = this.authService.token$;
+  user$ = this.authService.user$;
+  isLoggedIn$ = this.authService.isLoggedIn$;
+  isLoggedOut$ = this.authService.isLoggedOut$;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   logout() {
-    this.auth.logout();
+    this.authService.logout();
     this.router.navigateByUrl('/auth/login');
   }
 }

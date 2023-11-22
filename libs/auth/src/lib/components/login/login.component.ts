@@ -19,6 +19,7 @@ import { MaterialModule } from '@crown/material';
 })
 export class LoginComponent {
   form: FormGroup;
+  token$ = this.auth.token$;
 
   constructor(
     private fb: FormBuilder,
