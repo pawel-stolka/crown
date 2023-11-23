@@ -11,19 +11,18 @@
         CROWN
       </button>
     </div>
-    <div class="routes">
+    <div class="routes" *ngIf="isLoggedIn$ | async">
       <button
         mat-stroked-button
         routerLink="money"
         routerLinkActive="active-link"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        simple-list
+        Wydatki
       </button>
     </div>
 
     <div class="auth">
-      <!-- <ng-container *ngIf="token$ | async as token">{{ token | json }}</ng-container> -->
       <button
         *ngIf="isLoggedOut$ | async"
         mat-flat-button
@@ -32,27 +31,14 @@
         routerLinkActive="active-link"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        Login
+        Zaloguj się
+
       </button>
       <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
-        <div>{{ tokenEmail.email }}</div>
-        <button mat-flat-button color="basic" (click)="logout()">
-          Logout
+        <div class="email">{{ tokenEmail.email }}</div>
+        <button mat-flat-button color="warn" (click)="logout()">
+          <mat-icon>power_settings_new</mat-icon>
         </button>
-      <ng-container *ngIf="isLoggedIn$ | async">
-
-        </ng-container>
-        <!-- <ng-container *ngIf="user$ | async as user">
-          <div class="email">{{ user.email }}</div>
-          <img
-            *ngIf="user?.pictureUrl"
-            [src]="user.pictureUrl"
-            alt="pictureUrl"
-          />
-          <button mat-flat-button color="basic" (click)="logout()">
-            Logout
-          </button>
-        </ng-container> -->
       </ng-container>
     </div>
   </mat-toolbar-row>

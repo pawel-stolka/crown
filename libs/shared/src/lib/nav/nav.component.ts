@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from "@crown/material";
+import { MaterialModule } from '@crown/material';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from "libs/auth/src/lib/services/auth.service";
+import { AuthService } from 'libs/auth/src/lib/services/auth.service';
 
 @Component({
   selector: 'crown-nav',
@@ -13,7 +13,6 @@ import { AuthService } from "libs/auth/src/lib/services/auth.service";
 })
 export class NavComponent {
   tokenEmail$ = this.authService.tokenEmail$;
-  user$ = this.authService.user$;
   isLoggedIn$ = this.authService.isLoggedIn$;
   isLoggedOut$ = this.authService.isLoggedOut$;
 
