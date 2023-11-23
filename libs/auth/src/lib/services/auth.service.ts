@@ -11,13 +11,23 @@ import {
   throwError,
 } from 'rxjs';
 
+export interface TokenEmail {
+  token: string;
+  email: string;
+}
+
+const AUTH_TOKEN_EMAIL = 'AUTH_TOKEN_EMAIL';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
   private _userSubj = new BehaviorSubject<User | null>(null);
   private _tokenSubj = new BehaviorSubject<string | null>(null);
 
+  tokenEmail$: Observable<TokenEmail | null> =
+    this._tokenEmailSubj.asObservable();
   user$: Observable<User | null> = this._userSubj.asObservable();
   token$: Observable<string | null> = this._tokenSubj.asObservable();
 
@@ -25,12 +35,22 @@ export class AuthService {
   isLoggedOut$: Observable<boolean>;
 
   constructor(private http: HttpClient) {
-    this.isLoggedIn$ = this.token$.pipe(map((token) => !!token));
+    this.isLoggedIn$ = this.tokenEmail$.pipe(
+      tap((te) => console.log('te', te)),
+      map((te) => !!te?.token),
+      tap((te) => console.log('te2', te)),
+    );
     this.isLoggedOut$ = this.isLoggedIn$.pipe(
       // tap((x) => console.log('this.isLoggedOut$', x)),
       map((loggedIn) => !loggedIn)
       // tap((x) => console.log('this.isLoggedOut$ FIN', x)),
     );
+    // this.isLoggedIn$ = this.token$.pipe(map((token) => !!token));
+    // this.isLoggedOut$ = this.isLoggedIn$.pipe(
+    //   // tap((x) => console.log('this.isLoggedOut$', x)),
+    //   map((loggedIn) => !loggedIn)
+    //   // tap((x) => console.log('this.isLoggedOut$ FIN', x)),
+    // );
 
     const user = localStorage.getItem(AUTH_DATA);
     if (!!user) {
@@ -55,8 +75,12 @@ export class AuthService {
       tap((res) => {
         // this._userSubj.next(user);
         // localStorage.setItem(AUTH_DATA, JSON.stringify(user));
-        this._tokenSubj.next(res.token);
-        localStorage.setItem(AUTH_TOKEN, res.token); // JSON.stringify(token));
+        // this._tokenSubj.next(res.token);
+        // localStorage.setItem(AUTH_TOKEN, res.token); // JSON.stringify(token));
+        this._tokenEmailSubj.next(res);
+        localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
+
+        // localStorage.setItem(AUTH_TOKEN, res.token); // JSON.stringify(token));
       }),
       shareReplay()
     );

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AUTH_DATA, Money } from '@crown/data';
+import { AUTH_DATA, AUTH_TOKEN_EMAIL, Money } from '@crown/data';
 import { MoneyService } from '../services/money.service';
 import { MaterialModule } from '@crown/material';
 
@@ -23,17 +23,17 @@ export class AddDialogComponent {
     private dialogRef: MatDialogRef<AddDialogComponent>,
     private moneyService: MoneyService
     ) {
-    // const _user = localStorage.getItem(AUTH_DATA) ?? '';
-    // const email = JSON.parse(_user)?.email
-    // const userId = `${email}`;
-    const userId = `userId`;
+    const _user = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? '';
+    const email = JSON.parse(_user)?.email
+    const userId = `${email}`;
+    // const userId = `userId`;
 
     this.form = this.fb.group({
       userId: [userId, Validators.required],
       type: ['', Validators.required],
       price: [null, Validators.required],
       fromWho: ['', Validators.required],
-      createdAt: [new Date()],
+      createdAt: [new Date(), Validators.required],
       details: ['', Validators.required],
       extra: ['', Validators.required],
     });

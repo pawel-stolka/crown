@@ -34,7 +34,8 @@
       >
         Login
       </button>
-      <ng-container *ngIf="token$ | async as token">
+      <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
+        <div>{{ tokenEmail.email }}</div>
         <button mat-flat-button color="basic" (click)="logout()">
           Logout
         </button>

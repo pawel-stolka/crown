@@ -1,6 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  filter,
+  map,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Money, API_URL, MoneyGroup } from '@crown/data';
 import { AuthService } from 'libs/auth/src/lib/services/auth.service';
 
@@ -18,7 +28,7 @@ export class MoneyService {
       console.log('--moneyGroups--', moneyGroups)
     )
   );
-  headers!: { Authorization: string; };
+  headers!: { Authorization: string };
 
   constructor(private http: HttpClient, private authService: AuthService) {
     console.log('money service CTOR');
@@ -26,14 +36,21 @@ export class MoneyService {
   }
 
   data$() {
-    return this.authService.token$.pipe(
+    return this.authService.tokenEmail$.pipe(
       catchError((err) => {
         const message = 'Could not get token';
         // this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);
       }),
-      switchMap((token) => this.fetchAll$(token))
+      filter((x) => !!x),
+      switchMap((tokenEmail) => {
+        if (tokenEmail?.token) {
+          return this.fetchAll$(tokenEmail.token);
+        } else {
+          return of(null);
+        }
+      })
     );
   }
 
@@ -55,12 +72,14 @@ export class MoneyService {
 
   create(changes?: Partial<Money>) {
     // console.log('create changes', changes);
-    return this.http.post<Money>(this.URL, changes, { headers: this.headers }).pipe(
-      tap((money) => {
-        const update: Money[] = [...this._moneySubj.value, money];
-        this._moneySubj.next(update);
-      })
-    );
+    return this.http
+      .post<Money>(this.URL, changes, { headers: this.headers })
+      .pipe(
+        tap((money) => {
+          const update: Money[] = [...this._moneySubj.value, money];
+          this._moneySubj.next(update);
+        })
+      );
   }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {

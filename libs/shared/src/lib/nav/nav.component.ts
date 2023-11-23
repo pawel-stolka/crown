@@ -12,7 +12,7 @@ import { AuthService } from "libs/auth/src/lib/services/auth.service";
   styleUrl: './nav.component.scss',
 })
 export class NavComponent {
-  token$ = this.authService.token$;
+  tokenEmail$ = this.authService.tokenEmail$;
   user$ = this.authService.user$;
   isLoggedIn$ = this.authService.isLoggedIn$;
   isLoggedOut$ = this.authService.isLoggedOut$;

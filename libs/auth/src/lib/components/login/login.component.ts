@@ -19,7 +19,7 @@ import { MaterialModule } from '@crown/material';
 })
 export class LoginComponent {
   form: FormGroup;
-  token$ = this.auth.token$;
+  // tokenEmail$ = this.auth.tokenEmail$
 
   constructor(
     private fb: FormBuilder,
