@@ -1,32 +1,17 @@
 <div class="actions">
   <button mat-fab color="accent" (click)="add()">
-    <!-- <mat-icon>person_add</mat-icon> -->
     <mat-icon>add</mat-icon>
-    <!-- Dodaj -->
   </button>
 </div>
 
-
 <mat-tab-group>
-  <mat-tab label="groupy">
-    <ng-container *ngTemplateOutlet="nextMonthGroups"></ng-container>
+  <mat-tab label="Miesiącami">
+    <ng-container *ngTemplateOutlet="monthGroups"></ng-container>
   </mat-tab>
-  <mat-tab label="simple">
+  <mat-tab label="Wpisy">
     <ng-container *ngTemplateOutlet="simpleTable"></ng-container>
   </mat-tab>
-  <!-- <mat-tab label="simpleList">
-    <ng-container *ngTemplateOutlet="simpleList"></ng-container>
-  </mat-tab> -->
-  <!-- <mat-tab label="moneyGroups">
-    <ng-container *ngTemplateOutlet="moneyGroups"></ng-container>
-  </mat-tab> -->
 </mat-tab-group>
-
-<ng-template #simpleList>
-  <ng-container *ngIf="money$ | async as money">
-    <pre>{{ money | json }}</pre>
-  </ng-container>
-</ng-template>
 
 <ng-template #simpleTable>
   <ng-container *ngIf="money$ | async as money">
@@ -81,7 +66,7 @@
                 <mat-icon>edit</mat-icon>
               </button>
               <!-- confirmDialog="'Are you sure?'" -->
-              <button mat-button color="warn" (click)="remove(el.id)">
+              <button mat-button color="warn" (click)="remove(el)">
                 <mat-icon>delete</mat-icon>
               </button>
               <!-- <button confirmDialog="'Are you sure you want to perform this action?'">del</button> -->
@@ -106,64 +91,36 @@
   </ng-container>
 </ng-template>
 
-<ng-template #moneyGroups>
-  <ng-container *ngIf="moneyGroupsAsc$ | async as moneyGroups">
-    <!-- <pre>{{ moneyGroups | json }}</pre> -->
+<ng-template #monthGroups>
+  <!-- <ng-container *ngIf="categories$ | async as categories">
+    <div>{{ categories | json }}</div>
+  </ng-container> -->
 
-    <div class="table">
-      <ng-container *ngIf="headers$ | async as headers">
-        <div class="headers">
-          <span *ngFor="let header of headers">
-            {{ header }}
-          </span>
-        </div>
-
-        <ng-container *ngFor="let month of months; let monthIndex = index">
-          <div class="month">{{ month }}</div>
-          <!-- <div
-            *ngFor="let category of headers; let categoryIndex = index"
-            class="cell"
-          >
-          {{ month | json }}
-            {{ month[monthIndex][categoryIndex] }}
-          </div> -->
-        </ng-container>
-      </ng-container>
-      <!-- <ng-container *ngFor="let month of monthsData$ | async">
-        <div class="month">{{ month | json }}</div>
-        <div class="month">{{ month.period }}</div>
-        <div *ngFor="let category of categories" class="cell">
-          Display data for the corresponding month and category
-        </div>
-      </ng-container> -->
-    </div>
-    </ng-container>
-
-</ng-template>
-
-<ng-template #nextMonthGroups>
   <ng-container *ngIf="monthsData$ | async as monthsData">
     <!-- <pre>{{ monthsData | json }}</pre> -->
-    <table class="next-table mat-elevation-z8">
-      <tr>
-        <th>Miesiąc</th>
-        <th *ngFor="let category of categories">
-          {{ category }}
-        </th>
-      </tr>
-      <tr *ngFor="let item of monthsData">
-        <td class="center-align">{{ item.period }}</td>
-        <td class="center-align" *ngFor="let category of categories">
-          {{ item[category]  || '-' }}
-          <!-- | currency:"zł":"" -->
-        </td>
-      </tr>
-      <tr>
-        <!-- <td>Total</td> -->
-        <!-- <td *ngFor="let category of categorySums">
+    <ng-container *ngIf="categories$ | async as categories">
+      <table class="next-table mat-elevation-z8">
+        <tr>
+          <th>Miesiąc</th>
+          <th *ngFor="let category of categories">
+            {{ category }}
+          </th>
+        </tr>
+
+        <tr *ngFor="let item of monthsData">
+          <td>{{ item.period }}</td>
+          <td *ngFor="let category of categories">
+            {{ item[category] || '-' }}
+            <!-- | currency:"zł":"" -->
+          </td>
+        </tr>
+        <tr>
+          <!-- <td>Total</td> -->
+          <!-- <td *ngFor="let category of categorySums">
           {{ categorySums[category]  || '-'  }}
         </td> -->
-      </tr>
-    </table>
+        </tr>
+      </table>
+    </ng-container>
   </ng-container>
 </ng-template>

@@ -11,7 +11,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Money, API_URL, MoneyGroup } from '@crown/data';
+import { Money, API_URL, MoneyGroup, TokenEmail } from '@crown/data';
 import { AuthService } from 'libs/auth/src/lib/services/auth.service';
 
 @Injectable({
@@ -29,6 +29,7 @@ export class MoneyService {
     )
   );
   headers!: { Authorization: string };
+  tokenEmail: TokenEmail | null = null;
 
   constructor(private http: HttpClient, private authService: AuthService) {
     console.log('money service CTOR');
@@ -44,6 +45,7 @@ export class MoneyService {
         return throwError(err);
       }),
       filter((x) => !!x),
+      tap(tokenEmail => this.tokenEmail = tokenEmail),
       switchMap((tokenEmail) => {
         if (tokenEmail?.token) {
           return this.fetchAll$(tokenEmail.token);
@@ -57,16 +59,32 @@ export class MoneyService {
   fetchAll$(token: string | null) {
     // TODO: CLEAN IT
     this.headers = { Authorization: `Bearer ${token}` };
-    console.log('[headers]', this.headers);
+    // console.log('[headers]', this.headers);
 
     return this.http.get<Money[]>(this.URL, { headers: this.headers }).pipe(
       catchError((err) => {
-        const message = 'Something wrong...';
+        const message = '[fetchAll] Something wrong...';
         // this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);
       }),
       tap((money: Money[]) => this._moneySubj.next(money))
+    );
+  }
+
+  getCategories$() {
+    const URL = `${API_URL}/api/unique-types`;
+    return this.http.get<string[]>(URL, { headers: this.headers }).pipe(
+      catchError((err) => {
+        const message = '[getCategories] Something wrong...';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap((types: string[]) => {
+        console.log('[getCategories$]', types);
+
+      })
     );
   }
 

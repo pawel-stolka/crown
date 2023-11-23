@@ -1,5 +1,3 @@
-// .table,
-
 .next-table {
   width: 100%;
 
@@ -9,9 +7,11 @@
   tr > td {
     height: 40px;
     border: 1px dotted dodgerblue;
+    text-align: center;
   }
 }
 
-.center-align {
-  text-align: center;
+.table,
+.next-table {
+  margin-top: 30px;
 }

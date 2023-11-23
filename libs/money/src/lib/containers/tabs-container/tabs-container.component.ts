@@ -20,36 +20,28 @@ import { AddDialogComponent } from '../../components/add-dialog.component';
 export class TabsContainerComponent implements OnInit {
   dataSource!: MatTableDataSource<Money>;
   // dataSourceGroups!: MatTableDataSource<MoneyGroup>;
-  money$ /* = this.moneyService.money$.pipe(
+  money$ = this.moneyService.money$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     })
-  );*/
-
-  moneyGroups$ = this.moneyService.moneyGroups$;
-  moneyGroupsAsc$ = this.moneyService.moneyGroups$.pipe(
-    map((groups) => groups.sort(compareBy('period', true))),
-    // tap((groups) => console.log('%c groups', Colors.dots, groups))
   );
 
-  monthsData$ = this.moneyGroupsAsc$.pipe(
+  moneyGroups$ = this.moneyService.moneyGroups$.pipe(
+    map((groups) => groups.sort(compareBy('period', true)))
+  );
+
+  monthsData$ = this.moneyGroups$.pipe(
     // tap((x) => console.log('just monthsData', x)),
-    map((data) => this.transformData2(data)),
-    // tap((x) => console.log('%c PS.FIN monthsData', Colors.RED, x))
+    map((data) => this.transformData(data)),
+    tap((x) => console.log('%c PS.FIN monthsData', Colors.RED, x))
   );
 
-  categories = [
-    'auto',
-    'dentysta',
-    'spożywka',
-    'kuropatnik',
-    'na mieście',
-    'PIT',
-    'VAT',
-    'ZUS',
-  ];
+  categories: string[] = [];
+  categories$ = this.moneyService
+    .getCategories$()
+    .pipe(tap((categories) => (this.categories = categories)));
 
   months = [
     '2023-01',
@@ -66,7 +58,7 @@ export class TabsContainerComponent implements OnInit {
     '2023-12',
   ];
 
-  headers$ = this.moneyGroupsAsc$.pipe(
+  headers$ = this.moneyGroups$.pipe(
     map((groups: MoneyGroup[]) => groups.map((g) => g.typePrices)),
     map((tps) => tps.map((tp) => tp.map((x) => x.type))),
     map((types) => types.reduce((acc, curr) => acc.concat(curr), [])),
@@ -74,14 +66,13 @@ export class TabsContainerComponent implements OnInit {
     map((types) => types.sort(compareBy('', true)))
   );
 
-  private transformData2 = (data: any[]) => {
-  // Transform the data for easier rendering
+  private transformData = (data: any[]) => {
+    // Transform the data for easier rendering
     const sums: any = {};
     this.categories.forEach((category) => {
       sums[category] = 0;
     });
-    // console.log('%c [transformData2]', Colors.GREEN, data);
-    const transformedData = data.map((item) => {
+    const updated = data.map((item) => {
       const categoryPrices: any = {};
 
       item.typePrices.forEach((typePrice: any) => {
@@ -93,13 +84,13 @@ export class TabsContainerComponent implements OnInit {
       return fin;
     });
 
-      // Add a row for the column sums
-      const columnSumsRow: any = { period: 'Suma' };
-      this.categories.forEach((category) => {
-        columnSumsRow[category] = sums[category];
-      });
-      transformedData.push(columnSumsRow);
-      return transformedData;
+    // Add a row for the column sums
+    const columnSumsRow: any = { period: 'Suma' };
+    this.categories.forEach((category) => {
+      columnSumsRow[category] = sums[category];
+    });
+    updated.push(columnSumsRow);
+    return updated;
   };
 
   pageSizeOptions = [5, 10, 25];
@@ -116,30 +107,9 @@ export class TabsContainerComponent implements OnInit {
     'userId',
     /*'updatedAt'*/ 'action',
   ];
-  constructor(private dialog: MatDialog, private moneyService: MoneyService) {
-    this.money$ = this.moneyService.money$.pipe(
-      tap((data) => {
-        this.dataSource = new MatTableDataSource(data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      })
-    );
-  }
+  constructor(private dialog: MatDialog, private moneyService: MoneyService) {}
 
-  ngOnInit(): void {
-  //   console.log('[this.ngOnInit]', this.paginator);
-
-  //   if(this.paginator === undefined) {
-  //     console.log('[this.ngOnInit HERE]', this.paginator);
-  //     this.money$ = this.moneyService.money$.pipe(
-  //       tap((data) => {
-  //         this.dataSource = new MatTableDataSource(data);
-  //         this.dataSource.sort = this.sort;
-  //         this.dataSource.paginator = this.paginator;
-  //       })
-  //     );
-  //   }
-  }
+  ngOnInit(): void {}
 
   add() {
     console.log('add');
