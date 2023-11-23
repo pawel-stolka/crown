@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { authGuard } from 'libs/auth/src/lib/guards/auth.guard';
+import { AuthGuard } from '@crown/auth';
 
 export const appRoutes: Route[] = [
   {
@@ -14,7 +14,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'money',
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
     loadChildren: () => import('@crown/money').then((m) => m.MoneyModule),
   },
 ];

@@ -1,5 +1,7 @@
 <h2 mat-dialog-title>{{ title }}</h2>
 
+<!-- <pre>{{ form.value | json }}</pre> -->
+
 <!-- <loading></loading>
 
 <messages></messages> -->
@@ -21,9 +23,8 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Cena</mat-label>
-    <input matInput formControlName="price" dotNumber/>
+    <input matInput formControlName="price" dotNumber />
   </mat-form-field>
-
 
   <mat-form-field appearance="outline">
     <mat-label>Kategoria</mat-label>
@@ -34,13 +35,18 @@
     <mat-label>(Sklep)</mat-label>
     <input matInput formControlName="fromWho" />
   </mat-form-field>
-
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button mat-raised-button (click)="close()">Close</button>
 
-  <button mat-raised-button color="primary" #saveButton (click)="save()">
+  <button
+    mat-raised-button
+    color="primary"
+    #saveButton
+    [disabled]="!form.valid"
+    (click)="save()"
+  >
     Save
   </button>
 </mat-dialog-actions>

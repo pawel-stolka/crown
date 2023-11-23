@@ -3,13 +3,16 @@ mat-toolbar-row {
   justify-content: space-between;
   gap: 50px;
 
+  .mat-icon {
+    margin: 0;
+  }
+
   button:hover {
     cursor: pointer;
     background: rgba(255, 255, 255, 0.2);
   }
 
   .routes {
-    // border: 3px dotted white;
     display: flex;
     justify-content: flex-start;
     width: 100%;
@@ -21,7 +24,6 @@ mat-toolbar-row {
   }
 
   .auth {
-    // border: 3px dotted yellow;
     display: flex;
     align-items: center;
     gap: 10px;
