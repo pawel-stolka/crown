@@ -45,7 +45,7 @@ export class MoneyService {
         return throwError(err);
       }),
       filter((x) => !!x),
-      tap(tokenEmail => this.tokenEmail = tokenEmail),
+      tap((tokenEmail) => (this.tokenEmail = tokenEmail)),
       switchMap((tokenEmail) => {
         if (tokenEmail?.token) {
           return this.fetchAll$(tokenEmail.token);
@@ -73,18 +73,16 @@ export class MoneyService {
   }
 
   getCategories$() {
-    const URL = `${API_URL}/api/unique-types`;
-    return this.http.get<string[]>(URL, { headers: this.headers }).pipe(
+    const URL = `${API_URL}/api/unique-types-grouped`;
+    return this.http.get<{type: string, count: number}[]>(URL, { headers: this.headers }).pipe(
       catchError((err) => {
         const message = '[getCategories] Something wrong...';
         // this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);
       }),
-      tap((types: string[]) => {
-        console.log('[getCategories$]', types);
-
-      })
+      tap((countedCats) => console.log('[getCategories$]', countedCats)),
+      map(countedCats => countedCats.map(c => c.type))
     );
   }
 
