@@ -7,6 +7,7 @@ import {
   filter,
   map,
   of,
+  shareReplay,
   switchMap,
   tap,
   throwError,
@@ -31,7 +32,7 @@ export class MoneyService {
   tokenEmail: TokenEmail | null = null;
 
   get money() {
-    return this._moneySubj.value
+    return this._moneySubj.value;
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
@@ -77,16 +78,18 @@ export class MoneyService {
 
   getCategories$() {
     const URL = `${API_URL}/api/unique-types-grouped`;
-    return this.http.get<{type: string, count: number}[]>(URL, { headers: this.headers }).pipe(
-      catchError((err) => {
-        const message = '[getCategories] Something wrong...';
-        // this.messages.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      }),
-      tap((countedCats) => console.log('[getCategories$]', countedCats)),
-      map(countedCats => countedCats.map(c => c.type))
-    );
+    return this.http
+      .get<{ type: string; count: number }[]>(URL, { headers: this.headers })
+      .pipe(
+        catchError((err) => {
+          const message = '[getCategories] Something wrong...';
+          // this.messages.showErrors(message);
+          console.log(message, err);
+          return throwError(err);
+        }),
+        tap((countedCats) => console.log('[getCategories$]', countedCats)),
+        map((countedCats) => countedCats.map((c) => c.type))
+      );
   }
 
   create(changes?: Partial<Money>) {
@@ -101,19 +104,80 @@ export class MoneyService {
       );
   }
 
-  delete(id: string) {
-    return this.http.delete<Money>(`${this.URL}/${id}`, { headers: this.headers }).pipe(
+  save(moneyId: string, changes: Partial<Money>): Observable<any> {
+    const moneyList = this._moneySubj.value;
+    console.log('[this.save]', moneyId, moneyList);
+
+    const index = moneyList.findIndex((money) => money.id === moneyId);
+    const newMoney: Money = {
+      ...moneyList[index],
+      ...changes,
+    };
+
+    // copy of moneyList
+    const newMoneyList: Money[] = moneyList.slice(0);
+    console.log('save b4', newMoneyList[index]);
+    newMoneyList[index] = newMoney;
+    console.log('save AFTER?', newMoneyList[index]);
+
+    this._moneySubj.next(newMoneyList);
+
+    // console.log('..TODO');
+    return this.http
+      .put(`${this.URL}/${moneyId}`, changes, { headers: this.headers })
+      .pipe(
+        catchError((err) => {
+          const message = 'Could not save Money';
+          // this.messages.showErrors(message);
+          console.log(message, err);
+          return throwError(err);
+        }),
+        tap((x) => console.log('UPDATE result', x)),
+        shareReplay()
+      );
+
+  }
+  /*
+  saveCourse(courseId: string, changes: Partial<Course>): Observable<any> {
+    const courses = this._coursesSubj.value;
+
+    const index = courses.findIndex((course) => course.id === courseId);
+    const newCourse: Course = {
+      ...courses[index],
+      ...changes,
+    };
+
+    // copy of courses
+    const newCourses: Course[] = courses.slice(0);
+    newCourses[index] = newCourse;
+    this._coursesSubj.next(newCourses);
+
+    return this.http.put(`/api/courses/${courseId}`, changes).pipe(
       catchError((err) => {
-        const message = '[delete] Something wrong...';
-        // this.messages.showErrors(message);
+        const message = "Could not save course";
+        this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);
       }),
-      tap((money: Money) => {
-        const newMoneyList = this.money.filter((x) => x.id !== money.id);
-        this._moneySubj.next(newMoneyList);
-      })
+      shareReplay()
     );
+  }*/
+
+  delete(id: string) {
+    return this.http
+      .delete<Money>(`${this.URL}/${id}`, { headers: this.headers })
+      .pipe(
+        catchError((err) => {
+          const message = '[delete] Something wrong...';
+          // this.messages.showErrors(message);
+          console.log(message, err);
+          return throwError(err);
+        }),
+        tap((money: Money) => {
+          const newMoneyList = this.money.filter((x) => x.id !== money.id);
+          this._moneySubj.next(newMoneyList);
+        })
+      );
   }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {

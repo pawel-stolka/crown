@@ -124,6 +124,15 @@ export class TabsContainerComponent implements OnInit {
 
   edit(money: Money) {
     console.log('edit', money);
+    let type = `PS_${Math.random() * 100}`
+    let changes: Partial<Money> = {
+      type,
+      fromWho: 'TEST save 2',
+    };
+    this.moneyService
+      .save(money.id, changes)
+      .pipe(tap((x) => console.log('SAVE TAP', x)))
+      .subscribe();
     // dialogConfig.data = money;
 
     // const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
@@ -137,8 +146,6 @@ export class TabsContainerComponent implements OnInit {
   remove(id: number) {
     console.log('remove', id);
     dialogConfig.data = id;
-
-    
 
     const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
 
