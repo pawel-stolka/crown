@@ -104,7 +104,33 @@ export class MoneyService {
       );
   }
 
-  save(moneyId: string, changes: Partial<Money>): Observable<any> {
+  edit(id: string, changes: Partial<Money>) {
+    // console.log('edit changes', changes);
+    const index = this.money.findIndex((money) => money.id === id);
+    const newMoney: Money = {
+      ...this.money[index],
+      ...changes,
+    };
+
+    // copy of moneys
+    const newMoneys: Money[] = this.money.slice(0);
+    newMoneys[index] = newMoney;
+    this._moneySubj.next(newMoneys);
+
+    return this.http.put<Money>(`${this.URL}/${id}`, changes, { headers: this.headers }).pipe(
+      catchError((err) => {
+        const message = 'Could not edit money';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap((x) => console.log('EDIT result', x)),
+      shareReplay()
+    );
+
+  }
+
+  __save(moneyId: string, changes: Partial<Money>): Observable<any> {
     const moneyList = this._moneySubj.value;
     console.log('[this.save]', moneyId, moneyList);
 

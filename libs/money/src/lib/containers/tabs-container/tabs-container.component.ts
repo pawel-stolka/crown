@@ -10,6 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AddDialogComponent } from '../../components/dialogs/add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-dialog/delete-dialog.component';
+import { EditDialogComponent } from '../../components/dialogs/edit-dialog/edit-dialog.component';
 
 @Component({
   selector: 'crown-tabs-container',
@@ -124,23 +125,13 @@ export class TabsContainerComponent implements OnInit {
 
   edit(money: Money) {
     console.log('edit', money);
-    let type = `PS_${Math.random() * 100}`
-    let changes: Partial<Money> = {
-      type,
-      fromWho: 'TEST save 2',
-    };
-    this.moneyService
-      .save(money.id, changes)
-      .pipe(tap((x) => console.log('SAVE TAP', x)))
+    dialogConfig.data = money;
+    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter((val) => !!val))
       .subscribe();
-    // dialogConfig.data = money;
-
-    // const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
-
-    // dialogRef
-    //   .afterClosed()
-    //   .pipe(filter((val) => !!val))
-    //   .subscribe();
   }
 
   remove(id: number) {
