@@ -20,6 +20,7 @@ export class NavComponent {
 
   logout() {
     this.authService.logout();
-    this.router.navigateByUrl('/auth/login');
+    // this.router.navigateByUrl('/auth/login');
+    this.router.navigateByUrl('');
   }
 }

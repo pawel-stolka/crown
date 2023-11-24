@@ -76,8 +76,8 @@ export class TabsContainerComponent implements OnInit {
       const categoryPrices: any = {};
 
       item.typePrices.forEach((typePrice: any) => {
-        categoryPrices[typePrice.type] = typePrice.price;
-        sums[typePrice.type] += typePrice.price;
+        categoryPrices[typePrice.type] = +typePrice.price.toFixed(0);
+        sums[typePrice.type] += +typePrice.price.toFixed(0);
       });
       let fin = { period: item.period, ...categoryPrices };
       // console.log('%c [transformData2 | FIN]', Colors.GOLDEN, fin);
@@ -85,7 +85,7 @@ export class TabsContainerComponent implements OnInit {
     });
 
     // Add a row for the column sums
-    const columnSumsRow: any = { period: 'Suma' };
+    const columnSumsRow: any = { period: 'SUMA' };
     this.categories.forEach((category) => {
       columnSumsRow[category] = sums[category];
     });

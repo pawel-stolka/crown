@@ -92,10 +92,6 @@
 </ng-template>
 
 <ng-template #monthGroups>
-  <!-- <ng-container *ngIf="categories$ | async as categories">
-    <div>{{ categories | json }}</div>
-  </ng-container> -->
-
   <ng-container *ngIf="monthsData$ | async as monthsData">
     <!-- <pre>{{ monthsData | json }}</pre> -->
     <ng-container *ngIf="categories$ | async as categories">
@@ -107,18 +103,15 @@
           </th>
         </tr>
 
-        <tr *ngFor="let item of monthsData">
-          <td>{{ item.period }}</td>
+        <tr *ngFor="let item of monthsData; let i = index; let last = last">
+          <td [ngClass]="{ last: last }">{{ item.period }}</td>
+
           <td *ngFor="let category of categories">
-            {{ item[category] || '-' }}
+            <span [ngClass]="{ last: last }">
+              {{ item[category] || '-' }}
+            </span>
             <!-- | currency:"zł":"" -->
           </td>
-        </tr>
-        <tr>
-          <!-- <td>Total</td> -->
-          <!-- <td *ngFor="let category of categorySums">
-          {{ categorySums[category]  || '-'  }}
-        </td> -->
         </tr>
       </table>
     </ng-container>
