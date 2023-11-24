@@ -8,7 +8,8 @@ import { Colors, Money, MoneyGroup, dialogConfig } from '@crown/data';
 import { filter, map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { AddDialogComponent } from '../../components/add-dialog.component';
+import { AddDialogComponent } from '../../components/dialogs/add-dialog/add-dialog.component';
+import { DeleteDialogComponent } from '../../components/dialogs/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'crown-tabs-container',
@@ -135,13 +136,15 @@ export class TabsContainerComponent implements OnInit {
 
   remove(id: number) {
     console.log('remove', id);
-    // dialogConfig.data = id;
+    dialogConfig.data = id;
 
-    // const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
+    
 
-    // dialogRef
-    //   .afterClosed()
-    //   .pipe(filter((val) => !!val))
-    //   .subscribe();
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter((val) => !!val))
+      .subscribe();
   }
 }

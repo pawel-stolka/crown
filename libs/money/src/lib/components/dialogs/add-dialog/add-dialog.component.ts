@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AUTH_TOKEN_EMAIL, Money } from '@crown/data';
-import { MoneyService } from '../services/money.service';
 import { MaterialModule } from '@crown/material';
+import { MoneyService } from '../../../services/money.service';
 
 @Component({
   selector: 'crown-add-money-dialog',

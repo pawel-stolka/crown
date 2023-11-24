@@ -22,7 +22,6 @@ export class MoneyService {
   private _moneySubj = new BehaviorSubject<Money[]>([]);
   money$ = this._moneySubj.asObservable();
   moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
-    // moneyGroups$: Observable<any[]> = this.money$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period'))),
     tap((moneyGroups: MoneyGroup[]) =>
       console.log('--moneyGroups--', moneyGroups)
@@ -30,6 +29,10 @@ export class MoneyService {
   );
   headers!: { Authorization: string };
   tokenEmail: TokenEmail | null = null;
+
+  get money() {
+    return this._moneySubj.value
+  }
 
   constructor(private http: HttpClient, private authService: AuthService) {
     console.log('money service CTOR');
@@ -96,6 +99,21 @@ export class MoneyService {
           this._moneySubj.next(update);
         })
       );
+  }
+
+  delete(id: string) {
+    return this.http.delete<Money>(`${this.URL}/${id}`, { headers: this.headers }).pipe(
+      catchError((err) => {
+        const message = '[delete] Something wrong...';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap((money: Money) => {
+        const newMoneyList = this.money.filter((x) => x.id !== money.id);
+        this._moneySubj.next(newMoneyList);
+      })
+    );
   }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
