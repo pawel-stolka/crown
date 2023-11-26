@@ -5,6 +5,9 @@
 </div>
 
 <mat-tab-group>
+  <mat-tab label="Miesiącami 2">
+    <ng-container *ngTemplateOutlet="monthGroups2"></ng-container>
+  </mat-tab>
   <mat-tab label="Miesiącami">
     <ng-container *ngTemplateOutlet="monthGroups"></ng-container>
   </mat-tab>
@@ -91,9 +94,14 @@
   </ng-container>
 </ng-template>
 
+<ng-template #monthGroups2>
+  <ng-container *ngIf="monthsData$ | async as monthsData">
+    <pre>{{ monthsData | json }}</pre>
+  </ng-container>
+</ng-template>
 <ng-template #monthGroups>
   <ng-container *ngIf="monthsData$ | async as monthsData">
-    <!-- <pre>{{ monthsData | json }}</pre> -->
+    <pre>{{ monthsData | json }}</pre>
     <ng-container *ngIf="categories$ | async as categories">
       <table class="next-table mat-elevation-z8">
         <tr>

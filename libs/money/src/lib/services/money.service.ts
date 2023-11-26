@@ -12,7 +12,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Money, API_URL, MoneyGroup, TokenEmail } from '@crown/data';
+import { Money, API_URL, MoneyGroup, TokenEmail, Colors } from '@crown/data';
 import { AuthService } from 'libs/auth/src/lib/services/auth.service';
 
 @Injectable({
@@ -72,6 +72,7 @@ export class MoneyService {
         console.log(message, err);
         return throwError(err);
       }),
+      map((money: Money[]) => money.sort(compareBy('period', false))),
       tap((money: Money[]) => this._moneySubj.next(money))
     );
   }
@@ -117,17 +118,18 @@ export class MoneyService {
     newMoneys[index] = newMoney;
     this._moneySubj.next(newMoneys);
 
-    return this.http.put<Money>(`${this.URL}/${id}`, changes, { headers: this.headers }).pipe(
-      catchError((err) => {
-        const message = 'Could not edit money';
-        // this.messages.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      }),
-      tap((x) => console.log('EDIT result', x)),
-      shareReplay()
-    );
-
+    return this.http
+      .put<Money>(`${this.URL}/${id}`, changes, { headers: this.headers })
+      .pipe(
+        catchError((err) => {
+          const message = 'Could not edit money';
+          // this.messages.showErrors(message);
+          console.log(message, err);
+          return throwError(err);
+        }),
+        tap((x) => console.log('EDIT result', x)),
+        shareReplay()
+      );
   }
 
   __save(moneyId: string, changes: Partial<Money>): Observable<any> {
@@ -161,7 +163,6 @@ export class MoneyService {
         tap((x) => console.log('UPDATE result', x)),
         shareReplay()
       );
-
   }
   /*
   saveCourse(courseId: string, changes: Partial<Course>): Observable<any> {
