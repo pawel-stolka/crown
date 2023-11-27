@@ -24,9 +24,9 @@ export class MoneyService {
   money$ = this._moneySubj.asObservable();
   moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period'))),
-    tap((moneyGroups: MoneyGroup[]) =>
-      console.log('--moneyGroups--', moneyGroups)
-    )
+    // tap((moneyGroups: MoneyGroup[]) =>
+    //   console.log('--moneyGroups--', moneyGroups)
+    // )
   );
   headers!: { Authorization: string };
   tokenEmail: TokenEmail | null = null;

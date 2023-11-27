@@ -5,4 +5,5 @@ export enum Colors {
   RED = 'border: 7px dotted red;',
   // RED = 'border: 3px dotted; background-color: red;',
   MAG = 'border: 3px dotted; background-color: magenta;',
+  YELLOW = 'background: yellow'
 }

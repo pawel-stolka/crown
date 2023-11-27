@@ -11,7 +11,9 @@ import { MatSort } from '@angular/material/sort';
 import { AddDialogComponent } from '../../components/dialogs/add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-dialog/delete-dialog.component';
 import { EditDialogComponent } from '../../components/dialogs/edit-dialog/edit-dialog.component';
+import { TypePrice } from 'libs/data/src/lib/interfaces/TypePrice';
 
+const NO_DATA = '-';
 @Component({
   selector: 'crown-tabs-container',
   standalone: true,
@@ -36,8 +38,78 @@ export class TabsContainerComponent implements OnInit {
 
   monthsData$ = this.moneyGroups$.pipe(
     // tap((x) => console.log('just monthsData', x)),
-    map((data) => this.transformData(data)),
-    tap((x) => console.log('%c PS.FIN monthsData', Colors.RED, x))
+    map((data) => this.transformData(data))
+    // tap((x) => console.log('%c PS.FIN monthsData', Colors.RED, x))
+  );
+
+  getPriceByType(typePrices: any[], type: string): number | string {
+    const found = typePrices.find((tp) => tp.type === type);
+    return found ? found.price : NO_DATA;
+  }
+
+  monthsData_2$ = this.moneyGroups$.pipe(
+    map((moneyGroups) => {
+      // TODO: IMPROVE sorting !!!
+      const _flatCategories = moneyGroups
+        .map((x) => x.typePrices.map((tp) => tp.type))
+        .flat();
+      const categories = [...new Set(_flatCategories)];
+      console.log('%c[categories]', Colors.RED, categories);
+
+      const typePrices: TypePrice[] = [
+        {
+          type: 'VAT',
+          price: 100,
+        },
+        {
+          type: 'ZUS',
+          price: 1,
+        },
+      ];
+
+      const _tps = moneyGroups.map((x) => x.typePrices)
+      console.log('%c [_tps]', Colors.YELLOW, _tps);
+
+      const _typePrices: TypePrice[] = categories.map(c => {
+        return {
+          type: c,
+          price: 123
+        }
+      })
+      console.log('%c [_typePrices]', Colors.MAG, _typePrices);
+      // const groupByCategory = Object.groupBy(products, product => {
+      //   return product.category;
+      // });
+      // const groupByCategory = Map.groupBy(products, product => {
+      //   return product.category;
+      // });
+
+      // Group by 'type'
+      const flattenedItems = _tps.flat();
+      const groupedByType = flattenedItems.reduce((acc, item) => {
+        // If the type is not yet in the accumulator, add it with an empty array
+        if (!acc[item.type]) {
+            acc[item.type] = [];
+        }
+        // Push the current item into the appropriate type array
+        acc[item.type].push(item);
+        return acc;
+      }, {} as Record<string, any[]>);
+
+      console.log('%c[groupedByType]', Colors.GREEN, groupedByType);
+
+      const summary: MoneyGroup = {
+        period: 'SUMA',
+        userId: '',
+        typePrices: _typePrices,
+      };
+      const months = [...moneyGroups, summary];
+      return {
+        categories,
+        months,
+      };
+    }),
+    tap((x) => console.log('[monthsData_2$]', x))
   );
 
   categories: string[] = [];
