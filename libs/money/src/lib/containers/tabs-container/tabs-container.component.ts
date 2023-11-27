@@ -67,41 +67,43 @@ export class TabsContainerComponent implements OnInit {
         },
       ];
 
-      const _tps = moneyGroups.map((x) => x.typePrices)
-      console.log('%c [_tps]', Colors.YELLOW, _tps);
-
-      const _typePrices: TypePrice[] = categories.map(c => {
+      const _typePrices: TypePrice[] = categories.map((c) => {
         return {
           type: c,
-          price: 123
-        }
-      })
+          price: 123,
+        };
+      });
       console.log('%c [_typePrices]', Colors.MAG, _typePrices);
-      // const groupByCategory = Object.groupBy(products, product => {
-      //   return product.category;
-      // });
-      // const groupByCategory = Map.groupBy(products, product => {
-      //   return product.category;
-      // });
 
       // Group by 'type'
+      const _tps = moneyGroups.map((x) => x.typePrices);
+      console.log('%c [_tps]', Colors.YELLOW, _tps);
       const flattenedItems = _tps.flat();
+
       const groupedByType = flattenedItems.reduce((acc, item) => {
-        // If the type is not yet in the accumulator, add it with an empty array
+        // Initialize the type with a price of 0 if it's not yet in the accumulator
         if (!acc[item.type]) {
-            acc[item.type] = [];
+          acc[item.type] = 0;
         }
-        // Push the current item into the appropriate type array
-        acc[item.type].push(item);
+        // Add the current item's price to the total for its type
+        acc[item.type] += item.price;
         return acc;
-      }, {} as Record<string, any[]>);
+      }, {} as Record<string, number>);
 
       console.log('%c[groupedByType]', Colors.GREEN, groupedByType);
+
+      // Convert the object into an array of objects
+      const result = Object.keys(groupedByType).map((type) => ({
+        type: type,
+        price: groupedByType[type],
+      }));
+
+      console.log('%c[result]', Colors.GREEN, result);
 
       const summary: MoneyGroup = {
         period: 'SUMA',
         userId: '',
-        typePrices: _typePrices,
+        typePrices: result//_typePrices,
       };
       const months = [...moneyGroups, summary];
       return {
