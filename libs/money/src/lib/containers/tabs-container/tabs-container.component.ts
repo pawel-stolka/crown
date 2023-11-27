@@ -4,16 +4,21 @@ import { MaterialModule } from '@crown/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MoneyService, compareBy } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Colors, Money, MoneyGroup, dialogConfig } from '@crown/data';
+import {
+  Colors,
+  Money,
+  MoneyGroup,
+  NUMBER_PRECISION,
+  ZERO_DATA,
+  dialogConfig,
+} from '@crown/data';
 import { filter, map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AddDialogComponent } from '../../components/dialogs/add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-dialog/delete-dialog.component';
 import { EditDialogComponent } from '../../components/dialogs/edit-dialog/edit-dialog.component';
-import { TypePrice } from 'libs/data/src/lib/interfaces/TypePrice';
 
-const NO_DATA = '-';
 @Component({
   selector: 'crown-tabs-container',
   standalone: true,
@@ -23,7 +28,7 @@ const NO_DATA = '-';
 })
 export class TabsContainerComponent implements OnInit {
   dataSource!: MatTableDataSource<Money>;
-  // dataSourceGroups!: MatTableDataSource<MoneyGroup>;
+
   money$ = this.moneyService.money$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
@@ -36,56 +41,27 @@ export class TabsContainerComponent implements OnInit {
     map((groups) => groups.sort(compareBy('period', true)))
   );
 
-  monthsData$ = this.moneyGroups$.pipe(
-    // tap((x) => console.log('just monthsData', x)),
-    map((data) => this.transformData(data))
-    // tap((x) => console.log('%c PS.FIN monthsData', Colors.RED, x))
-  );
-
   getPriceByType(typePrices: any[], type: string): number | string {
     const found = typePrices.find((tp) => tp.type === type);
-    return found ? found.price : NO_DATA;
+    return found ? found.price : ZERO_DATA;
   }
 
-  monthsData_2$ = this.moneyGroups$.pipe(
+  monthsData$ = this.moneyGroups$.pipe(
     map((moneyGroups) => {
       // TODO: IMPROVE sorting !!!
-      const _flatCategories = moneyGroups
-        .map((x) => x.typePrices.map((tp) => tp.type))
+      const _categories = moneyGroups
+        .map((x) => x.typePrices.map(({ type }) => type))
         .flat();
-      const categories = [...new Set(_flatCategories)];
-      console.log('%c[categories]', Colors.RED, categories);
-
-      const typePrices: TypePrice[] = [
-        {
-          type: 'VAT',
-          price: 100,
-        },
-        {
-          type: 'ZUS',
-          price: 1,
-        },
-      ];
-
-      const _typePrices: TypePrice[] = categories.map((c) => {
-        return {
-          type: c,
-          price: 123,
-        };
-      });
-      console.log('%c [_typePrices]', Colors.MAG, _typePrices);
+      const categories = [...new Set(_categories)];
 
       // Group by 'type'
-      const _tps = moneyGroups.map((x) => x.typePrices);
-      console.log('%c [_tps]', Colors.YELLOW, _tps);
-      const flattenedItems = _tps.flat();
+      const flatTypePrices = moneyGroups.map((x) => x.typePrices).flat();
 
-      const groupedByType = flattenedItems.reduce((acc, item) => {
-        // Initialize the type with a price of 0 if it's not yet in the accumulator
+      const groupedByType = flatTypePrices.reduce((acc, item) => {
+        // Initialize the price with 0 if not yet in the acc
         if (!acc[item.type]) {
           acc[item.type] = 0;
         }
-        // Add the current item's price to the total for its type
         acc[item.type] += item.price;
         return acc;
       }, {} as Record<string, number>);
@@ -93,17 +69,16 @@ export class TabsContainerComponent implements OnInit {
       console.log('%c[groupedByType]', Colors.GREEN, groupedByType);
 
       // Convert the object into an array of objects
-      const result = Object.keys(groupedByType).map((type) => ({
-        type: type,
-        price: groupedByType[type],
+      const typePrices = Object.keys(groupedByType).map((type) => ({
+        type,
+        price: +groupedByType[type].toFixed(NUMBER_PRECISION),
       }));
 
-      console.log('%c[result]', Colors.GREEN, result);
-
+      // const summary: Partial<MoneyGroup> = {
       const summary: MoneyGroup = {
         period: 'SUMA',
         userId: '',
-        typePrices: result//_typePrices,
+        typePrices,
       };
       const months = [...moneyGroups, summary];
       return {
