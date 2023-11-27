@@ -5,4 +5,4 @@ export const AUTH_TOKEN = 'auth_token';
 export const AUTH_TOKEN_EMAIL = 'AUTH_TOKEN_EMAIL';
 
 export const ZERO_DATA = '-';
-export const NUMBER_PRECISION = 2;
+export const NUMBER_PRECISION = 0;
