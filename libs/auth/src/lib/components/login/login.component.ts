@@ -19,7 +19,6 @@ import { MaterialModule } from '@crown/material';
 })
 export class LoginComponent {
   form: FormGroup;
-  // tokenEmail$ = this.auth.tokenEmail$
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +35,6 @@ export class LoginComponent {
     const { email, password } = this.form.value;
     this.auth.login(email, password).subscribe(
       () => {
-        // this.router.navigateByUrl('/money/table');
         this.router.navigateByUrl('/money'); // TODO
       },
       (err) => {

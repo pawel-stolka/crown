@@ -6,8 +6,7 @@ import { Component } from '@angular/core';
     <div class="container">
       <div id="welcome">
         <h3>
-          <span> Hello there, </span>
-          Welcome in Crown (reactive-monorepo) 👋
+          <span> Welcome in Crown (reactive-monorepo) 👋 </span>
         </h3>
       </div>
     </div>

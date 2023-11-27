@@ -47,7 +47,7 @@ export class TabsContainerComponent implements OnInit {
       const typePrices = groupTypePrices(moneyGroups);
 
       const summary: MoneyGroup = {
-        period: 'SUMA',
+        period: 'TOTAL',
         userId: '',
         typePrices,
       };
@@ -61,11 +61,6 @@ export class TabsContainerComponent implements OnInit {
       };
     })
   );
-
-  categories: string[] = [];
-  categories$ = this.moneyService
-    .getCategories$()
-    .pipe(tap((categories) => (this.categories = categories)));
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[1];
