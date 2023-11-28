@@ -22,6 +22,8 @@ export class AddDialogComponent {
   title = 'Dodaj rachunek';
   form: FormGroup;
 
+  getCategories$ = this.moneyService.getCategories$();
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,

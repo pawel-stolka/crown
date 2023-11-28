@@ -27,9 +27,20 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
+    <!-- <mat-select [formControl]="animalControl" required> -->
+    <mat-select formControlName="type" required>
+      @for (category of getCategories$ | async; track category) {
+      <mat-option [value]="category">{{ category }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  @if (form.hasError('required')) {
+  <mat-error>Please choose category</mat-error>
+  }
+  <!-- <mat-form-field appearance="outline">
     <mat-label>Kategoria</mat-label>
     <input matInput formControlName="type" />
-  </mat-form-field>
+  </mat-form-field> -->
 
   <mat-form-field appearance="outline">
     <mat-label>(Sklep)</mat-label>
