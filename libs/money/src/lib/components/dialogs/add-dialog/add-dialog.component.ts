@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -10,6 +11,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { AUTH_TOKEN_EMAIL, Money } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { MoneyService } from '../../../services/money.service';
+import { Observable, map, startWith } from 'rxjs';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -23,6 +25,39 @@ export class AddDialogComponent {
   form: FormGroup;
 
   getCategories$ = this.moneyService.getCategories$();
+  filteredCats$ = this.getCategories$.pipe(
+
+  )
+  searchInput = new FormControl<string>('');
+
+  myControl = new FormControl<string>('');
+  options: string[] = ['Mary', 'Shelley', 'Igor'];
+  filteredOptions!: Observable<string[]>;
+
+  ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const name = typeof value === 'string' ? value : value;
+        return name ? this._filter(name as string) : this.options.slice();
+      })
+    );
+  }
+
+  displayFn2(cat: string): string {
+    return cat;
+  }
+  displayFn(user: string): string {
+    return user;
+  }
+
+  private _filter(name: string): string[] {
+    const filterValue = name.toLowerCase();
+
+    return this.options.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +78,10 @@ export class AddDialogComponent {
       details: [''],
       extra: [''],
     });
+  }
+
+  get type() {
+    return this.form.get('type')?.value ?? null;
   }
 
   save() {
