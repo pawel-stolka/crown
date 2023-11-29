@@ -34,25 +34,35 @@
       }
     </mat-autocomplete>
   </mat-form-field> -->
+  <div>
+    [myControl.value] {{ myControl.value| json }}
+  </div>
+  <div *ngIf="filteredCats$ | async as cats">
+    <div>{{ cats | json }}</div>
+  </div>
   <mat-form-field class="example-full-width">
     <mat-label>category</mat-label>
     <input
       type="text"
       matInput
       [formControl]="myControl"
-      [matAutocomplete]="auto2"
+      [matAutocomplete]="auto"
     />
-    <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2">
-      @for (cat of getCategories$ | async; track cat) {
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn2">
+      <ng-container *ngFor="let cat of filteredCats$ | async;">
+        <mat-option [value]="cat">{{ cat }}</mat-option>
+      </ng-container>
+      @for (cat of filteredCats$ | async; track cat) {
+
       <mat-option [value]="cat">{{ cat }}</mat-option>
       }
     </mat-autocomplete>
-    <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-      @for (option of filteredOptions | async; track option) {
-      <mat-option [value]="option">{{ option }}</mat-option>
-      }
-    </mat-autocomplete> -->
   </mat-form-field>
+  <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    @for (option of filteredOptions | async; track option) {
+    <mat-option [value]="option">{{ option }}</mat-option>
+    }
+  </mat-autocomplete> -->
 
   <mat-form-field appearance="outline">
     <input

@@ -11,7 +11,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { AUTH_TOKEN_EMAIL, Money } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { MoneyService } from '../../../services/money.service';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, map, startWith, tap } from 'rxjs';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -24,24 +24,54 @@ export class AddDialogComponent {
   title = 'Dodaj rachunek';
   form: FormGroup;
 
+  // currentInput = this.form.get('type')?.value
   getCategories$ = this.moneyService.getCategories$();
-  filteredCats$ = this.getCategories$.pipe(
+  filteredCats$!: Observable<string[] | null>
+  /* = this.getCategories$.pipe(
+    map((cats) => {
+      console.log('cats', cats);
+      let mc: string = this.myControl.value ?? '';
+      console.log('mc', mc);
 
-  )
-  searchInput = new FormControl<string>('');
+      if (!mc) {
+        return cats;
+      }
+      let filtered = mc
+        ? cats.filter((c) => c.toLowerCase().includes(mc.toLowerCase()))
+        : cats;
+      console.log('Filtered categories:', filtered);
+      return filtered;
+
+      // let fil = cats.filter((c) => c.toLowerCase().includes(this.type))
+      // // let fil = cats.filter((c) =>
+      // //   // c!! ? c.toLowerCase().includes(this.myControl.value) : null
+      // //   c!! ? c.toLowerCase().includes(this.form.get('type')?.value) : null
+      // // );
+      // console.log('fil', fil);
+      // return fil;
+    })
+    // map(cats => cats.filter(c => c.includes(this.myControl.value))
+  );*/
+  // searchInput = new FormControl<string>('');
 
   myControl = new FormControl<string>('');
   options: string[] = ['Mary', 'Shelley', 'Igor'];
   filteredOptions!: Observable<string[]>;
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    this.filteredCats$ = this.myControl.valueChanges.pipe(
       startWith(''),
-      map((value) => {
-        const name = typeof value === 'string' ? value : value;
-        return name ? this._filter(name as string) : this.options.slice();
-      })
+      map((value) => this._filter(value))
     );
+    // this.filteredOptions = this.myControl.valueChanges.pipe(
+    //   startWith(''),
+    //   map((value) => {
+    //     console.log('[valueChanges]', value);
+
+    //     const name = typeof value === 'string' ? value : value;
+    //     return name ? this._filter(name as string) : this.options.slice();
+    //   })
+    // );
   }
 
   displayFn2(cat: string): string {
@@ -51,9 +81,8 @@ export class AddDialogComponent {
     return user;
   }
 
-  private _filter(name: string): string[] {
-    const filterValue = name.toLowerCase();
-
+  private _filter(name: string | null): string[] {
+    const filterValue = name?.toLowerCase() ?? '';
     return this.options.filter((option) =>
       option.toLowerCase().includes(filterValue)
     );
