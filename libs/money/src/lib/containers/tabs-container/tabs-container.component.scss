@@ -46,3 +46,20 @@
   font-size: 1.3rem;
   // font-weight: bolder;
 }
+
+.no-data {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    font-size: large;
+    margin: 20px 0;
+  }
+  .subtitle {
+    // font-size: larger;
+  }
+}

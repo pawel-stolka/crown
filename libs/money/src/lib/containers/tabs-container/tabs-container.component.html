@@ -11,94 +11,111 @@
   <mat-tab label="Wpisy">
     <ng-container *ngTemplateOutlet="simpleTable"></ng-container>
   </mat-tab>
-
 </mat-tab-group>
 
 <ng-template #simpleTable>
   <ng-container *ngIf="money$ | async as money">
-    <div class="table mat-elevation-z8">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        matSortDisableClear
-        matSortActive="position"
-        matSortDirection="asc"
-        multiTemplateDataRows
-      >
-        <ng-container matColumnDef="fromWho">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="custom-header-cell">sklep</th>
-          <td mat-cell *matCellDef="let el">{{ el.fromWho }}</td>
-        </ng-container>
+    <ng-container *ngIf="money.length; else noData">
+      <div class="table mat-elevation-z8">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          matSortDisableClear
+          matSortActive="position"
+          matSortDirection="asc"
+          multiTemplateDataRows
+        >
+          <ng-container matColumnDef="fromWho">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="custom-header-cell"
+            >
+              sklep
+            </th>
+            <td mat-cell *matCellDef="let el">{{ el.fromWho }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
-          <td mat-cell *matCellDef="let el">{{ el.price }}</td>
-        </ng-container>
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
+            <td mat-cell *matCellDef="let el">{{ el.price }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>kategoria</th>
-          <td mat-cell *matCellDef="let el">{{ el.type }}</td>
-        </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>kategoria</th>
+            <td mat-cell *matCellDef="let el">{{ el.type }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>data</th>
-          <td mat-cell *matCellDef="let el">
-            {{ el.createdAt | date : 'dd.MM.yyyy' }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>data</th>
+            <td mat-cell *matCellDef="let el">
+              {{ el.createdAt | date : 'dd.MM.yyyy' }}
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let el">
-            <div class="actions-buttons">
-              <button mat-button color="primary" (click)="edit(el)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <!-- confirmDialog="'Are you sure?'" -->
-              <button mat-button color="warn" (click)="remove(el.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let el">
+              <div class="actions-buttons">
+                <button mat-flat-button (click)="edit(el)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <!-- confirmDialog="'Are you sure?'" -->
+                <button mat-flat-button (click)="remove(el.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="columns"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns"></tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        </table>
 
-      <mat-paginator
-        #paginator
-        [pageSize]="pageSize"
-        [pageSizeOptions]="pageSizeOptions"
-        showFirstLastButtons
-      >
-      </mat-paginator>
-    </div>
+        <mat-paginator
+          #paginator
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </div>
+    </ng-container>
   </ng-container>
 </ng-template>
 
 <ng-template #monthGroups>
   <ng-container *ngIf="monthsData$ | async as data">
-    <ng-container *ngIf="data.categories as categories">
-      <table class="next-table mat-elevation-z8">
-        <tr>
-          <th>Miesiąc</th>
-          <th *ngFor="let category of categories">
-            <span>{{ category }}</span>
-          </th>
-        </tr>
+    <ng-container *ngIf="data.categories.length; else noData">
+      <ng-container *ngIf="data.categories as categories">
+        <table class="next-table mat-elevation-z8">
+          <tr>
+            <th>Miesiąc</th>
+            <th *ngFor="let category of categories">
+              <span>{{ category }}</span>
+            </th>
+          </tr>
 
-        <tr *ngFor="let item of data.months; let i = index; let last = last">
-          <td [ngClass]="{ last: last }">{{ item.period }}</td>
+          <tr *ngFor="let item of data.months; let i = index; let last = last">
+            <td [ngClass]="{ last: last }">{{ item.period }}</td>
 
-          <td *ngFor="let category of categories">
-            <span [ngClass]="{ last: last }">
-              {{ getPriceByType(item.typePrices, category) }}
-            </span>
-          </td>
-        </tr>
-      </table>
+            <td *ngFor="let category of categories">
+              <span [ngClass]="{ last: last }">
+                {{ getPriceByType(item.typePrices, category) }}
+              </span>
+            </td>
+          </tr>
+        </table>
+      </ng-container>
     </ng-container>
   </ng-container>
+</ng-template>
+
+<ng-template #noData>
+  <div class="no-data">
+    <span class="title">Nic tu jeszcze nie ma</span>
+    <span class="subtitle">Dodaj coś ☝️ (+)</span>
+  </div>
 </ng-template>
