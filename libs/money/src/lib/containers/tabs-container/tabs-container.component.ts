@@ -1,15 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, formatNumber } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MoneyService, compareBy } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  Colors,
   Money,
   MoneyGroup,
   NUMBER_PRECISION,
-  TypePrice,
+  Command,
   ZERO_DATA,
   dialogConfig,
 } from '@crown/data';
@@ -77,38 +76,46 @@ export class TabsContainerComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  constructor(private dialog: MatDialog, private moneyService: MoneyService) {}
+  constructor(@Inject(LOCALE_ID) private locale: string, private dialog: MatDialog, private moneyService: MoneyService) {}
 
   ngOnInit(): void {}
 
   getPriceByType(typePrices: any[], type: string): number | string {
     const found = typePrices.find((tp) => tp.type === type);
-    return found ? found.price : ZERO_DATA;
+    const result = found ? found.price : ZERO_DATA;
+    return this.formatValue(result);
   }
 
   add() {
-    const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
-
-    dialogRef
-      .afterClosed()
-      .pipe(filter((val) => !!val))
-      .subscribe();
+    this.openDialog(Command.ADD, AddDialogComponent);
   }
 
   edit(money: Money) {
-    dialogConfig.data = money;
-    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
-
-    dialogRef
-      .afterClosed()
-      .pipe(filter((val) => !!val))
-      .subscribe();
+    this.openDialog(Command.EDIT, EditDialogComponent, money);
   }
 
   remove(id: number) {
-    dialogConfig.data = id;
+    this.openDialog(Command.REMOVE, DeleteDialogComponent, id);
+  }
 
-    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+  formatValue(value: number | string): string {
+    if (typeof value === 'number') {
+      return formatNumber(value, this.locale, '1.0-0');
+    } else {
+      return value;
+    }
+  }
+
+  private openDialog(
+    command: Command,
+    dialogComponent: any,
+    data?: Money | number
+  ) {
+    if (data && (command === Command.ADD || command === Command.REMOVE)) {
+      dialogConfig.data = data;
+    }
+
+    const dialogRef = this.dialog.open(dialogComponent, dialogConfig);
 
     dialogRef
       .afterClosed()
@@ -140,18 +147,14 @@ function groupTypePrices(moneyGroups: MoneyGroup[]) {
 }
 
 function uniqueCategories(moneyGroups: MoneyGroup[]) {
-  const flatTypePrices = moneyGroups.map((x) => x.typePrices).flat();
-  console.log('[MONEY_GROUPS]', moneyGroups, flatTypePrices);
+  const flatTypePrices = moneyGroups.flatMap((a) => a.typePrices);
+  // console.log('[MONEY_GROUPS]', moneyGroups, flatTypePrices);
 
-  // Flatten the array
-  const flattened = moneyGroups.flatMap((a) => a.typePrices);
-  // Sum prices by type
-  const priceSumByType = flattened.reduce((sum: any, cur) => {
+  const priceSumByType = flatTypePrices.reduce((sum: any, cur) => {
     sum[cur.type] = (sum[cur.type] || 0) + cur.price;
     return sum;
   }, {});
 
-  // Sort by total price and extract unique types
   const uniqueSortedTypes = Object.keys(priceSumByType).sort(
     (a, b) => priceSumByType[b] - priceSumByType[a]
   );

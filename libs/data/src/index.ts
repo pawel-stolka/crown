@@ -4,6 +4,9 @@ export * from './lib/interfaces/User';
 export * from './lib/interfaces/TypePrice';
 export * from './lib/interfaces/TokenEmail';
 export * from './lib/configs/constants';
-export * from './lib/configs/Colors'
-export * from './lib/configs/dialogConfig'
-export * from './lib/directives/DotNumber.directive'
+export * from './lib/configs/Colors';
+export * from './lib/configs/dialogConfig';
+
+export * from './lib/directives/DotNumber.directive';
+
+export * from './lib/enums/Command';
