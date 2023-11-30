@@ -8,15 +8,20 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AUTH_TOKEN_EMAIL, Money } from '@crown/data';
+import { AUTH_TOKEN_EMAIL, DotNumberDirective, Money } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { MoneyService } from '../../../services/money.service';
-import { Observable, map, startWith, tap } from 'rxjs';
+import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 
 @Component({
   selector: 'crown-add-money-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DotNumberDirective,
+  ],
   templateUrl: './add-dialog.component.html',
   styleUrl: './add-dialog.component.scss',
 })
@@ -24,68 +29,26 @@ export class AddDialogComponent {
   title = 'Dodaj rachunek';
   form: FormGroup;
 
-  // currentInput = this.form.get('type')?.value
-  getCategories$ = this.moneyService.getCategories$();
-  filteredCats$!: Observable<string[] | null>
-  /* = this.getCategories$.pipe(
-    map((cats) => {
-      console.log('cats', cats);
-      let mc: string = this.myControl.value ?? '';
-      console.log('mc', mc);
+  private getCategories$ = this.moneyService.getCategories$();
+  categoriesFiltered$!: Observable<string[]>;
 
-      if (!mc) {
-        return cats;
-      }
-      let filtered = mc
-        ? cats.filter((c) => c.toLowerCase().includes(mc.toLowerCase()))
-        : cats;
-      console.log('Filtered categories:', filtered);
-      return filtered;
-
-      // let fil = cats.filter((c) => c.toLowerCase().includes(this.type))
-      // // let fil = cats.filter((c) =>
-      // //   // c!! ? c.toLowerCase().includes(this.myControl.value) : null
-      // //   c!! ? c.toLowerCase().includes(this.form.get('type')?.value) : null
-      // // );
-      // console.log('fil', fil);
-      // return fil;
-    })
-    // map(cats => cats.filter(c => c.includes(this.myControl.value))
-  );*/
-  // searchInput = new FormControl<string>('');
-
-  myControl = new FormControl<string>('');
-  options: string[] = ['Mary', 'Shelley', 'Igor'];
-  filteredOptions!: Observable<string[]>;
+  typeControl = new FormControl<string>('') as FormControl<string>;
 
   ngOnInit() {
-    this.filteredCats$ = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value))
+    this.categoriesFiltered$ = combineLatest([
+      this.getCategories$,
+      this.typeControl.valueChanges.pipe(startWith('')),
+    ]).pipe(
+      map(([categories, input]) =>
+        categories.filter((c) =>
+          c.toLowerCase().includes((input || '').toLowerCase())
+        )
+      )
     );
-    // this.filteredOptions = this.myControl.valueChanges.pipe(
-    //   startWith(''),
-    //   map((value) => {
-    //     console.log('[valueChanges]', value);
-
-    //     const name = typeof value === 'string' ? value : value;
-    //     return name ? this._filter(name as string) : this.options.slice();
-    //   })
-    // );
   }
 
-  displayFn2(cat: string): string {
-    return cat;
-  }
-  displayFn(user: string): string {
-    return user;
-  }
-
-  private _filter(name: string | null): string[] {
-    const filterValue = name?.toLowerCase() ?? '';
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+  get type() {
+    return this.form.get('type');
   }
 
   constructor(
@@ -99,27 +62,22 @@ export class AddDialogComponent {
       : null;
 
     this.form = this.fb.group({
-      userId: [email, Validators.required],
-      type: ['', Validators.required],
-      price: [null, Validators.required],
+      userId: [email, [Validators.required]],
+      type: ['', [Validators.required]],
+      price: [null, [Validators.required]],
       fromWho: [''],
-      createdAt: [new Date(), Validators.required],
+      createdAt: [new Date(), [Validators.required]],
       details: [''],
       extra: [''],
     });
   }
 
-  get type() {
-    return this.form.get('type')?.value ?? null;
-  }
-
   save() {
     const changes: Partial<Money> = this.form.value;
 
-    this.moneyService.create(changes).subscribe((res) => {
-      console.log('money created', res);
-      this.dialogRef.close();
-    });
+    this.moneyService
+      .create(changes)
+      .subscribe(() => this.dialogRef.close());
   }
 
   close() {

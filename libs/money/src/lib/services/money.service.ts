@@ -23,7 +23,7 @@ export class MoneyService {
   private _moneySubj = new BehaviorSubject<Money[]>([]);
   money$ = this._moneySubj.asObservable();
   moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
-    map((data: Money[]) => this.groupMoney(data).sort(compareBy('period'))),
+    map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
     // tap((moneyGroups: MoneyGroup[]) =>
     //   console.log('--moneyGroups--', moneyGroups)
     // )
@@ -88,8 +88,10 @@ export class MoneyService {
           console.log(message, err);
           return throwError(err);
         }),
-        tap((countedCats) => console.log('[getCategories$]', countedCats)),
-        map((countedCats) => countedCats.map((c) => c.type))
+        map((countedCats) =>
+          countedCats.map((c) => c.type.trim().toLowerCase())
+        ),
+        map((c) => [...new Set(c)]),
       );
   }
 

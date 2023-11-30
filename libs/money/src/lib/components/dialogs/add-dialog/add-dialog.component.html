@@ -1,107 +1,67 @@
-<!-- <form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Number</mat-label>
-    <input type="text"
-           placeholder="Pick one"
-           aria-label="Number"
-           matInput
-           [formControl]="type"
-           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      @for (option of getCategories$ | async; track option) {
-        <mat-option [value]="option">{{option}}</mat-option>
-      }
-    </mat-autocomplete>
-  </mat-form-field>
-</form>
-<hr> -->
-
-<h2 mat-dialog-title>{{ title }}</h2>
-
-<!-- <pre>{{ form.value | json }}</pre> -->
+<div mat-dialog-title>{{ title }}</div>
 
 <!-- <loading></loading>
 
 <messages></messages> -->
 
 <mat-dialog-content [formGroup]="form">
-  <!-- <mat-form-field class="example-full-width">
-    <mat-label>Assignee</mat-label>
-    <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-      @for (option of filteredOptions | async; track option) {
-        <mat-option [value]="option">{{option}}</mat-option>
-      }
-    </mat-autocomplete>
-  </mat-form-field> -->
-  <div>
-    [myControl.value] {{ myControl.value| json }}
-  </div>
-  <div *ngIf="filteredCats$ | async as cats">
-    <div>{{ cats | json }}</div>
-  </div>
-  <mat-form-field class="example-full-width">
-    <mat-label>category</mat-label>
-    <input
-      type="text"
-      matInput
-      [formControl]="myControl"
-      [matAutocomplete]="auto"
-    />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn2">
-      <ng-container *ngFor="let cat of filteredCats$ | async;">
-        <mat-option [value]="cat">{{ cat }}</mat-option>
-      </ng-container>
-      @for (cat of filteredCats$ | async; track cat) {
-
-      <mat-option [value]="cat">{{ cat }}</mat-option>
-      }
-    </mat-autocomplete>
-  </mat-form-field>
-  <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-    @for (option of filteredOptions | async; track option) {
-    <mat-option [value]="option">{{ option }}</mat-option>
-    }
-  </mat-autocomplete> -->
-
   <mat-form-field appearance="outline">
+    <mat-label>kiedy</mat-label>
     <input
       matInput
-      [matDatepicker]="myDatepicker"
+      [matDatepicker]="datepicker"
       #searchInput
       formControlName="createdAt"
     />
 
-    <mat-datepicker-toggle matSuffix [for]="myDatepicker">
+    <mat-datepicker-toggle matSuffix [for]="datepicker">
     </mat-datepicker-toggle>
 
-    <mat-datepicker #myDatepicker></mat-datepicker>
+    <mat-datepicker #datepicker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Cena</mat-label>
+    <mat-label>cena</mat-label>
     <input matInput formControlName="price" dotNumber />
+    @if (form.get('price')?.hasError('required')) {
+    <mat-error> Podaj cenę! </mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-select formControlName="type" required>
-      @for (category of getCategories$ | async; track category) {
-      <mat-option [value]="category">{{ category }}</mat-option>
+    <mat-label>kategoria</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="type"
+      [matAutocomplete]="auto"
+    />
+
+    <mat-autocomplete #auto="matAutocomplete">
+      @for (category of categoriesFiltered$ | async; track category) {
+      <mat-option [value]="category">{{ category }} </mat-option>
       }
-    </mat-select>
+    </mat-autocomplete>
+    <button
+      matSuffix
+      mat-icon-button
+      *ngIf="type?.value"
+      (click)="type?.setValue('')"
+    >
+      <mat-icon>cancel</mat-icon>
+    </button>
   </mat-form-field>
-  @if (form.hasError('required')) {
-  <mat-error>Please choose category</mat-error>
-  }
+
+  <div class="divider">opcjonalnie</div>
 
   <mat-form-field appearance="outline">
-    <mat-label>(Sklep)</mat-label>
+    <mat-label>sklep</mat-label>
     <input matInput formControlName="fromWho" />
   </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-raised-button (click)="close()">Close</button>
+  <button mat-button (click)="close()">zamknij</button>
 
   <button
     mat-raised-button
@@ -110,6 +70,6 @@
     [disabled]="!form.valid"
     (click)="save()"
   >
-    Save
+    dodaj
   </button>
 </mat-dialog-actions>

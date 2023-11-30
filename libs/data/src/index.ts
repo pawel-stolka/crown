@@ -6,3 +6,4 @@ export * from './lib/interfaces/TokenEmail';
 export * from './lib/configs/constants';
 export * from './lib/configs/Colors'
 export * from './lib/configs/dialogConfig'
+export * from './lib/directives/DotNumber.directive'

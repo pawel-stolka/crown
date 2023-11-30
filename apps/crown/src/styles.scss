@@ -7,3 +7,22 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+  // margin-top: 5px;
+  color: #ddd;
+  font-size: 0.85em;
+}
+
+.divider:before,
+.divider:after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+  margin: 0 10px;
+}
