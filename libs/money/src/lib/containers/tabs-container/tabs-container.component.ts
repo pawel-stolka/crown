@@ -54,6 +54,7 @@ export class TabsContainerComponent implements OnInit {
 
       const months = [...moneyGroups, summary];
       const categories = uniqueCategories(moneyGroups);
+      console.log('UNIQUE', categories);
 
       return {
         months,
@@ -106,7 +107,6 @@ export class TabsContainerComponent implements OnInit {
   }
 
   remove(id: number) {
-    console.log('remove', id);
     dialogConfig.data = id;
 
     const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
@@ -144,34 +144,18 @@ function uniqueCategories(moneyGroups: MoneyGroup[]) {
   const flatTypePrices = moneyGroups.map((x) => x.typePrices).flat();
   console.log('[MONEY_GROUPS]', moneyGroups, flatTypePrices);
 
-  // TODO: IMPROVE sorting !!!
-  const _categories = moneyGroups
-    .map((x) => x.typePrices.map(({ type }) => type))
-    .flat();
-  let res = [...new Set(_categories)];
-  console.log('[uniqueCategories]', res);
+  // Flatten the array
+  const flattened = moneyGroups.flatMap((a) => a.typePrices);
+  // Sum prices by type
+  const priceSumByType = flattened.reduce((sum: any, cur) => {
+    sum[cur.type] = (sum[cur.type] || 0) + cur.price;
+    return sum;
+  }, {});
 
-  return res;
+  // Sort by total price and extract unique types
+  const uniqueSortedTypes = Object.keys(priceSumByType).sort(
+    (a, b) => priceSumByType[b] - priceSumByType[a]
+  );
+
+  return uniqueSortedTypes;
 }
-
-// function sumUpPrices(typePrices: TypePrice[]) {
-//   // Group by 'type' and sum up prices
-//   const totalByType = typePrices.reduce((acc, item) => {
-//     if (!acc[item.type]) {
-//       acc[item.type] = 0;
-//     }
-//     acc[item.type] += item.price;
-//     return acc;
-//   }, {} as Record<string, number>);
-
-//   // Convert the object into an array of objects
-//   const result = Object.keys(totalByType).map((type) => ({
-//     type: type,
-//     price: +totalByType[type].toFixed(NUMBER_PRECISION),
-//   }));
-
-//   let res = result.sort(compareBy('price'));
-
-//   console.log('[sumUpPrices]', result, res);
-//   return res; //ult
-// }
