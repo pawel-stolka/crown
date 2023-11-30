@@ -11,7 +11,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { AUTH_TOKEN_EMAIL, DotNumberDirective, Money } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { MoneyService } from '../../../services/money.service';
-import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
+import { Observable, combineLatest, map, startWith } from 'rxjs';
 
 @Component({
   selector: 'crown-add-money-dialog',

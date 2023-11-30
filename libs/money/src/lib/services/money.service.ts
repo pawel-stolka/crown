@@ -91,7 +91,7 @@ export class MoneyService {
         map((countedCats) =>
           countedCats.map((c) => c.type.trim().toLowerCase())
         ),
-        map((c) => [...new Set(c)]),
+        map((c) => [...new Set(c)])
       );
   }
 
@@ -134,64 +134,6 @@ export class MoneyService {
       );
   }
 
-  __save(moneyId: string, changes: Partial<Money>): Observable<any> {
-    const moneyList = this._moneySubj.value;
-    console.log('[this.save]', moneyId, moneyList);
-
-    const index = moneyList.findIndex((money) => money.id === moneyId);
-    const newMoney: Money = {
-      ...moneyList[index],
-      ...changes,
-    };
-
-    // copy of moneyList
-    const newMoneyList: Money[] = moneyList.slice(0);
-    console.log('save b4', newMoneyList[index]);
-    newMoneyList[index] = newMoney;
-    console.log('save AFTER?', newMoneyList[index]);
-
-    this._moneySubj.next(newMoneyList);
-
-    // console.log('..TODO');
-    return this.http
-      .put(`${this.URL}/${moneyId}`, changes, { headers: this.headers })
-      .pipe(
-        catchError((err) => {
-          const message = 'Could not save Money';
-          // this.messages.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-        }),
-        tap((x) => console.log('UPDATE result', x)),
-        shareReplay()
-      );
-  }
-  /*
-  saveCourse(courseId: string, changes: Partial<Course>): Observable<any> {
-    const courses = this._coursesSubj.value;
-
-    const index = courses.findIndex((course) => course.id === courseId);
-    const newCourse: Course = {
-      ...courses[index],
-      ...changes,
-    };
-
-    // copy of courses
-    const newCourses: Course[] = courses.slice(0);
-    newCourses[index] = newCourse;
-    this._coursesSubj.next(newCourses);
-
-    return this.http.put(`/api/courses/${courseId}`, changes).pipe(
-      catchError((err) => {
-        const message = "Could not save course";
-        this.messages.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      }),
-      shareReplay()
-    );
-  }*/
-
   delete(id: string) {
     return this.http
       .delete<Money>(`${this.URL}/${id}`, { headers: this.headers })
@@ -216,7 +158,6 @@ export class MoneyService {
   }
 
   private summarize(moneys: Money[]): MoneyGroup[] {
-    // console.log('summarize', moneys);
     return moneys.map((data: any) => {
       const [period, moneyList] = data;
       const typePrices = groupBy(moneyList, (x: any) => x.type)
@@ -229,14 +170,8 @@ export class MoneyService {
       return {
         userId: 'not-yet',
         period,
-        // moneyList,
         typePrices,
         sum,
-
-        // id: 'id',
-        // price: 'price',
-        // fromWho: 'fromWho',
-        // createdAt: 'createdAt'
       };
     });
   }
@@ -256,10 +191,7 @@ export class MoneyService {
 }
 
 function getMonth(date: Date) {
-  let res = date.toString().substring(0, 7);
-  // console.log('getMonth', res, date);
-
-  return res;
+  return date.toString().substring(0, 7);
 }
 
 function groupBy(list: any[], prop: any) {

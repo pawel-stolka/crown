@@ -87,7 +87,6 @@ export class TabsContainerComponent implements OnInit {
   }
 
   add() {
-    console.log('add');
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
 
     dialogRef
@@ -97,7 +96,6 @@ export class TabsContainerComponent implements OnInit {
   }
 
   edit(money: Money) {
-    console.log('edit', money);
     dialogConfig.data = money;
     const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
 
@@ -145,8 +143,6 @@ function groupTypePrices(moneyGroups: MoneyGroup[]) {
 function uniqueCategories(moneyGroups: MoneyGroup[]) {
   const flatTypePrices = moneyGroups.map((x) => x.typePrices).flat();
   console.log('[MONEY_GROUPS]', moneyGroups, flatTypePrices);
-  // const sumPrices = sumUpPrices(flatTypePrices)
-  // console.log('[sumPrices]', sumPrices);
 
   // TODO: IMPROVE sorting !!!
   const _categories = moneyGroups
@@ -158,24 +154,24 @@ function uniqueCategories(moneyGroups: MoneyGroup[]) {
   return res;
 }
 
-function sumUpPrices(typePrices: TypePrice[]) {
-  // Group by 'type' and sum up prices
-  const totalByType = typePrices.reduce((acc, item) => {
-    if (!acc[item.type]) {
-      acc[item.type] = 0;
-    }
-    acc[item.type] += item.price;
-    return acc;
-  }, {} as Record<string, number>);
+// function sumUpPrices(typePrices: TypePrice[]) {
+//   // Group by 'type' and sum up prices
+//   const totalByType = typePrices.reduce((acc, item) => {
+//     if (!acc[item.type]) {
+//       acc[item.type] = 0;
+//     }
+//     acc[item.type] += item.price;
+//     return acc;
+//   }, {} as Record<string, number>);
 
-  // Convert the object into an array of objects
-  const result = Object.keys(totalByType).map((type) => ({
-    type: type,
-    price: +totalByType[type].toFixed(NUMBER_PRECISION),
-  }));
+//   // Convert the object into an array of objects
+//   const result = Object.keys(totalByType).map((type) => ({
+//     type: type,
+//     price: +totalByType[type].toFixed(NUMBER_PRECISION),
+//   }));
 
-  let res = result.sort(compareBy('price'));
+//   let res = result.sort(compareBy('price'));
 
-  console.log('[sumUpPrices]', result, res);
-  return res; //ult
-}
+//   console.log('[sumUpPrices]', result, res);
+//   return res; //ult
+// }

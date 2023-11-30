@@ -27,8 +27,6 @@ export class DeleteDialogComponent {
   }
 
   delete() {
-    console.log('[this.delete - dialog]');
-
     this.moneyService.delete(this.id).subscribe();
     this.dialogRef.close();
   }
