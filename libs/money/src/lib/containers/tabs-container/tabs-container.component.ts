@@ -18,6 +18,7 @@ import { MatSort } from '@angular/material/sort';
 import { AddDialogComponent } from '../../components/dialogs/add-dialog/add-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-dialog/delete-dialog.component';
 import { EditDialogComponent } from '../../components/dialogs/edit-dialog/edit-dialog.component';
+import { ToastService } from '@crown/ui';
 
 @Component({
   selector: 'crown-tabs-container',
@@ -76,7 +77,12 @@ export class TabsContainerComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  constructor(@Inject(LOCALE_ID) private locale: string, private dialog: MatDialog, private moneyService: MoneyService) {}
+  constructor(
+    @Inject(LOCALE_ID) private locale: string,
+    private dialog: MatDialog,
+    private moneyService: MoneyService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -96,6 +102,15 @@ export class TabsContainerComponent implements OnInit {
 
   remove(id: number) {
     this.openDialog(Command.REMOVE, DeleteDialogComponent, id);
+  }
+
+  toast() {
+    this.toastService.showToast(
+      'Success',
+      'This is a custom toast message',
+      'icon-class',
+      5000
+    );
   }
 
   formatValue(value: number | string): string {

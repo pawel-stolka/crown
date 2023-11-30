@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -12,6 +12,7 @@ import { AUTH_TOKEN_EMAIL, DotNumberDirective, Money } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { MoneyService } from '../../../services/money.service';
 import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { ToastService } from "@crown/ui";
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -21,6 +22,7 @@ import { Observable, combineLatest, map, startWith } from 'rxjs';
     MaterialModule,
     ReactiveFormsModule,
     DotNumberDirective,
+
   ],
   templateUrl: './add-dialog.component.html',
   styleUrl: './add-dialog.component.scss',
@@ -54,7 +56,8 @@ export class AddDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
-    private moneyService: MoneyService
+    private moneyService: MoneyService,
+    private toastService: ToastService
   ) {
     const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
     const email: string | null = currentUser

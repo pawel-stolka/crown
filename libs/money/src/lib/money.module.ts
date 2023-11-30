@@ -12,6 +12,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     RouterModule.forChild(moneyRoutes),
     MatDatepickerModule,
   ],
-  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    // ToastService
+  ],
 })
 export class MoneyModule {}

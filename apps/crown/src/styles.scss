@@ -26,3 +26,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background: #ddd;
   margin: 0 10px;
 }
+
+// #toastContainer {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   z-index: 10000; /* Ensure this is higher than other elements */
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   pointer-events: none;
+// }
+
+// .toast {
+//   pointer-events: auto;
+//   margin-top: 10px;
+//   /* Add additional styling for the toast */
+// }
+
+.toast-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050; /* High enough to be above other elements */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  margin-top: 10px;
+  /* Additional toast styling */
+}
