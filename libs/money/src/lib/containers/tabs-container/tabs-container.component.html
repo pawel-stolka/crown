@@ -16,7 +16,6 @@
 
 <ng-template #simpleTable>
   <ng-container *ngIf="money$ | async as money">
-    <!-- <pre>{{ money | json }}</pre> -->
     <div class="table mat-elevation-z8">
       <table
         mat-table
@@ -27,28 +26,19 @@
         matSortDirection="asc"
         multiTemplateDataRows
       >
-        <ng-container matColumnDef="userId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>user</th>
-          <td mat-cell *matCellDef="let el">{{ el.userId }}</td>
-          <td mat-footer-cell *matFooterCellDef>Total</td>
-        </ng-container>
-
         <ng-container matColumnDef="fromWho">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>sklep</th>
           <td mat-cell *matCellDef="let el">{{ el.fromWho }}</td>
-          <!-- <td mat-footer-cell *matFooterCellDef></td> -->
         </ng-container>
 
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
           <td mat-cell *matCellDef="let el">{{ el.price }}</td>
-          <!-- <td mat-footer-cell *matFooterCellDef>{{ totalCost | number }} zł</td> -->
         </ng-container>
 
         <ng-container matColumnDef="type">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>kategoria</th>
           <td mat-cell *matCellDef="let el">{{ el.type }}</td>
-          <!-- <td mat-footer-cell *matFooterCellDef></td> -->
         </ng-container>
 
         <ng-container matColumnDef="createdAt">
@@ -56,7 +46,6 @@
           <td mat-cell *matCellDef="let el">
             {{ el.createdAt | date : 'dd.MM.yyyy' }}
           </td>
-          <!-- <td mat-footer-cell *matFooterCellDef></td> -->
         </ng-container>
 
         <ng-container matColumnDef="action">
@@ -70,15 +59,12 @@
               <button mat-button color="warn" (click)="remove(el.id)">
                 <mat-icon>delete</mat-icon>
               </button>
-              <!-- <button confirmDialog="'Are you sure you want to perform this action?'">del</button> -->
             </div>
           </td>
-          <!-- <td mat-footer-cell *matFooterCellDef></td> -->
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let row; columns: columns"></tr>
-        <!-- <tr mat-footer-row *matFooterRowDef="columns"></tr> -->
       </table>
 
       <mat-paginator
@@ -94,7 +80,6 @@
 
 <ng-template #monthGroups>
   <ng-container *ngIf="monthsData$ | async as data">
-    <!-- <pre>{{ data.months| json }}</pre> -->
     <ng-container *ngIf="data.categories as categories">
       <table class="next-table mat-elevation-z8">
         <tr>

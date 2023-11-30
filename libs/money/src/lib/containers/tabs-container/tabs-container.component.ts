@@ -54,7 +54,6 @@ export class TabsContainerComponent implements OnInit {
 
       const months = [...moneyGroups, summary];
       const categories = uniqueCategories(moneyGroups);
-      console.log('UNIQUE', categories);
 
       return {
         months,
@@ -71,8 +70,8 @@ export class TabsContainerComponent implements OnInit {
     'type',
     'price',
     'fromWho',
-    'userId',
-    /*'updatedAt'*/ 'action',
+    // 'updatedAt'
+    'action',
   ];
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;

@@ -24,9 +24,6 @@ export class MoneyService {
   money$ = this._moneySubj.asObservable();
   moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
-    // tap((moneyGroups: MoneyGroup[]) =>
-    //   console.log('--moneyGroups--', moneyGroups)
-    // )
   );
   headers!: { Authorization: string };
   tokenEmail: TokenEmail | null = null;
@@ -63,7 +60,6 @@ export class MoneyService {
   fetchAll$(token: string | null) {
     // TODO: CLEAN IT
     this.headers = { Authorization: `Bearer ${token}` };
-    // console.log('[headers]', this.headers);
 
     return this.http.get<Money[]>(this.URL, { headers: this.headers }).pipe(
       catchError((err) => {
@@ -96,11 +92,11 @@ export class MoneyService {
   }
 
   create(changes?: Partial<Money>) {
-    // console.log('create changes', changes);
     return this.http
       .post<Money>(this.URL, changes, { headers: this.headers })
       .pipe(
         tap((money) => {
+          console.log('created', money);
           const update: Money[] = [...this._moneySubj.value, money];
           this._moneySubj.next(update);
         })
@@ -108,7 +104,6 @@ export class MoneyService {
   }
 
   edit(id: string, changes: Partial<Money>) {
-    // console.log('edit changes', changes);
     const index = this.money.findIndex((money) => money.id === id);
     const newMoney: Money = {
       ...this.money[index],
@@ -161,9 +156,9 @@ export class MoneyService {
     return moneys.map((data: any) => {
       const [period, moneyList] = data;
       const typePrices = groupBy(moneyList, (x: any) => x.type)
-        .map((x) => ({
-          type: x[0],
-          price: fixNumber(x[1].reduce((a: any, c: any) => a + +c.price, 0)),
+        .map(([type, price]) => ({
+          type,//: x[0],
+          price: fixNumber(price.reduce((a: any, c: any) => a + +c.price, 0)),
         }))
         .sort(compareBy('price'));
       const sum = fixNumber(typePrices.reduce((a, c) => a + +c.price, 0));
