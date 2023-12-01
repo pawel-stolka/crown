@@ -25,6 +25,8 @@ export class EditDialogComponent {
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;
+    console.log('CTOR', money);
+
     const { userId, type, price, fromWho, createdAt, details, extra } = money;
     this.form = this.fb.group({
       userId: [userId, Validators.required],
@@ -40,8 +42,8 @@ export class EditDialogComponent {
   save() {
     const changes: Partial<Money> = this.form.value;
 
-    this.moneyService.edit(this.money.id, changes).subscribe(() => {
-      this.dialogRef.close();
+    this.moneyService.edit(this.money.id, changes).subscribe((res) => {
+      this.dialogRef.close(res);
     });
   }
 

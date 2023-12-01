@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, formatNumber } from '@angular/common';
 import { MaterialModule } from '@crown/material';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MoneyService, compareBy } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -93,24 +93,68 @@ export class TabsContainerComponent implements OnInit {
   }
 
   add() {
-    this.openDialog(Command.ADD, AddDialogComponent);
+    const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
+
+    this.handleDialog(dialogRef);
   }
 
   edit(money: Money) {
-    this.openDialog(Command.EDIT, EditDialogComponent, money);
+    console.log('[PRE.edit]', money);
+    // this.toast()
+    dialogConfig.data = money;
+    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
+
+    // this.handleDialog(dialogRef);
+    dialogRef
+      .afterClosed()
+      .pipe(
+        tap((x) => console.log('[this.edit]', x)),
+        tap((_) => this.showInfo()),
+        filter((val) => !!val)
+      )
+      .subscribe((_) => {
+        console.log('[this.edit sub]', _);
+      });
   }
 
   remove(id: number) {
-    this.openDialog(Command.REMOVE, DeleteDialogComponent, id);
+    dialogConfig.data = id;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
+
+    this.handleDialog(dialogRef);
   }
 
-  toast() {
-    this.toastService.showToast(
-      'Success',
-      'This is a custom toast message',
-      'icon-class',
-      5000
-    );
+  private handleDialog(dialogRef: MatDialogRef<any>) {
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((val) => !!val),
+        tap((x) => console.log('[this.handleDialog]', x))
+      )
+      .subscribe((_) => {
+        console.log('[this.handleDialog]', _);
+
+        // this.toast();
+      });
+  }
+
+  showInfo() {
+    this.toastService.showInfo('masz dostęp do wydatków');
+    // this.toastService.showToast(
+    //   'Sukces',
+    //   'Coś udało się zrobić, pytanie co??? :D',
+    //   'icon-class',
+    //   5000
+    // );
+  }
+  showSuccess() {
+    this.toastService.showSuccess('Udało się!');
+  }
+  showWarning() {
+    this.toastService.showWarning('Ups');
+  }
+  showError() {
+    this.toastService.showError('Motyla noga!');
   }
 
   formatValue(value: number | string): string {
@@ -129,6 +173,8 @@ export class TabsContainerComponent implements OnInit {
     if (data && (command === Command.ADD || command === Command.REMOVE)) {
       dialogConfig.data = data;
     }
+
+    console.log('dialogComponent, data', dialogComponent, data);
 
     const dialogRef = this.dialog.open(dialogComponent, dialogConfig);
 

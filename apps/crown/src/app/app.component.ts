@@ -1,4 +1,5 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { NavComponent, ToastService } from '@crown/ui';
 

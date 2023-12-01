@@ -159,6 +159,8 @@ export class MoneyService {
         .map(([type, price]) => ({
           type,//: x[0],
           price: fixNumber(price.reduce((a: any, c: any) => a + +c.price, 0)),
+
+
         }))
         .sort(compareBy('price'));
       const sum = fixNumber(typePrices.reduce((a, c) => a + +c.price, 0));

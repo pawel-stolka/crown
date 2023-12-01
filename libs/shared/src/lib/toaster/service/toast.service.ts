@@ -1,6 +1,7 @@
 import {
   ApplicationRef,
   ComponentFactoryResolver,
+  ComponentRef,
   Injectable,
   Injector,
   ViewContainerRef,
@@ -11,29 +12,63 @@ import { ToastComponent } from '../toast/toast.component';
   providedIn: 'root',
 })
 export class ToastService {
-  private toastContainer!: ViewContainerRef;
+  private toastContainerRef!: ViewContainerRef;
+  private toasts: ComponentRef<ToastComponent>[] = [];
 
   constructor(private resolver: ComponentFactoryResolver) {}
 
   setToastContainer(container: ViewContainerRef) {
-    this.toastContainer = container;
+    this.toastContainerRef = container;
   }
 
-  showToast(title: string, message: string, icon: string, duration: number = 3000) {
+  showSuccess(msg: string) {
+    this.showToast('Sukces', msg, 'check');
+  }
+  showInfo(msg: string) {
+    this.showToast('Info', msg, 'warning');
+  }
+  showWarning(msg: string) {
+    this.showToast('Ostrzeżenie', msg, 'priority_high');
+  }
+  showError(msg: string) {
+    this.showToast('Błąd', msg, 'error');
+  }
+
+  showToast(title: string, message: string, icon: string, duration: number = 5000) {
     const factory = this.resolver.resolveComponentFactory(ToastComponent);
-    const componentRef = this.toastContainer.createComponent(factory);
+    const componentRef = this.toastContainerRef.createComponent(factory);
+
+    // Calculate position based on the number of existing toasts
+    const position = this.toasts.length * 100; // Adjust 50 to your toast height + margin
+
     // ... set the properties and handle removal
     componentRef.instance.title = title;
     componentRef.instance.message = message;
     componentRef.instance.icon = icon;
     componentRef.instance.duration = duration;
+    componentRef.instance.position = position;
+
+    console.log('duration', duration);
 
 
+    this.toasts.push(componentRef);
+    console.log('[this.toasts]', this.toasts);
+
+    const totalDuration = duration + 300;
+    // TODO: don't remove temporarly
+    setTimeout(() => {
+      const index = this.toasts.indexOf(componentRef);
+      if (index >= 0) {
+        this.toastContainerRef.remove(index);
+        this.toasts.splice(index, 1);
+      }
+    }, totalDuration);
+    // STOP
 
     // Automatically remove the toast after the duration
-    setTimeout(() => {
-      this.toastContainer.remove(this.toastContainer.indexOf(componentRef.hostView));
-    }, duration);
+    // setTimeout(() => {
+    //   this.toastContainerRef.remove(this.toastContainerRef.indexOf(componentRef.hostView));
+    // }, duration);
 
     // this.appRef.attachView(componentRef.hostView);
 

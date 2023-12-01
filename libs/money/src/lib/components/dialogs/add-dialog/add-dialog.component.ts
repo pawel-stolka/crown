@@ -49,6 +49,15 @@ export class AddDialogComponent {
     );
   }
 
+  toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
+    this.toastService.showToast(
+      'Sukces',
+      message,
+      'icon-class',
+      5000
+    );
+  }
+
   get type() {
     return this.form.get('type');
   }
@@ -80,7 +89,10 @@ export class AddDialogComponent {
 
     this.moneyService
       .create(changes)
-      .subscribe(() => this.dialogRef.close());
+      .subscribe(() => {
+        this.dialogRef.close()
+        this.toast('Dodałeś rachunek...')
+      });
   }
 
   close() {
