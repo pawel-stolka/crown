@@ -109,7 +109,7 @@ export class TabsContainerComponent implements OnInit {
       .afterClosed()
       .pipe(
         tap((x) => console.log('[this.edit]', x)),
-        tap((_) => this.showInfo()),
+        // tap((_) => this.showInfo()),
         filter((val) => !!val)
       )
       .subscribe((_) => {
@@ -133,29 +133,22 @@ export class TabsContainerComponent implements OnInit {
       )
       .subscribe((_) => {
         console.log('[this.handleDialog]', _);
-
         // this.toast();
       });
   }
 
-  showInfo() {
-    this.toastService.showInfo('masz dostęp do wydatków');
-    // this.toastService.showToast(
-    //   'Sukces',
-    //   'Coś udało się zrobić, pytanie co??? :D',
-    //   'icon-class',
-    //   5000
-    // );
-  }
-  showSuccess() {
-    this.toastService.showSuccess('Udało się!');
-  }
-  showWarning() {
-    this.toastService.showWarning('Ups');
-  }
-  showError() {
-    this.toastService.showError('Motyla noga!');
-  }
+  // showInfo() {
+  //   this.toastService.showInfo('masz dostęp do wydatków');
+  // }
+  // showSuccess() {
+  //   this.toastService.showSuccess('Udało się!');
+  // }
+  // showWarning() {
+  //   this.toastService.showWarning('Ups');
+  // }
+  // showError() {
+  //   this.toastService.showError('Motyla noga!');
+  // }
 
   formatValue(value: number | string): string {
     if (typeof value === 'number') {
