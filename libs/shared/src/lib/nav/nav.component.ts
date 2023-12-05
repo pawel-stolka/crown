@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { Router, RouterModule } from '@angular/router';
@@ -15,6 +15,7 @@ export class NavComponent {
   tokenEmail$ = this.authService.tokenEmail$;
   isLoggedIn$ = this.authService.isLoggedIn$;
   isLoggedOut$ = this.authService.isLoggedOut$;
+  @Output() toggle = new EventEmitter();
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -22,5 +23,9 @@ export class NavComponent {
     this.authService.logout();
     this.router.navigateByUrl('/auth/login');
     // this.router.navigateByUrl('');
+  }
+
+  toggleNav() {
+    this.toggle.emit('try');
   }
 }

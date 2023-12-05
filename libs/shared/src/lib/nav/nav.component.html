@@ -1,6 +1,9 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <div>
+      <button mat-button (click)="toggleNav()">
+        <mat-icon>menu</mat-icon>
+      </button>
       <button
         class="home"
         mat-button
@@ -32,7 +35,6 @@
         [routerLinkActiveOptions]="{ exact: true }"
       >
         Zaloguj się
-
       </button>
       <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
         <div class="email">{{ tokenEmail.email }}</div>

@@ -1,9 +1,18 @@
-<crown-nav></crown-nav>
-
 <!-- <div #toastContainer></div> -->
 <!-- <div #toastContainer class="toast-container"></div> -->
 <ng-template #toastContainer></ng-template>
 
-<div class="wrapper">
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav [mode]="mode.value || 'over'">
+    <button mat-button (click)="sidenav.toggle()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <crown-nav (toggle)="sidenav.toggle()"></crown-nav>
+    <div class="wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

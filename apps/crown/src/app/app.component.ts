@@ -1,11 +1,20 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDrawerMode, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
+import { MaterialModule } from '@crown/material';
 import { NavComponent, ToastService } from '@crown/ui';
 
 @Component({
   standalone: true,
-  imports: [NavComponent, RouterModule],
+  imports: [
+    NavComponent,
+    RouterModule,
+    MaterialModule,
+    MatSidenavModule,
+    MatButtonModule,
+  ],
   selector: 'crown-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -15,6 +24,8 @@ export class AppComponent {
   toastContainerRef!: ViewContainerRef;
 
   title = 'crown';
+
+  mode = new FormControl('over' as MatDrawerMode);
 
   constructor(private toastService: ToastService) {}
 
