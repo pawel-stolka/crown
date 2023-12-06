@@ -15,19 +15,19 @@
     {
       "title": "coś",
       "description": "qwqew  gsg s wgsag agsfg gsfggsgs sgsgs",
-      "status": "TO DO",
+      "status": "IN PROGRESS",
       "id": "6NrKnJz"
     },
     {
       "title": "todosy",
       "description": "dodać walidację na długość tekstów",
-      "status": "DONE",
+      "status": "CLOSED",
       "id": "O9d70jY"
     },
     {
       "title": "tere",
       "description": "df",
-      "status": "TO DO",
+      "status": "CLOSED",
       "id": "akKq26b"
     },
     {
@@ -39,7 +39,7 @@
     {
       "title": "sfs",
       "description": "sds",
-      "status": "TO DO",
+      "status": "CLOSED",
       "id": "9tBwYok"
     }
   ]

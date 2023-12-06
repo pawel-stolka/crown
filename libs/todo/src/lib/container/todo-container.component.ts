@@ -30,6 +30,10 @@ export class TodoContainerComponent implements OnInit {
     map(all => all.filter(todo => todo.status === Status.DONE))
   )
 
+  closed$ = this.all$.pipe(
+    map(all => all.filter(todo => todo.status === Status.CLOSED))
+  )
+
   constructor(private dialog: MatDialog, private todoService: TodoService) {}
 
   ngOnInit(): void {}

@@ -20,6 +20,7 @@ import { MaterialModule } from '@crown/material';
 export class TodoComponent {
   @Input() todo!: Todo;
   @Output() action = new EventEmitter();
+  @Input() closed = false;
 
   Status = Status;
 

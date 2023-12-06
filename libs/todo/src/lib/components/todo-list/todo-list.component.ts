@@ -16,6 +16,7 @@ import { MaterialModule } from '@crown/material';
 })
 export class TodoListComponent {
   @Input() todos: Todo[] = [];
+  @Input() closed = false;
   @Output() update = new EventEmitter();
 
   updateTodo(event: any) {

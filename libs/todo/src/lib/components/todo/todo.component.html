@@ -1,7 +1,15 @@
-<mat-card>
+<mat-card
+  [ngClass]="{
+    'todo-layer': todo.status === Status.TO_DO,
+    'done-layer': todo.status === Status.DONE,
+    'in_progress-layer': todo.status === Status.IN_PROGRESS,
+    disabled: todo.status === Status.CLOSED
+  }"
+>
   <div class="card-header">
     <div class="title center">{{ todo.title }}</div>
-    <mat-icon class="icon center"
+    <mat-icon
+      class="icon center"
       [ngClass]="{
         todo: todo.status === Status.TO_DO,
         done: todo.status === Status.DONE,
@@ -11,15 +19,29 @@
       {{ getIconName(todo.status) }}
     </mat-icon>
   </div>
-  <mat-card-content>
-    <div>{{ todo.description }}</div>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-flat-button (click)="downgrade()">
-      <mat-icon>arrow_back_ios</mat-icon>
-    </button>
-    <button mat-flat-button (click)="upgrade()">
-      <mat-icon>arrow_forward_ios</mat-icon>
-    </button>
-  </mat-card-actions>
+  <ng-container *ngIf="!closed; then normal; else short"> </ng-container>
 </mat-card>
+
+<ng-template #short>
+  <div class="short">
+    {{ todo.description }}
+  </div>
+</ng-template>
+
+<ng-template #normal>
+  <div class="card-content">
+    <div class="action">
+      <button mat-flat-button (click)="downgrade()">
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+    </div>
+    <div class="description">
+      {{ todo.description }}
+    </div>
+    <div class="action">
+      <button mat-flat-button (click)="upgrade()">
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+    </div>
+  </div>
+</ng-template>

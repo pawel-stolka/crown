@@ -10,14 +10,20 @@
   <crown-todo-list [todos]="todos" (update)="updateTodo($event)"></crown-todo-list>
 </ng-container>
 
-<div class="divider">in progress</div>
+<div class="divider">w trakcie</div>
 
 <ng-container *ngIf="inProgress$ | async as inProgress">
   <crown-todo-list [todos]="inProgress" (update)="updateTodo($event)"></crown-todo-list>
 </ng-container>
 
-<div class="divider">done</div>
+<div class="divider">gotowe</div>
 
 <ng-container *ngIf="done$ | async as done">
   <crown-todo-list [todos]="done" (update)="updateTodo($event)"></crown-todo-list>
+</ng-container>
+
+<div class="divider">zamknięte</div>
+
+<ng-container *ngIf="closed$ | async as closed">
+  <crown-todo-list [closed]="true" [todos]="closed" (update)="updateTodo($event)"></crown-todo-list>
 </ng-container>

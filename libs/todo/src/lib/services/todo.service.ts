@@ -113,7 +113,11 @@ export class TodoService {
 
     switch (action) {
       case TodoAction.UPGRADE:
-        status = currentTodo?.status === Status.TO_DO ? Status.IN_PROGRESS : Status.DONE;
+        status = currentTodo?.status === Status.TO_DO
+        ? Status.IN_PROGRESS
+        : currentTodo?.status === Status.IN_PROGRESS
+          ? Status.DONE
+          : Status.CLOSED
 
         break;
       case TodoAction.DOWNGRADE:
