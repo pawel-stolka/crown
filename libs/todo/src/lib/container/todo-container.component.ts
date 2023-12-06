@@ -22,6 +22,11 @@ export class TodoContainerComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  updateTodo(event: any) {
+    console.log('[updateTodo]', event);
+    this.todoService.updateStatus(event)
+  }
+
   add() {
     const dialogRef = this.dialog.open(AddTodoComponent, dialogConfig);
 

@@ -1,0 +1,32 @@
+mat-card {
+  // border: 5px dotted;
+  background-color: rgba(127, 240, 255, 0.637);
+  // width: 100%;
+  margin: 10px;
+
+  mat-card-title {
+    display: flex;
+    justify-content: space-between;
+
+    mat-icon {
+      margin-right: 10px;
+    }
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+.todo {
+  color: red;
+}
+
+.done {
+  color: green;
+}
+
+.in_progress {
+  color: orange;
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todo.service';
 import { Todo } from '@crown/data';
@@ -15,4 +15,9 @@ import { TodoComponent } from '../todo/todo.component';
 })
 export class TodoListComponent {
   @Input() todos: Todo[] = [];
+  @Output() update = new EventEmitter();
+
+  updateTodo(event: any) {
+    this.update.emit(event);
+  }
 }

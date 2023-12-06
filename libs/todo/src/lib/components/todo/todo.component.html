@@ -1,2 +1,30 @@
-<pre>{{ todo | json }}</pre>
-
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <!-- <div>{{ todo.status }}</div>
+        <mat-icon>done_outline</mat-icon> -->
+      <mat-icon
+        [ngClass]="{
+          todo: todo.status === Status.TO_DO,
+          done: todo.status === Status.DONE,
+          in_progress: todo.status === Status.IN_PROGRESS
+        }"
+      >
+        {{ getIconName(todo.status) }}
+      </mat-icon>
+      <div>{{ todo.title }}</div>
+    </mat-card-title>
+    <!-- <mat-card-subtitle>{{ todo.description }}</mat-card-subtitle> -->
+  </mat-card-header>
+  <mat-card-content>
+    <div>{{ todo.description }}</div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button (click)="downgrade()">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    <button mat-flat-button (click)="upgrade()">
+      <mat-icon>arrow_forward_ios</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

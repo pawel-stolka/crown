@@ -1,7 +1,7 @@
 
 <!-- <ng-container *ngIf="todos$ | async as todos"> -->
   <ng-container *ngIf="todos?.length; else empty">
-  <crown-todo *ngFor="let todo of todos" [todo]="todo">
+  <crown-todo *ngFor="let todo of todos" [todo]="todo" (action)="updateTodo($event)">
     <!-- <div>{{ todo | json }}</div> -->
   </crown-todo>
 </ng-container>

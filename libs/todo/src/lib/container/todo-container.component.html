@@ -5,5 +5,5 @@
 </div>
 
 <ng-container *ngIf="todos$ | async as todos">
-  <crown-todo-list [todos]="todos"></crown-todo-list>
+  <crown-todo-list [todos]="todos" (update)="updateTodo($event)"></crown-todo-list>
 </ng-container>
