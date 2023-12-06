@@ -1,23 +1,18 @@
 mat-card {
-  // border: 5px dotted;
   background-color: rgba(127, 240, 255, 0.637);
-  // width: 100%;
   margin: 10px;
-  // width: 100%;
 
-  // mat-card-header {
-  //   width: 100%;
 
-  mat-card-title {
-    // width: 100%;
-    // display: flex;
-    // // justify-content: center;
-    // justify-content: space-between;
+  // mat-card-title {
+  //   // width: 100%;
+  //   // display: flex;
+  //   // // justify-content: center;
+  //   // justify-content: space-between;
 
-    mat-icon {
-      margin-right: 10px;
-    }
-  }
+  //   mat-icon {
+  //     margin-right: 10px;
+  //   }
+  // }
   // }
 
   .card-content {
@@ -64,14 +59,14 @@ mat-card {
   }
 
   .title {
-    width: 90%;
+    width: 93%;
     font-size: 1.2em;
     font-weight: bolder;
-    border-right: 1px solid grey;
+    // border-right: 1px solid grey;
   }
 
   .icon {
-    width: 10%;
+    width: 7%;
   }
 
   .mat-mdc-card-title {
