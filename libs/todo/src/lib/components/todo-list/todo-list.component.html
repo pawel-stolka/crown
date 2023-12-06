@@ -1,7 +1,14 @@
 
-<ng-container *ngIf="todos$ | async as todos">
-  <div *ngFor="let todo of todos">
-    <div>{{ todo | json }}</div>
-  </div>
+<!-- <ng-container *ngIf="todos$ | async as todos"> -->
+  <ng-container *ngIf="todos?.length; else empty">
+  <crown-todo *ngFor="let todo of todos" [todo]="todo">
+    <!-- <div>{{ todo | json }}</div> -->
+  </crown-todo>
 </ng-container>
+
+<ng-template #empty>
+  nic.
+</ng-template>
+
+<!-- </ng-container> -->
 

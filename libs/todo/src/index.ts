@@ -1,3 +1,3 @@
 export * from './lib/lib.routes';
 
-export * from './lib/components/todo-list/todo-list.component';
+export * from './lib/container/todo-container.component';

@@ -1,0 +1,36 @@
+<div mat-dialog-title>{{ title }}</div>
+
+<mat-dialog-content [formGroup]="form">
+
+  <mat-form-field appearance="outline">
+    <mat-label>nazwa</mat-label>
+    <input matInput formControlName="title" />
+    @if (form.get('title')?.hasError('required')) {
+    <mat-error> Nazwij to jakoś ;) </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>opis</mat-label>
+    <input matInput formControlName="description" />
+    @if (form.get('description')?.hasError('required')) {
+    <mat-error> Opisz problem </mat-error>
+    }
+  </mat-form-field>
+
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+  <button mat-button (click)="close()">zamknij</button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    #saveButton
+    [disabled]="!form.valid"
+    (click)="save()"
+  >
+    dodaj
+  </button>
+</mat-dialog-actions>

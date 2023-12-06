@@ -19,6 +19,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'todo',
-    loadComponent: () => import('@crown/todo').then((m) => m.TodoListComponent),
+    loadComponent: () => import('@crown/todo').then((m) => m.TodoContainerComponent),
   },
 ];

@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@crown/material';
 import { NavComponent, ToastService } from '@crown/ui';
 import { TodoContainerComponent } from 'libs/todo/src/lib/container/todo-container.component';
+import { TodoService } from 'libs/todo/src/lib/services/todo.service';
 
 @Component({
   standalone: true,
@@ -29,9 +30,16 @@ export class AppComponent {
 
   mode = new FormControl('over' as MatDrawerMode);
 
-  constructor(private toastService: ToastService) {}
+  constructor(private toastService: ToastService,
+    private todoService: TodoService
+    ) {}
 
   ngAfterViewInit() {
     this.toastService.setToastContainer(this.toastContainerRef);
+  }
+
+  onSidenavOpen() {
+    console.log('onSidenavOpen');
+    this.todoService.fetchAll$(null).subscribe();
   }
 }
