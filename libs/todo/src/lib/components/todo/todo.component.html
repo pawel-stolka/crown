@@ -6,6 +6,33 @@
     disabled: todo.status === Status.CLOSED
   }"
 >
+  <ng-container *ngIf="!closed; then normal; else short"> </ng-container>
+  <!-- <div class="card-header">
+    <div class="title center">{{ todo.title }}</div>
+    <mat-icon
+      class="icon center"
+      [ngClass]="{
+        todo: todo.status === Status.TO_DO,
+        done: todo.status === Status.DONE,
+        in_progress: todo.status === Status.IN_PROGRESS
+      }"
+    >
+      {{ getIconName(todo.status) }}
+    </mat-icon>
+  </div>
+  <ng-container *ngIf="!closed; then normal; else short"> </ng-container> -->
+</mat-card>
+
+<ng-template #short>
+  <div class="short">
+    <!-- <div class="_title center"> -->
+      <div  class="title">{{ todo.title }}</div>
+      <div>{{ todo.description }}</div>
+    <!-- </div> -->
+  </div>
+</ng-template>
+
+<ng-template #normal>
   <div class="card-header">
     <div class="title center">{{ todo.title }}</div>
     <mat-icon
@@ -19,16 +46,6 @@
       {{ getIconName(todo.status) }}
     </mat-icon>
   </div>
-  <ng-container *ngIf="!closed; then normal; else short"> </ng-container>
-</mat-card>
-
-<ng-template #short>
-  <div class="short">
-    {{ todo.description }}
-  </div>
-</ng-template>
-
-<ng-template #normal>
   <div class="card-content">
     <div class="action">
       <button mat-flat-button (click)="downgrade()">

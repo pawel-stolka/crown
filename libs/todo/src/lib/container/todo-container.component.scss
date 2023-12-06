@@ -1,3 +1,13 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  // border: 5px dotted;
+  // height: calc(100vh - 10px);
+  // align-content: space-between;
+  justify-content: space-between;
+}
+
 .actions {
   display: flex;
   flex-direction: row;

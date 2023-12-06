@@ -1,46 +1,40 @@
 {
   "todos": [
     {
-      "title": "testy",
+      "title": "unit-testy",
       "description": "zacząć od serwisów",
       "status": "TO DO",
       "id": "-lZT7yO"
     },
     {
-      "title": "test",
-      "description": "qwesgssfs sfsfsfsfsfffffffffffffffffffffffff",
+      "title": "Role",
+      "description": "admin, user, reader",
       "status": "TO DO",
-      "id": "pgJlBqo"
+      "id": "K1ETGpt"
     },
     {
-      "title": "coś",
-      "description": "qwqew  gsg s wgsag agsfg gsfggsgs sgsgs",
+      "title": "todo-lista",
+      "description": "dodaj, edytuj, usuń po x dniach",
       "status": "IN PROGRESS",
-      "id": "6NrKnJz"
+      "id": "L6YY0F8"
     },
     {
-      "title": "todosy",
-      "description": "dodać walidację na długość tekstów",
-      "status": "CLOSED",
-      "id": "O9d70jY"
+      "title": "boczny panel ",
+      "description": "wysuwa się / znika",
+      "status": "DONE",
+      "id": "GuP0aOI"
     },
     {
-      "title": "tere",
-      "description": "df",
-      "status": "CLOSED",
-      "id": "akKq26b"
-    },
-    {
-      "title": "dfdf",
-      "description": "dfd",
+      "title": "stan",
+      "description": "zarządzanie stanem",
       "status": "TO DO",
-      "id": "mV6GMFR"
+      "id": "dd9C7sU"
     },
     {
-      "title": "sfs",
-      "description": "sds",
-      "status": "CLOSED",
-      "id": "9tBwYok"
+      "title": "gwiazdki w todo",
+      "description": "priorytety - ControlValueAccessor",
+      "status": "TO DO",
+      "id": "Sq6l2Kh"
     }
   ]
 }

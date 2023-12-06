@@ -1,5 +1,5 @@
 mat-card {
-  background-color: rgba(127, 240, 255, 0.637);
+  // background-color: rgba(127, 240, 255, 0.637);
   margin: 10px;
 
 
@@ -35,9 +35,14 @@ mat-card {
 
   .short {
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
-    border: 5px dotted green;
+    // flex-wrap: wrap;
+    padding: 3px;
+
+    .title {
+      font-weight: bolder;
+    }
   }
 
   mat-card-actions {
@@ -48,6 +53,12 @@ mat-card {
 }
 
 .card-header {
+  .title {
+    width: 93%;
+    font-size: 1.2em;
+    font-weight: bolder;
+    // border-right: 1px solid grey;
+  }
   display: flex;
   align-items: center;
   padding: 5px;
@@ -58,12 +69,6 @@ mat-card {
     justify-content: center;
   }
 
-  .title {
-    width: 93%;
-    font-size: 1.2em;
-    font-weight: bolder;
-    // border-right: 1px solid grey;
-  }
 
   .icon {
     width: 7%;
@@ -106,5 +111,5 @@ mat-card-content {
 
 .disabled {
   background-color: gray;
-  opacity: 50%;
+  opacity: 30%;
 }
