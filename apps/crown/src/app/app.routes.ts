@@ -17,4 +17,8 @@ export const appRoutes: Route[] = [
     canActivate: [AuthGuard],
     loadChildren: () => import('@crown/money').then((m) => m.MoneyModule),
   },
+  {
+    path: 'todo',
+    loadComponent: () => import('@crown/todo').then((m) => m.TodoListComponent),
+  },
 ];

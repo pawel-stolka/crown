@@ -1,0 +1,7 @@
+
+<ng-container *ngIf="todos$ | async as todos">
+  <div *ngFor="let todo of todos">
+    <div>{{ todo | json }}</div>
+  </div>
+</ng-container>
+

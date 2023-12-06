@@ -4,9 +4,22 @@
 
 <mat-sidenav-container class="example-container">
   <mat-sidenav #sidenav [mode]="mode.value || 'over'">
-    <button mat-button (click)="sidenav.toggle()">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
+    <div class="sidenav-buttons">
+      <!-- <button mat-button (click)="sidenav.toggle()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button> -->
+
+      <!-- <button
+        class="home"
+        mat-button
+        routerLink="todo"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        TODOs
+      </button> -->
+      <crown-todo-container></crown-todo-container>
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content>

@@ -5,6 +5,7 @@ import { MatDrawerMode, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@crown/material';
 import { NavComponent, ToastService } from '@crown/ui';
+import { TodoContainerComponent } from 'libs/todo/src/lib/container/todo-container.component';
 
 @Component({
   standalone: true,
@@ -14,6 +15,7 @@ import { NavComponent, ToastService } from '@crown/ui';
     MaterialModule,
     MatSidenavModule,
     MatButtonModule,
+    TodoContainerComponent
   ],
   selector: 'crown-root',
   templateUrl: './app.component.html',
