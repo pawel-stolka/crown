@@ -1,0 +1,9 @@
+.empty {
+  display: flex;
+  justify-content:space-around;
+  margin: 10px 0;
+
+  mat-icon {
+    color: rgba(128, 128, 128, 0.5);
+  }
+}

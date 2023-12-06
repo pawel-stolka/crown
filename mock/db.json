@@ -9,8 +9,38 @@
     {
       "title": "test",
       "description": "qwesgssfs sfsfsfsfsfffffffffffffffffffffffff",
-      "status": "IN PROGRESS",
+      "status": "TO DO",
       "id": "pgJlBqo"
+    },
+    {
+      "title": "coś",
+      "description": "qwqew  gsg s wgsag agsfg gsfggsgs sgsgs",
+      "status": "TO DO",
+      "id": "6NrKnJz"
+    },
+    {
+      "title": "todosy",
+      "description": "dodać walidację na długość tekstów",
+      "status": "DONE",
+      "id": "O9d70jY"
+    },
+    {
+      "title": "tere",
+      "description": "df",
+      "status": "TO DO",
+      "id": "akKq26b"
+    },
+    {
+      "title": "dfdf",
+      "description": "dfd",
+      "status": "TO DO",
+      "id": "mV6GMFR"
+    },
+    {
+      "title": "sfs",
+      "description": "sds",
+      "status": "TO DO",
+      "id": "9tBwYok"
     }
   ]
 }

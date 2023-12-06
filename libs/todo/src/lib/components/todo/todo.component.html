@@ -1,21 +1,16 @@
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>
-      <!-- <div>{{ todo.status }}</div>
-        <mat-icon>done_outline</mat-icon> -->
-      <mat-icon
-        [ngClass]="{
-          todo: todo.status === Status.TO_DO,
-          done: todo.status === Status.DONE,
-          in_progress: todo.status === Status.IN_PROGRESS
-        }"
-      >
-        {{ getIconName(todo.status) }}
-      </mat-icon>
-      <div>{{ todo.title }}</div>
-    </mat-card-title>
-    <!-- <mat-card-subtitle>{{ todo.description }}</mat-card-subtitle> -->
-  </mat-card-header>
+  <div class="card-header">
+    <div class="title center">{{ todo.title }}</div>
+    <mat-icon class="icon center"
+      [ngClass]="{
+        todo: todo.status === Status.TO_DO,
+        done: todo.status === Status.DONE,
+        in_progress: todo.status === Status.IN_PROGRESS
+      }"
+    >
+      {{ getIconName(todo.status) }}
+    </mat-icon>
+  </div>
   <mat-card-content>
     <div>{{ todo.description }}</div>
   </mat-card-content>

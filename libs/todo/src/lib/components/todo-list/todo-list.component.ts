@@ -4,12 +4,13 @@ import { TodoService } from '../../services/todo.service';
 import { Todo } from '@crown/data';
 import { AddTodoComponent } from '../dialogs/add-todo/add-todo.component';
 import { TodoComponent } from '../todo/todo.component';
+import { MaterialModule } from '@crown/material';
 
 @Component({
   selector: 'crown-todo-list',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, TodoComponent],
+  imports: [CommonModule, TodoComponent, MaterialModule],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss',
 })

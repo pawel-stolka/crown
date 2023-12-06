@@ -3,20 +3,63 @@ mat-card {
   background-color: rgba(127, 240, 255, 0.637);
   // width: 100%;
   margin: 10px;
+  // width: 100%;
+
+  // mat-card-header {
+  //   width: 100%;
 
   mat-card-title {
-    display: flex;
-    justify-content: space-between;
+    // width: 100%;
+    // display: flex;
+    // // justify-content: center;
+    // justify-content: space-between;
 
     mat-icon {
       margin-right: 10px;
     }
   }
+  // }
 
   mat-card-actions {
     display: flex;
+    flex-direction: row;
     justify-content: space-around;
   }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid grey;
+
+  .center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .title {
+    width: 80%;
+    font-size: 1.2em;
+    font-weight: bolder;
+    border-right: 1px solid grey;
+  }
+
+  .icon {
+    width: 20%;
+  }
+
+  .mat-mdc-card-title {
+    // border: 5px dotted dodgerblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+mat-card-content {
+  margin: 10px ;
 }
 
 .todo {

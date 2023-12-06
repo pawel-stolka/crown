@@ -4,6 +4,20 @@
   </button>
 </div>
 
+<div class="divider">todo</div>
+
 <ng-container *ngIf="todos$ | async as todos">
   <crown-todo-list [todos]="todos" (update)="updateTodo($event)"></crown-todo-list>
+</ng-container>
+
+<div class="divider">in progress</div>
+
+<ng-container *ngIf="inProgress$ | async as inProgress">
+  <crown-todo-list [todos]="inProgress" (update)="updateTodo($event)"></crown-todo-list>
+</ng-container>
+
+<div class="divider">done</div>
+
+<ng-container *ngIf="done$ | async as done">
+  <crown-todo-list [todos]="done" (update)="updateTodo($event)"></crown-todo-list>
 </ng-container>
