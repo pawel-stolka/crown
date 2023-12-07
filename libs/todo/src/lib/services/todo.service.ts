@@ -1,6 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Status, Todo, TodoAction, TodoEvent } from '@crown/data';
+import {
+  API_URL,
+  Colors,
+  Status,
+  Todo,
+  TodoAction,
+  TodoEvent,
+  TokenEmail,
+} from '@crown/data';
+import { AuthService } from '@crown/auth/service';
 import {
   catchError,
   throwError,
@@ -16,21 +25,50 @@ import {
   providedIn: 'root',
 })
 export class TodoService {
+  private URL = `${API_URL}/todo`;
   private dataLoaded = false;
-  private _todosSubj = new BehaviorSubject<Todo[]>([]); //this.mockTodo);
+  private _todosSubj = new BehaviorSubject<Todo[]>([]);
+
   todos$: Observable<Todo[]> = this._todosSubj.asObservable();
-  URL = 'http://localhost:3000/todos';
+
+  headers!: { Authorization: string };
+  tokenEmail: TokenEmail | null = null;
 
   get todos() {
     return this._todosSubj.value;
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+    console.log('todo service CTOR');
+    this.data$().subscribe();
+  }
+
+  data$() {
+    return this.authService.tokenEmail$.pipe(
+      catchError((err) => {
+        console.log('Could not get token', err);
+        return throwError(err);
+      }),
+      filter((x) => !!x),
+      tap(
+        (tokenEmail) =>
+          (this.headers = { Authorization: `Bearer ${tokenEmail?.token}` })
+      )
+      // TODO: finish after first call
+
+      // switchMap((tokenEmail) => {
+      //   if (tokenEmail?.token) {
+      //     return this.fetchAll$(tokenEmail.token);
+      //   } else {
+      //     return of(null);
+      //   }
+      // })
+    );
+  }
 
   fetchAll$(token: string | null) {
     if (!this.dataLoaded) {
-      // return this.http.get<Todo[]>(this.URL, { headers: this.headers }).pipe(
-      return this.http.get<Todo[]>(this.URL).pipe(
+      return this.http.get<Todo[]>(this.URL, { headers: this.headers }).pipe(
         catchError((err) => {
           const message = '[fetchAll | TODO] Something wrong...';
           // this.messages.showErrors(message);
@@ -61,15 +99,13 @@ export class TodoService {
   }
 
   create(changes?: Partial<Todo>) {
-    return this.http
-      .post<Todo>(this.URL, changes) //, { headers: this.headers })
-      .pipe(
-        tap((todo) => {
-          console.log('created | todo', todo);
-          const todos: Todo[] = [...this._todosSubj.value, todo];
-          this._todosSubj.next(todos);
-        })
-      );
+    return this.http.post<Todo>(this.URL, changes).pipe(
+      tap((todo) => {
+        console.log('created | todo', todo);
+        const todos: Todo[] = [...this._todosSubj.value, todo];
+        this._todosSubj.next(todos);
+      })
+    );
   }
 
   edit(id: string, changes: Partial<Todo>) {
@@ -84,10 +120,8 @@ export class TodoService {
     newTodos[index] = newTodo;
     this._todosSubj.next(newTodos);
 
-    console.log('[this.todos =>]', this.todos);
-
     return this.http
-      .put<Todo>(`${this.URL}/${id}`, changes /*, { headers: this.headers }*/)
+      .put<Todo>(`${this.URL}/${id}`, changes, { headers: this.headers })
       .pipe(
         catchError((err) => {
           const message = `Could not edit Todo: ${changes.id}`;
@@ -101,35 +135,35 @@ export class TodoService {
   }
 
   updateStatus(event: TodoEvent): void {
-    console.log('[status]', event);
     const { action, id } = event;
 
-    // let todo: Todo | Partial<Todo> = this.todos.find(todo => todo.id === event.id)
-    let status; // = action === 'upgrade' ? Status.IN_PROGRESS : Status.DONE;
-    let currentTodo: Todo | undefined = this.todos.find((todo) => todo.id === id)
-    // const oldStatus = currentTodo?.status;
-    // console.log('[oldStatus]', oldStatus);
+    let status;
+    let currentTodo: Todo | undefined = this.todos.find(
+      (todo) => todo.id === id
+    );
 
-
+    // TODO: refactor - maybe in state management?
     switch (action) {
       case TodoAction.UPGRADE:
-        status = currentTodo?.status === Status.TO_DO
-        ? Status.IN_PROGRESS
-        : currentTodo?.status === Status.IN_PROGRESS
-          ? Status.DONE
-          : Status.CLOSED
+        status =
+          currentTodo?.status === Status.TO_DO
+            ? Status.IN_PROGRESS
+            : currentTodo?.status === Status.IN_PROGRESS
+            ? Status.DONE
+            : Status.CLOSED;
 
         break;
       case TodoAction.DOWNGRADE:
         status =
-        currentTodo?.status === Status.IN_PROGRESS ? Status.TO_DO : Status.IN_PROGRESS;
+          currentTodo?.status === Status.IN_PROGRESS
+            ? Status.TO_DO
+            : Status.IN_PROGRESS;
         break;
     }
 
     let todo: Partial<Todo> = {
       ...currentTodo,
       status,
-      // updatedAt: ''
     };
     console.log('[updateStatus]', event, todo);
 

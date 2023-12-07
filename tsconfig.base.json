@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@crown/auth": ["libs/auth/src/index.ts"],
+      "@crown/auth/service": ["libs/auth/src/lib/services/auth.service"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],

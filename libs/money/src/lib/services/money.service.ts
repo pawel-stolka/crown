@@ -12,8 +12,8 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Money, API_URL, MoneyGroup, TokenEmail, Colors } from '@crown/data';
-import { AuthService } from 'libs/auth/src/lib/services/auth.service';
+import { Money, API_URL, MoneyGroup, TokenEmail } from '@crown/data';
+import { AuthService } from '@crown/auth/service';
 
 @Injectable({
   providedIn: 'root',
@@ -73,6 +73,7 @@ export class MoneyService {
     );
   }
 
+  // TODO: check if needed
   getCategories$() {
     const URL = `${API_URL}/api/unique-types-grouped`;
     return this.http
@@ -157,10 +158,8 @@ export class MoneyService {
       const [period, moneyList] = data;
       const typePrices = groupBy(moneyList, (x: any) => x.type)
         .map(([type, price]) => ({
-          type,//: x[0],
+          type, 
           price: fixNumber(price.reduce((a: any, c: any) => a + +c.price, 0)),
-
-
         }))
         .sort(compareBy('price'));
       const sum = fixNumber(typePrices.reduce((a, c) => a + +c.price, 0));

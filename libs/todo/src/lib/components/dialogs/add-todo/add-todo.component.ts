@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TodoService } from '../../../services/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Status, Todo } from '@crown/data';
+import { AUTH_TOKEN_EMAIL, Status, Todo } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 
 @Component({
@@ -22,11 +22,18 @@ export class AddTodoComponent {
     private dialogRef: MatDialogRef<AddTodoComponent>,
     private todoService: TodoService,
   ) {
+    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
+    console.log('[currentUser]', currentUser);
+
+    const email: string | null = currentUser
+      ? JSON.parse(currentUser).email
+      : null;
+
     this.form = this.fb.group({
+      userId: [email],
       title: ['', [Validators.required]],
       description: [null, [Validators.required]],
       status: [Status.TO_DO, [Validators.required]],
-      // createdAt: [new Date(), [Validators.required]],
     });
   }
 
