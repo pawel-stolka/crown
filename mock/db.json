@@ -21,7 +21,7 @@
     {
       "title": "boczny panel ",
       "description": "wysuwa się / znika",
-      "status": "DONE",
+      "status": "CLOSED",
       "id": "GuP0aOI"
     },
     {
@@ -35,6 +35,42 @@
       "description": "priorytety - ControlValueAccessor",
       "status": "TO DO",
       "id": "Sq6l2Kh"
+    },
+    {
+      "title": "mobilka",
+      "description": "dodaj responsywność",
+      "status": "TO DO",
+      "id": "VBh6ZF4"
+    },
+    {
+      "title": "rejestracja",
+      "description": "dodaj max 10 userów",
+      "status": "TO DO",
+      "id": "gp1bMAq"
+    },
+    {
+      "title": "wersja appki",
+      "description": "gdzieś na górze",
+      "status": "TO DO",
+      "id": "f7IOtFQ"
+    },
+    {
+      "title": "API",
+      "description": "w NX",
+      "status": "TO DO",
+      "id": "Yvh2J5z"
+    },
+    {
+      "title": "scroll w todo",
+      "description": "po lewej stronie",
+      "status": "TO DO",
+      "id": "N4GZALk"
+    },
+    {
+      "title": "todosy",
+      "description": " w API",
+      "status": "TO DO",
+      "id": "u5HfqjR"
     }
   ]
 }

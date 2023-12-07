@@ -17,6 +17,9 @@ export class NavComponent {
   isLoggedOut$ = this.authService.isLoggedOut$;
   @Output() toggle = new EventEmitter();
 
+  splineColor = '#ffc83d';
+  splineBackground = '#3f51b5';
+
   constructor(private authService: AuthService, private router: Router) {}
 
   logout() {

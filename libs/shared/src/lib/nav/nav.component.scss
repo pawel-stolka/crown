@@ -1,6 +1,7 @@
 mat-toolbar-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 50px;
 
   .mat-icon {
@@ -32,4 +33,16 @@ mat-toolbar-row {
       font-size: medium;
     }
   }
+
+  .help-fix {
+    // border: 2px dotted;
+    display: flex;
+    font-size: small;
+    align-items: center;
+  }
+
+  // .label-fix {
+  //   margin-top: 0;
+  //   color: magenta;
+  // }
 }

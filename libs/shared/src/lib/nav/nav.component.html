@@ -1,9 +1,9 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <div>
-      <button mat-button (click)="toggleNav()">
+      <!-- <button mat-button (click)="toggleNav()">
         <mat-icon>menu</mat-icon>
-      </button>
+      </button> -->
       <button
         class="home"
         mat-button
@@ -22,6 +22,32 @@
         [routerLinkActiveOptions]="{ exact: true }"
       >
         Wydatki
+      </button>
+    </div>
+    <div class="help-fix">
+      <div [ngStyle]="{ color: splineColor }">Poprawki ?</div>
+      <svg width="160" height="64" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M10 20 Q 50 0, 85 30 T 150 40"
+          [attr.stroke]="splineColor"
+          stroke-width="2"
+          fill="none"
+        />
+        <path
+          d="M150 40 T 137 33"
+          [attr.stroke]="splineColor"
+          stroke-width="2"
+          fill="none"
+        />
+        <path
+          d="M150 40 T 150 55"
+          [attr.stroke]="splineColor"
+          stroke-width="2"
+          fill="none"
+        />
+      </svg>
+      <button mat-mini-fab color="accent" (click)="toggleNav()">
+        <mat-icon>favorite</mat-icon>
       </button>
     </div>
 
