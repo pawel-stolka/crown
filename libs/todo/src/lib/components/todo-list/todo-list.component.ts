@@ -18,8 +18,13 @@ export class TodoListComponent {
   @Input() todos: Todo[] = [];
   @Input() closed = false;
   @Output() update = new EventEmitter();
+  @Output() edit = new EventEmitter();
 
   updateTodo(event: any) {
     this.update.emit(event);
+  }
+
+  editTodo(event: any) {
+    this.edit.emit(event)
   }
 }

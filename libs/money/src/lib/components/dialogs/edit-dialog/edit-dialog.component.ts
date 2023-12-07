@@ -1,7 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Money } from '@crown/data';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { AUTH_TOKEN_EMAIL, Money } from '@crown/data';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MoneyService } from '../../../services/money.service';
 import { MaterialModule } from '@crown/material';
@@ -27,7 +32,12 @@ export class EditDialogComponent {
     this.money = money;
     console.log('CTOR', money);
 
-    const { userId, type, price, fromWho, createdAt, details, extra } = money;
+    let { userId } = money;
+    const { type, price, fromWho, createdAt, details, extra } = money;
+
+    
+
+
     this.form = this.fb.group({
       userId: [userId, Validators.required],
       type: [type, Validators.required],

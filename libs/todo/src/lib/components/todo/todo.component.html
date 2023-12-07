@@ -26,37 +26,32 @@
 <ng-template #short>
   <div class="short">
     <!-- <div class="_title center"> -->
-      <div  class="title">{{ todo.title }}</div>
-      <div>{{ todo.description }}</div>
+    <div class="title">{{ todo.title }}</div>
+    <div>{{ todo.description }}</div>
     <!-- </div> -->
   </div>
 </ng-template>
 
 <ng-template #normal>
   <div class="card-header">
+    <div>TODO: {{ todo.priority }}</div>
+
     <div class="title center">{{ todo.title }}</div>
-    <mat-icon
-      class="icon center"
-      [ngClass]="{
-        todo: todo.status === Status.TO_DO,
-        done: todo.status === Status.DONE,
-        in_progress: todo.status === Status.IN_PROGRESS
-      }"
-    >
-      {{ getIconName(todo.status) }}
-    </mat-icon>
+    <button mat-mini-fab (click)="edit()">
+      <mat-icon>edit</mat-icon>
+    </button>
   </div>
   <div class="card-content">
     <div class="action">
-      <button mat-flat-button (click)="downgrade()">
+      <button mat-stroked-button (click)="downgrade()">
         <mat-icon>arrow_back_ios</mat-icon>
       </button>
     </div>
-    <div class="description">
+    <div class="description" (click)="edit()">
       {{ todo.description }}
     </div>
     <div class="action">
-      <button mat-flat-button (click)="upgrade()">
+      <button mat-stroked-button (click)="upgrade()">
         <mat-icon>arrow_forward_ios</mat-icon>
       </button>
     </div>

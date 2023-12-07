@@ -19,8 +19,9 @@ import { MaterialModule } from '@crown/material';
 })
 export class TodoComponent {
   @Input() todo!: Todo;
-  @Output() action = new EventEmitter();
   @Input() closed = false;
+  @Output() action = new EventEmitter();
+  @Output() editting = new EventEmitter();
 
   Status = Status;
 
@@ -35,6 +36,11 @@ export class TodoComponent {
       default:
         return 'priority_high';
     }
+  }
+
+  edit() {
+    console.log('edit', this.todo);
+    this.editting.emit(this.todo)
   }
 
   upgrade() {

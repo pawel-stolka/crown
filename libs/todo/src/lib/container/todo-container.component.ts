@@ -7,6 +7,9 @@ import { TodoService } from '../services/todo.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
 import { filter, map, tap } from 'rxjs';
+import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
+// TODO: add alias to tsconfig
+import { compareBy } from "../../../../money/src/lib/services/money.service";
 
 @Component({
   selector: 'crown-todo-container',
@@ -19,20 +22,21 @@ export class TodoContainerComponent implements OnInit {
   all$ = this.todoService.todos$;
 
   todos$ = this.all$.pipe(
-    map(all => all.filter(todo => todo.status === Status.TO_DO))
-  )
+    map((all) => all.filter((todo) => todo.status === Status.TO_DO)),
+    map(todos => todos.sort(compareBy('priority')))
+  );
 
   inProgress$ = this.all$.pipe(
-    map(all => all.filter(todo => todo.status === Status.IN_PROGRESS))
-  )
+    map((all) => all.filter((todo) => todo.status === Status.IN_PROGRESS))
+  );
 
   done$ = this.all$.pipe(
-    map(all => all.filter(todo => todo.status === Status.DONE))
-  )
+    map((all) => all.filter((todo) => todo.status === Status.DONE))
+  );
 
   closed$ = this.all$.pipe(
-    map(all => all.filter(todo => todo.status === Status.CLOSED))
-  )
+    map((all) => all.filter((todo) => todo.status === Status.CLOSED))
+  );
 
   constructor(private dialog: MatDialog, private todoService: TodoService) {}
 
@@ -47,6 +51,25 @@ export class TodoContainerComponent implements OnInit {
   updateTodo(event: any) {
     console.log('[updateTodo]', event);
     this.todoService.updateStatus(event);
+  }
+
+  editTodo(todo: Todo) {
+    console.log('[editTodo]', event);
+    // this.todoService.updateStatus(event);
+    dialogConfig.data = todo;
+    const dialogRef = this.dialog.open(EditTodoComponent, dialogConfig);
+
+    // this.handleDialog(dialogRef);
+    dialogRef
+      .afterClosed()
+      .pipe(
+        tap((x) => console.log('[this.edit]', x)),
+        // tap((_) => this.showInfo()),
+        filter((val) => !!val)
+      )
+      .subscribe((_) => {
+        console.log('[this.edit sub]', _);
+      });
   }
 
   private handleDialog(dialogRef: MatDialogRef<any>) {

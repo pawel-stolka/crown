@@ -23,8 +23,6 @@ export class AddTodoComponent {
     private todoService: TodoService,
   ) {
     const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
-    console.log('[currentUser]', currentUser);
-
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
       : null;
@@ -34,6 +32,7 @@ export class AddTodoComponent {
       title: ['', [Validators.required]],
       description: [null, [Validators.required]],
       status: [Status.TO_DO, [Validators.required]],
+      priority: [null, [Validators.required]]
     });
   }
 

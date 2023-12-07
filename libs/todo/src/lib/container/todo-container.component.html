@@ -7,9 +7,11 @@
 
   <div class="divider">todo</div>
 
+  <!-- TODO: refactor: template -->
   <ng-container *ngIf="todos$ | async as todos">
     <crown-todo-list
       [todos]="todos"
+      (edit)="editTodo($event)"
       (update)="updateTodo($event)"
     ></crown-todo-list>
   </ng-container>
@@ -19,6 +21,7 @@
   <ng-container *ngIf="inProgress$ | async as inProgress">
     <crown-todo-list
       [todos]="inProgress"
+      (edit)="editTodo($event)"
       (update)="updateTodo($event)"
     ></crown-todo-list>
   </ng-container>
@@ -28,6 +31,7 @@
   <ng-container *ngIf="done$ | async as done">
     <crown-todo-list
       [todos]="done"
+      (edit)="editTodo($event)"
       (update)="updateTodo($event)"
     ></crown-todo-list>
   </ng-container>

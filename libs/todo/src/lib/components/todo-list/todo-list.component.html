@@ -3,6 +3,7 @@
     *ngFor="let todo of todos"
     [todo]="todo"
     [closed]="closed"
+    (editting)="editTodo($event)"
     (action)="updateTodo($event)"
   >
   </crown-todo>
