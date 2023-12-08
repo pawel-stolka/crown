@@ -1,5 +1,8 @@
+@import '../styles/colors.scss';
+
 .wrapper {
   margin: 10px;
+  // border: 5px dotted;
 }
 
 // #toastContainer {
@@ -34,6 +37,7 @@
 
 // sidenav
 .example-container {
+  // border: 5px dotted;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -41,6 +45,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: $demo-primary-background;
 
   .sidenav-buttons {
     display: flex;
