@@ -1,8 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import './colors.scss';
 
 body {
   margin: 0;
-  background-color:rgba(245, 245, 220, 0.568);
+  // background-color:rgba(245, 245, 220, 0.568);
+  background-color: $demo-primary-background;
 }
 
 html, body { height: 100%; }
@@ -24,6 +26,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   flex: 1;
   height: 1px;
   background: #ddd;
+  background: $demo-primary-background;
   margin: 0 10px;
 }
 
