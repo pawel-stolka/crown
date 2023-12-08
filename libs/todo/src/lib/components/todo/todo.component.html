@@ -6,29 +6,23 @@
     disabled: todo.status === Status.CLOSED
   }"
 >
-  <ng-container *ngIf="!closed; then normal; else short"> </ng-container>
-  <!-- <div class="card-header">
-    <div class="title center">{{ todo.title }}</div>
-    <mat-icon
-      class="icon center"
-      [ngClass]="{
-        todo: todo.status === Status.TO_DO,
-        done: todo.status === Status.DONE,
-        in_progress: todo.status === Status.IN_PROGRESS
-      }"
-    >
-      {{ getIconName(todo.status) }}
-    </mat-icon>
-  </div>
-  <ng-container *ngIf="!closed; then normal; else short"> </ng-container> -->
+  <ng-container *ngIf="closed; then short; else normal2"> </ng-container>
 </mat-card>
 
 <ng-template #short>
   <div class="short">
-    <!-- <div class="_title center"> -->
     <div class="title">{{ todo.title }}</div>
     <div>{{ todo.description }}</div>
-    <!-- </div> -->
+  </div>
+</ng-template>
+
+<ng-template #normal2>
+  <div class="todo">
+    <div>TODO: {{ todo.priority }}</div>
+    <div class="title center">{{ todo.title }}</div>
+    <button mat-mini-fab (click)="edit()">
+      <mat-icon>edit</mat-icon>
+    </button>
   </div>
 </ng-template>
 

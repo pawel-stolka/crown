@@ -1,22 +1,7 @@
 mat-card {
-  // background-color: rgba(127, 240, 255, 0.637);
   margin: 10px;
 
-
-  // mat-card-title {
-  //   // width: 100%;
-  //   // display: flex;
-  //   // // justify-content: center;
-  //   // justify-content: space-between;
-
-  //   mat-icon {
-  //     margin-right: 10px;
-  //   }
-  // }
-  // }
-
   .card-content {
-    // border: 2px dotted violet;
     display: flex;
     align-items: center;
 
@@ -32,10 +17,19 @@ mat-card {
       justify-content: center;
     }
   }
+  .todo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
 
   .short {
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
     // flex-wrap: wrap;
     padding: 3px;
@@ -68,7 +62,6 @@ mat-card {
     display: flex;
     justify-content: center;
   }
-
 
   .icon {
     width: 7%;
