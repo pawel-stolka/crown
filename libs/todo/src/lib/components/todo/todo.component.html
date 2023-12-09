@@ -20,9 +20,12 @@
   <div class="todo">
     <div>TODO: {{ todo.priority }}</div>
     <div class="title center">{{ todo.title }}</div>
-    <button mat-mini-fab (click)="edit()">
+    <!-- <button mat-icon-button (click)="edit()">
       <mat-icon>edit</mat-icon>
-    </button>
+    </button> -->
+    <div class="edit" (click)="edit()">
+      <mat-icon>edit</mat-icon>
+    </div>
   </div>
 </ng-template>
 

@@ -1,5 +1,7 @@
+@import '@colors';
+
 mat-card {
-  margin: 10px;
+  margin: 5px;
 
   .card-content {
     display: flex;
@@ -10,19 +12,20 @@ mat-card {
     }
 
     .description {
-      padding: 10px 0;
+      padding: 5px;
       width: 70%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
   }
+
   .todo {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 2px;
+    // padding: 5px;
     border: 1px solid;
     border-radius: 5px;
   }
@@ -44,6 +47,10 @@ mat-card {
     flex-direction: row;
     justify-content: space-around;
   }
+}
+
+.highlight {
+  border: 5px dotted;
 }
 
 .card-header {
@@ -81,28 +88,41 @@ mat-card-content {
 }
 
 .todo {
-  color: red;
+  color: $danger;
 
   &-layer {
-    background-color: rgba(255, 0, 0, 0.521);
+    background-color: $demo-primary-background;
+  }
+}
+
+.edit {
+  display: flex;
+  padding: 0 5px;
+
+  mat-icon {
+    align-items: center;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 }
 
 .in_progress {
-  color: orangered;
+  color: $warning;
   &-layer {
-    background-color: orange;
+    background-color: $warning;
   }
 }
 
 .done {
-  color: green;
+  color: $success; //green;
   &-layer {
-    background-color: yellowgreen;
+    background-color: $success;
   }
 }
 
 .disabled {
-  background-color: gray;
-  opacity: 30%;
+  background-color: $demo-danger2;
+  // opacity: 30%;
 }

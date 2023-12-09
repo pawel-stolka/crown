@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@colors": ["apps/crown/src/styles/_colors.scss"],
       "@crown/auth": ["libs/auth/src/index.ts"],
       "@crown/auth/service": ["libs/auth/src/lib/services/auth.service"],
       "@crown/data": ["libs/data/src/index.ts"],
