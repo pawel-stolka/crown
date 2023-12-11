@@ -68,7 +68,8 @@ export class TodoComponent {
       case Priority.VERY_LOW:
         return 'info';
       default:
-        return 'visibility';
+        return '';
+        // return 'visibility';
     }
   }
 
@@ -87,6 +88,7 @@ export class TodoComponent {
         return 'priority-very-low';
 
       default:
+        return 'priority-unknown';
         return 'priority-minor';
     }
   }

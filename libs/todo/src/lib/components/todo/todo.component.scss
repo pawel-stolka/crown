@@ -83,18 +83,25 @@ mat-card {
   }
 }
 
-.priority {
+.center-y {
+  display: flex;
+}
 
+.priority {
   &-high {
     color: red;
+    // font-size: 1.15em;
+    font-weight:bolder;
+    // text-decoration: underline;
   }
 
   &-medium {
-    color: orange;
+    color: rgb(255, 136, 0);
   }
 
-  &-minor {
-    color: rgba(30, 143, 255, 0.432);
+  &-unknown {
+    color: white;
+    font-size: 0.85em;
   }
 
   &-low {

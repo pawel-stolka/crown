@@ -18,14 +18,14 @@
 
 <ng-template #normal2>
   <div class="todo">
-    <div class="_priority" [ngClass]="getClass(todo.priority)">
-      <mat-icon [ngClass]="getClass(todo.priority)">{{
+    <div class="center-y" [ngClass]="getClass(todo.priority)">
+      <mat-icon >{{
         getPriorityIcon(todo.priority)
       }}</mat-icon>
-      {{ showPriority(todo.priority) }}
+      <!-- {{ showPriority(todo.priority) }} -->
     </div>
     <div class="title center" [ngClass]="getClass(todo.priority)">
-      {{ todo.title }}
+      {{ todo.title | uppercase }}
     </div>
     <div class="edit" (click)="edit()">
       <mat-icon>edit</mat-icon>
