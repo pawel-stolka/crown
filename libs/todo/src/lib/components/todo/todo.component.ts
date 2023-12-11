@@ -6,7 +6,13 @@ import {
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Status, Todo, StatusChange } from '@crown/data';
+import {
+  Status,
+  Todo,
+  StatusChange,
+  Priority,
+  SHOW_PRIORITY,
+} from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { TodoPriorityComponent } from '../todo-priority/todo-priority.component';
 
@@ -45,11 +51,51 @@ export class TodoComponent {
     this.editting.emit(this.todo);
   }
 
-  onPriorityChange(priority: number) {
-    const { id } = this.todo;
-    console.log('[this.onPriorityChange]', priority);
-    this.priority.emit({ id, priority });
+  showPriority = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
+
+  getPriorityIcon(priority: Priority | undefined): string {
+    switch (priority) {
+      case Priority.VERY_HIGH:
+        return 'error';
+        return 'priority_high';
+      case Priority.HIGH:
+        return 'error_outline';
+      case Priority.MEDIUM:
+        return 'warning';
+        return 'error_outline';
+      case Priority.LOW:
+        return 'bug_report';
+      case Priority.VERY_LOW:
+        return 'info';
+      default:
+        return 'visibility';
+    }
   }
+
+  getClass(priority: Priority | undefined) {
+    switch (priority) {
+      case Priority.VERY_HIGH:
+      case Priority.HIGH:
+        return 'priority-high';
+
+      case Priority.MEDIUM:
+        return 'priority-medium';
+
+      case Priority.LOW:
+        return 'priority-low';
+      case Priority.VERY_LOW:
+        return 'priority-very-low';
+
+      default:
+        return 'priority-minor';
+    }
+  }
+
+  // onPriorityChange(priority: number) {
+  //   const { id } = this.todo;
+  //   console.log('[this.onPriorityChange]', priority);
+  //   this.priority.emit({ id, priority });
+  // }
 
   upgrade() {
     const { id } = this.todo;

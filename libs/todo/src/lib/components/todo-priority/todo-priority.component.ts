@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { PRIORITIES, Priority, SHOW_PRIORITY } from '@crown/data';
 
 @Component({
   selector: 'crown-todo-priority',
@@ -20,7 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './todo-priority.component.scss',
 })
 export class TodoPriorityComponent {
-  @Input() priority: number | undefined = 0;
+  @Input() priority!: Priority;// | undefined;// Priority.UNDEFINED;
   @Output() selectionChange = new EventEmitter();
 
   onSelectionChange(event: any) {
@@ -28,4 +29,8 @@ export class TodoPriorityComponent {
 
     this.selectionChange.emit(event.value)
   }
+  priorities = PRIORITIES
+  showPriorities = (priority: Priority) => SHOW_PRIORITY(priority);
+
+  showPriority = SHOW_PRIORITY(this.priority)
 }

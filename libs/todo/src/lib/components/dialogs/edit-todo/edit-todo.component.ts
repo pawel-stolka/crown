@@ -62,7 +62,7 @@ export class EditTodoComponent {
   priorities = PRIORITIES;
 
   showStatus = (status: Status) => SHOW_STATUS(status);
-  showPriorities = (priority: Priority) => SHOW_PRIORITY(priority);
+  showPriorities = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
 
   save() {
     const changes: Partial<Todo> = this.form.value;

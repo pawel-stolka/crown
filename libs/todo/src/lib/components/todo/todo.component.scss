@@ -83,6 +83,29 @@ mat-card {
   }
 }
 
+.priority {
+
+  &-high {
+    color: red;
+  }
+
+  &-medium {
+    color: orange;
+  }
+
+  &-minor {
+    color: rgba(30, 143, 255, 0.432);
+  }
+
+  &-low {
+    color: grey;
+  }
+
+  &-very-low {
+    color: rgb(175, 175, 175);
+  }
+}
+
 mat-card-content {
   margin: 10px;
 }

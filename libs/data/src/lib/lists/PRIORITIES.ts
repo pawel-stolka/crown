@@ -6,16 +6,18 @@ export const PRIORITIES: Priority[] = [
   Priority.MEDIUM,
   Priority.LOW,
   Priority.VERY_LOW,
+  // Priority.UNDEFINED
 ];
 
-export const SHOW_PRIORITY = (priority: Priority): string => {
+export const SHOW_PRIORITY = (priority: Priority | undefined): string | null => {
   const priorityMap = {
     [Priority.VERY_HIGH]: 'VERY HIGH',
     [Priority.HIGH]: 'HIGH',
     [Priority.MEDIUM]: 'MEDIUM',
     [Priority.LOW]: 'LOW',
     [Priority.VERY_LOW]: 'VERY LOW',
+    // [Priority.UNDEFINED]: null
   };
 
-  return priorityMap[priority];
+  return priority ? priorityMap[priority] : null;
 };

@@ -4,8 +4,8 @@
     [(value)]="priority"
     (selectionChange)="onSelectionChange($event)"
   >
-    @for (priority of [1,2,3,4,5]; track priority) {
-    <mat-option [value]="priority">{{ priority }}</mat-option>
+    @for (priority of priorities; track priority) {
+    <mat-option [value]="priority">{{ showPriorities(priority) }}</mat-option>
     }
   </mat-select>
 </mat-form-field>

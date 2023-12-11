@@ -4,4 +4,5 @@ export enum Priority {
   MEDIUM = 3,
   LOW = 2,
   VERY_LOW = 1,
+  // UNDEFINED = 0
 }
