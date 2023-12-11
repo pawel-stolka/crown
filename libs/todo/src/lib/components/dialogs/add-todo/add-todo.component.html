@@ -25,20 +25,10 @@ TODO: <messages></messages> -->
     <mat-label>priorytet</mat-label>
     <mat-select formControlName="priority">
       @for (priority of priorities; track priority) {
-      <mat-option [value]="priority">{{
-        showPriority(priority)
-      }}</mat-option>
+      <mat-option [value]="priority">{{ showPriority(priority) }}</mat-option>
       }
     </mat-select>
   </mat-form-field>
-  <!-- <mat-form-field appearance="outline">
-    <mat-label>priorytet</mat-label>
-    <mat-select formControlName="priority">
-      @for (priority of [1,2,3,4,5]; track priority) {
-      <mat-option [value]="priority">{{ priority }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field> -->
 </mat-dialog-content>
 
 <mat-dialog-actions class="actions">
