@@ -4,9 +4,7 @@
       <!-- <button mat-button (click)="toggleNav()">
         <mat-icon>menu</mat-icon>
       </button> -->
-      <button mat-mini-fab color="warn" (click)="toggleNav()">
-        <mat-icon>contact_support</mat-icon>
-      </button>
+
       <button
         class="home"
         mat-button
@@ -54,23 +52,29 @@
       </button>
     </div> -->
 
-    <div class="auth">
-      <button
-        *ngIf="isLoggedOut$ | async"
-        mat-flat-button
-        color="basic"
-        routerLink="auth/login"
-        routerLinkActive="active-link"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        Zaloguj się
+    <div class="actions">
+      <button mat-mini-fab color="accent" (click)="toggleNav()">
+        <mat-icon>error</mat-icon>
       </button>
-      <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
-        <div class="email">{{ tokenEmail.email }}</div>
-        <button mat-flat-button color="warn" (click)="logout()">
-          <mat-icon>power_settings_new</mat-icon>
+
+      <div class="auth">
+        <button
+          *ngIf="isLoggedOut$ | async"
+          mat-flat-button
+          color="basic"
+          routerLink="auth/login"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Zaloguj się
         </button>
-      </ng-container>
+        <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
+          <div class="email">{{ tokenEmail.email }}</div>
+          <button mat-flat-button color="warn" (click)="logout()">
+            <mat-icon>power_settings_new</mat-icon>
+          </button>
+        </ng-container>
+      </div>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

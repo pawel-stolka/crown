@@ -24,13 +24,19 @@ mat-toolbar-row {
     }
   }
 
-  .auth {
+  .actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 30px;
 
-    .email {
-      font-size: medium;
+    .auth {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .email {
+        font-size: medium;
+      }
     }
   }
 
