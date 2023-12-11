@@ -1,24 +1,10 @@
-<h2 mat-dialog-title>{{ title }}</h2>
+<div mat-dialog-title>{{ title }}</div>
 
 <!-- <loading></loading>
 
 <messages></messages> -->
 
 <mat-dialog-content [formGroup]="form">
-  <!-- <mat-form-field appearance="outline">
-    <input
-      matInput
-      [matDatepicker]="myDatepicker"
-      #searchInput
-      formControlName="createdAt"
-    />
-
-    <mat-datepicker-toggle matSuffix [for]="myDatepicker">
-    </mat-datepicker-toggle>
-
-    <mat-datepicker #myDatepicker></mat-datepicker>
-  </mat-form-field> -->
-
   <mat-form-field appearance="outline">
     <mat-label>tytuł</mat-label>
     <input matInput formControlName="title" />
@@ -29,16 +15,27 @@
     <input matInput formControlName="description" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>status</mat-label>
-    <input matInput formControlName="status" />
-  </mat-form-field>
+  <div class="inline">
+    <mat-form-field appearance="outline">
+      <mat-label>status</mat-label>
+      <mat-select formControlName="status">
+        @for (status of statuses; track status) {
+        <mat-option [value]="status">{{ showStatus(status) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>priorytet</mat-label>
-    <input type="number" matInput formControlName="priority" />
-  </mat-form-field>
-
+    <mat-form-field appearance="outline" class="narrow">
+      <mat-label>priorytet</mat-label>
+      <mat-select formControlName="priority">
+        @for (priority of priorities; track priority) {
+        <mat-option [value]="priority">{{
+          showPriorities(priority)
+        }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>

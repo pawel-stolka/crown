@@ -1,11 +1,11 @@
-<!-- <div>{{ priority }}</div> -->
-<!-- <form> -->
 <mat-form-field appearance="outline">
   <!-- <mat-label>priorytet</mat-label> -->
-  <mat-select [(value)]="priority" (selectionChange)="onSelectionChange($event)">
+  <mat-select
+    [(value)]="priority"
+    (selectionChange)="onSelectionChange($event)"
+  >
     @for (priority of [1,2,3,4,5]; track priority) {
     <mat-option [value]="priority">{{ priority }}</mat-option>
     }
   </mat-select>
 </mat-form-field>
-<!-- </form> -->

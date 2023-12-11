@@ -10,9 +10,9 @@ import {
 import { MatDialogRef } from '@angular/material/dialog';
 import { AUTH_TOKEN_EMAIL, DotNumberDirective, Money } from '@crown/data';
 import { MaterialModule } from '@crown/material';
-import { MoneyService } from '../../../services/money.service';
 import { Observable, combineLatest, map, startWith } from 'rxjs';
-import { ToastService } from "@crown/ui";
+import { ToastService } from '@crown/ui';
+import { MoneyService } from '@crown/money';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -22,10 +22,9 @@ import { ToastService } from "@crown/ui";
     MaterialModule,
     ReactiveFormsModule,
     DotNumberDirective,
-
   ],
-  templateUrl: './add-dialog.component.html',
-  styleUrl: './add-dialog.component.scss',
+  templateUrl: './add-money-dialog.component.html',
+  styleUrl: './add-money-dialog.component.scss',
 })
 export class AddDialogComponent {
   title = 'Dodaj rachunek';
@@ -50,12 +49,7 @@ export class AddDialogComponent {
   }
 
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-    this.toastService.showToast(
-      'Sukces',
-      message,
-      'icon-class',
-      5000
-    );
+    this.toastService.showToast('Sukces', message, 'icon-class', 5000);
   }
 
   get type() {
@@ -87,12 +81,10 @@ export class AddDialogComponent {
   save() {
     const changes: Partial<Money> = this.form.value;
 
-    this.moneyService
-      .create(changes)
-      .subscribe(() => {
-        this.dialogRef.close()
-        this.toast('Dodałeś rachunek...')
-      });
+    this.moneyService.create(changes).subscribe(() => {
+      this.dialogRef.close();
+      this.toast('Dodałeś rachunek...');
+    });
   }
 
   close() {

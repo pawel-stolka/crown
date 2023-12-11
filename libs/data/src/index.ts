@@ -14,4 +14,9 @@ export * from './lib/directives/DotNumber.directive';
 
 export * from './lib/enums/Command';
 export * from './lib/enums/Status';
+export * from './lib/enums/Priority';
 export * from './lib/enums/TodoAction';
+
+export * from './lib/lists/PRIORITIES';
+export * from './lib/lists/STATUSES';
+// export * from './lib/lists';

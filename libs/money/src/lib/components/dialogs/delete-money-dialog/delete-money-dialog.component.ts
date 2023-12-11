@@ -8,8 +8,8 @@ import { MaterialModule } from '@crown/material';
   selector: 'crown-delete-dialog',
   standalone: true,
   imports: [CommonModule, MaterialModule],
-  templateUrl: './delete-dialog.component.html',
-  styleUrl: './delete-dialog.component.scss',
+  templateUrl: './delete-money-dialog.component.html',
+  styleUrl: './delete-money-dialog.component.scss',
 })
 export class DeleteDialogComponent {
   private id: string;

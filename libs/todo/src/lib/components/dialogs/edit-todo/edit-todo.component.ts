@@ -6,7 +6,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AUTH_TOKEN_EMAIL, Todo } from '@crown/data';
+import {
+  AUTH_TOKEN_EMAIL,
+  PRIORITIES,
+  Priority,
+  SHOW_PRIORITY,
+  SHOW_STATUS,
+  STATUSES,
+  Status,
+  Todo,
+} from '@crown/data';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TodoService } from '../../../services/todo.service';
 import { MaterialModule } from '@crown/material';
@@ -19,7 +28,7 @@ import { MaterialModule } from '@crown/material';
   styleUrl: './edit-todo.component.scss',
 })
 export class EditTodoComponent {
-  title = 'Zmień zadanie';
+  title = 'Edytuj błąd';
   form: FormGroup;
   todo: Todo;
 
@@ -49,6 +58,11 @@ export class EditTodoComponent {
       createdAt: [createdAt],
     });
   }
+  statuses = STATUSES;
+  priorities = PRIORITIES;
+
+  showStatus = (status: Status) => SHOW_STATUS(status);
+  showPriorities = (priority: Priority) => SHOW_PRIORITY(priority);
 
   save() {
     const changes: Partial<Todo> = this.form.value;

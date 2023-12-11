@@ -15,9 +15,9 @@ import {
 import { filter, map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { AddDialogComponent } from '../../components/dialogs/add-dialog/add-dialog.component';
-import { DeleteDialogComponent } from '../../components/dialogs/delete-dialog/delete-dialog.component';
-import { EditDialogComponent } from '../../components/dialogs/edit-dialog/edit-dialog.component';
+import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
+import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
+import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
 import { ToastService } from '@crown/ui';
 
 @Component({
@@ -102,7 +102,7 @@ export class TabsContainerComponent implements OnInit {
     console.log('[PRE.edit]', money);
     // this.toast()
     dialogConfig.data = money;
-    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(EditMoneyDialog, dialogConfig);
 
     // this.handleDialog(dialogRef);
     dialogRef

@@ -12,31 +12,27 @@ import { MoneyService } from '../../../services/money.service';
 import { MaterialModule } from '@crown/material';
 
 @Component({
-  selector: 'crown-edit-dialog',
+  selector: 'crown-edit-money-dialog',
   standalone: true,
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  templateUrl: './edit-dialog.component.html',
-  styleUrl: './edit-dialog.component.scss',
+  templateUrl: './edit-money-dialog.component.html',
+  styleUrl: './edit-money-dialog.component.scss',
 })
-export class EditDialogComponent {
-  title = 'Zmień płatność';
+export class EditMoneyDialog {
+  title = 'Edytuj płatność';
   form: FormGroup;
   money: Money;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<EditDialogComponent>,
+    private dialogRef: MatDialogRef<EditMoneyDialog>,
     private moneyService: MoneyService,
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;
-    console.log('CTOR', money);
 
-    let { userId } = money;
-    const { type, price, fromWho, createdAt, details, extra } = money;
-
-    
-
+    // let { userId } = money;
+    const { userId, type, price, fromWho, createdAt, details, extra } = money;
 
     this.form = this.fb.group({
       userId: [userId, Validators.required],
