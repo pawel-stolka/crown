@@ -1,6 +1,6 @@
-import { TodoAction } from '../enums/TodoAction';
+import { StatusChange } from '../enums/TodoAction';
 
 export interface TodoEvent {
-  action: TodoAction;
+  action: StatusChange;
   id: string;
 }

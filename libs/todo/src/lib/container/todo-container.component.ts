@@ -6,10 +6,10 @@ import { TodoListComponent } from '../components/todo-list/todo-list.component';
 import { TodoService } from '../services/todo.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
-import { filter, map, tap } from 'rxjs';
+import { filter, map, take, tap } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
 // TODO: add alias to tsconfig
-import { compareBy } from "../../../../money/src/lib/services/money.service";
+import { compareBy } from '../../../../money/src/lib/services/money.service';
 
 @Component({
   selector: 'crown-todo-container',
@@ -23,7 +23,7 @@ export class TodoContainerComponent implements OnInit {
 
   todos$ = this.all$.pipe(
     map((all) => all.filter((todo) => todo.status === Status.TO_DO)),
-    map(todos => todos.sort(compareBy('priority')))
+    map((todos) => todos.sort(compareBy('priority')))
   );
 
   inProgress$ = this.all$.pipe(
@@ -70,6 +70,11 @@ export class TodoContainerComponent implements OnInit {
       .subscribe((_) => {
         console.log('[this.edit sub]', _);
       });
+  }
+
+  updatePriority(todo: Todo) {
+    const { id, priority } = todo;
+    this.todoService.edit(todo.id, { id, priority }).pipe(take(1)).subscribe();
   }
 
   private handleDialog(dialogRef: MatDialogRef<any>) {

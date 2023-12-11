@@ -4,7 +4,9 @@
     [todo]="todo"
     [closed]="closed"
     (editting)="editTodo($event)"
-    (action)="updateTodo($event)"
+    (status)="updateTodo($event)"
+    (priority)="updatePriority($event)"
+
   >
   </crown-todo>
 </ng-container>

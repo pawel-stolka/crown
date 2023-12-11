@@ -18,7 +18,8 @@
 
 <ng-template #normal2>
   <div class="todo">
-    <div>TODO: {{ todo.priority }}</div>
+    <!-- <div>TODO: {{ todo.priority }}</div> -->
+    <crown-todo-priority [priority]="todo.priority" (selectionChange)="onPriorityChange($event)"></crown-todo-priority>
     <div class="title center">{{ todo.title }}</div>
     <!-- <button mat-icon-button (click)="edit()">
       <mat-icon>edit</mat-icon>

@@ -1,7 +1,6 @@
 <div mat-dialog-title>{{ title }}</div>
 
 <mat-dialog-content [formGroup]="form">
-
   <mat-form-field appearance="outline">
     <mat-label>nazwa</mat-label>
     <input matInput formControlName="title" />
@@ -20,15 +19,16 @@
 
   <mat-form-field appearance="outline">
     <mat-label>priorytet</mat-label>
-    <input type="number" matInput formControlName="priority" />
+    <mat-select formControlName="priority">
+      @for (priority of [1,2,3,4,5]; track priority) {
+      <mat-option [value]="priority">{{ priority }}</mat-option>
+      }
+    </mat-select>
   </mat-form-field>
-
 </mat-dialog-content>
-
 
 <mat-dialog-actions>
   <button mat-button (click)="close()">zamknij</button>
-
   <button
     mat-raised-button
     color="primary"

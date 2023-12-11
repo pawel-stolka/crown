@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TodoService } from '../../services/todo.service';
 import { Todo } from '@crown/data';
@@ -19,12 +25,17 @@ export class TodoListComponent {
   @Input() closed = false;
   @Output() update = new EventEmitter();
   @Output() edit = new EventEmitter();
+  @Output() priority = new EventEmitter();
 
   updateTodo(event: any) {
     this.update.emit(event);
   }
 
+  updatePriority(event: any) {
+    this.priority.emit(event);
+  }
+
   editTodo(event: any) {
-    this.edit.emit(event)
+    this.edit.emit(event);
   }
 }

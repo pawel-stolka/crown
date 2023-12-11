@@ -5,7 +5,7 @@ import {
   Colors,
   Status,
   Todo,
-  TodoAction,
+  StatusChange,
   TodoEvent,
   TokenEmail,
 } from '@crown/data';
@@ -77,7 +77,6 @@ export class TodoService {
         }),
         tap(() => (this.dataLoaded = true)),
         tap((all) => console.log('[fetchAll$]', all)),
-        // map((todos) => todos?.length),
         tap((todos: Todo[]) => this._todosSubj.next(todos)),
         shareReplay(1)
         // map((money: Money[]) => money.sort(compareBy('period', false))),
@@ -114,6 +113,8 @@ export class TodoService {
       ...this.todos[index],
       ...changes,
     };
+    console.log('[EDIT]', newTodo, changes);
+
 
     // copy of todos
     const newTodos: Todo[] = this.todos.slice(0);
@@ -144,7 +145,7 @@ export class TodoService {
 
     // TODO: refactor - maybe in state management?
     switch (action) {
-      case TodoAction.UPGRADE:
+      case StatusChange.UPGRADE:
         status =
           currentTodo?.status === Status.TO_DO
             ? Status.IN_PROGRESS
@@ -153,7 +154,7 @@ export class TodoService {
             : Status.CLOSED;
 
         break;
-      case TodoAction.DOWNGRADE:
+      case StatusChange.DOWNGRADE:
         status =
           currentTodo?.status === Status.IN_PROGRESS
             ? Status.TO_DO
