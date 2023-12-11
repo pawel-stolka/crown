@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TodoService } from '../../../services/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AUTH_TOKEN_EMAIL, Status, Todo } from '@crown/data';
+import { AUTH_TOKEN_EMAIL, PRIORITIES, Priority, SHOW_PRIORITY, Status, Todo } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 
 @Component({
@@ -14,8 +14,10 @@ import { MaterialModule } from '@crown/material';
   styleUrl: './add-todo.component.scss',
 })
 export class AddTodoComponent {
-  title = 'Dodaj do poprawy...';
+  title = 'Zgłoś błąd';
   form: FormGroup;
+
+  priorities = PRIORITIES;
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +37,9 @@ export class AddTodoComponent {
       priority: [null, [Validators.required]]
     });
   }
+
+  showPriority = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
+
 
   save() {
     const changes: Partial<Todo> = this.form.value;

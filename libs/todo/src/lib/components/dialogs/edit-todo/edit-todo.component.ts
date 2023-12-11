@@ -32,6 +32,9 @@ export class EditTodoComponent {
   form: FormGroup;
   todo: Todo;
 
+  statuses = STATUSES;
+  priorities = PRIORITIES;
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditTodoComponent>,
@@ -58,15 +61,12 @@ export class EditTodoComponent {
       createdAt: [createdAt],
     });
   }
-  statuses = STATUSES;
-  priorities = PRIORITIES;
 
   showStatus = (status: Status) => SHOW_STATUS(status);
-  showPriorities = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
+  showPriority = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
 
   save() {
     const changes: Partial<Todo> = this.form.value;
-    console.log('save changes', changes);
 
     this.todoService.edit(this.todo.id, changes).subscribe((res) => {
       this.dialogRef.close(res);

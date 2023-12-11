@@ -55,7 +55,7 @@ export class TodoComponent {
 
   getPriorityIcon(priority: Priority | undefined): string {
     switch (priority) {
-      case Priority.VERY_HIGH:
+      case Priority.URGENT:
         return 'error';
         return 'priority_high';
       case Priority.HIGH:
@@ -65,17 +65,16 @@ export class TodoComponent {
         return 'error_outline';
       case Priority.LOW:
         return 'bug_report';
-      case Priority.VERY_LOW:
+      case Priority.WHO_CARES:
         return 'info';
       default:
         return '';
-        // return 'visibility';
     }
   }
 
   getClass(priority: Priority | undefined) {
     switch (priority) {
-      case Priority.VERY_HIGH:
+      case Priority.URGENT:
       case Priority.HIGH:
         return 'priority-high';
 
@@ -84,7 +83,7 @@ export class TodoComponent {
 
       case Priority.LOW:
         return 'priority-low';
-      case Priority.VERY_LOW:
+      case Priority.WHO_CARES:
         return 'priority-very-low';
 
       default:

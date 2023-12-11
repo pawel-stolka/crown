@@ -1,0 +1,32 @@
+div.dialog-title {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+mat-dialog-content {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+
+  mat-form-field {
+    padding: 10px 0 0;
+    width: 100%;
+  }
+
+  .inline {
+    display: flex;
+    gap: 15px;
+
+    .narrow {
+      width: 80%;
+    }
+  }
+}
+
+mat-dialog-actions.actions {
+  display: flex;
+  justify-content: flex-end;
+}

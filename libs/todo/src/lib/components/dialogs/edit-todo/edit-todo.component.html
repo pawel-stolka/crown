@@ -1,4 +1,4 @@
-<div mat-dialog-title>{{ title }}</div>
+<div class="dialog-title">{{ title }}</div>
 
 <!-- <loading></loading>
 
@@ -30,7 +30,7 @@
       <mat-select formControlName="priority">
         @for (priority of priorities; track priority) {
         <mat-option [value]="priority">{{
-          showPriorities(priority)
+          showPriority(priority)
         }}</mat-option>
         }
       </mat-select>
@@ -38,7 +38,7 @@
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions class="actions">
   <button mat-raised-button (click)="close()">Close</button>
 
   <button mat-raised-button color="primary" #saveButton (click)="save()">

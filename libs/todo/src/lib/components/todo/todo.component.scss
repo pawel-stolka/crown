@@ -25,7 +25,6 @@ mat-card {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    // padding: 5px;
     border: 1px solid;
     border-radius: 5px;
   }
@@ -34,7 +33,6 @@ mat-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // flex-wrap: wrap;
     padding: 3px;
 
     .title {
@@ -58,17 +56,12 @@ mat-card {
     width: 93%;
     font-size: 1.2em;
     font-weight: bolder;
-    // border-right: 1px solid grey;
   }
+
   display: flex;
   align-items: center;
   padding: 5px;
   border-bottom: 1px solid grey;
-
-  .center {
-    display: flex;
-    justify-content: center;
-  }
 
   .icon {
     width: 7%;
@@ -78,7 +71,7 @@ mat-card {
     // border: 5px dotted dodgerblue;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    // justify-content: space-between;
     width: 100%;
   }
 }
@@ -89,13 +82,13 @@ mat-card {
 
 .priority {
   &-high {
+    color: $warn;// red;
     color: red;
-    // font-size: 1.15em;
-    font-weight:bolder;
-    // text-decoration: underline;
+    font-weight: bolder;
   }
 
   &-medium {
+    // color: $warn-light;
     color: rgb(255, 136, 0);
   }
 
@@ -146,13 +139,13 @@ mat-card-content {
 }
 
 .done {
-  color: $success; //green;
+  color: $success;
   &-layer {
     background-color: $success;
   }
 }
 
-.disabled {
-  background-color: $demo-danger2;
-  // opacity: 30%;
+.closed {
+  background-color: $demo-danger;
+  text-decoration: line-through;
 }

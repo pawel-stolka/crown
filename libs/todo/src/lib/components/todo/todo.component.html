@@ -3,7 +3,7 @@
     'todo-layer': todo.status === Status.TO_DO,
     'done-layer': todo.status === Status.DONE,
     'in_progress-layer': todo.status === Status.IN_PROGRESS,
-    disabled: todo.status === Status.CLOSED
+    closed: todo.status === Status.CLOSED
   }"
 >
   <ng-container *ngIf="closed; then short; else normal2"> </ng-container>
@@ -19,13 +19,12 @@
 <ng-template #normal2>
   <div class="todo">
     <div class="center-y" [ngClass]="getClass(todo.priority)">
-      <mat-icon >{{
-        getPriorityIcon(todo.priority)
-      }}</mat-icon>
+      <mat-icon>{{ getPriorityIcon(todo.priority) }}</mat-icon>
       <!-- {{ showPriority(todo.priority) }} -->
     </div>
     <div class="title center" [ngClass]="getClass(todo.priority)">
       {{ todo.title | uppercase }}
+      <ng-container *ngIf="!todo.userId">***</ng-container>
     </div>
     <div class="edit" (click)="edit()">
       <mat-icon>edit</mat-icon>
