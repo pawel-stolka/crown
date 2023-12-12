@@ -4,22 +4,47 @@
   </button>
 </div>
 
-<ng-container *ngIf="money$ | async as money">
-  <ng-container *ngIf="money.length; else noData">
-    <mat-tab-group (selectedIndexChange)="onTabChanged($event)">
-      <mat-tab label="SUMY">
-        <ng-container *ngTemplateOutlet="monthGroups"></ng-container>
-      </mat-tab>
-      <mat-tab label="Wpisy">
-        <ng-container
-          *ngTemplateOutlet="simpleTable; context: { money: money }"
-        ></ng-container>
-      </mat-tab>
-    </mat-tab-group>
-  </ng-container>
-</ng-container>
+@if (money$ | async; as money) { @if (money.length) {
+<mat-tab-group (selectedIndexChange)="onTabChanged($event)">
+  <mat-tab label="{{ GROUPS_LABEL }}">
+    <ng-container *ngTemplateOutlet="GROUPS"></ng-container>
+  </mat-tab>
+  <mat-tab label="{{ DETAILS_LABEL }}">
+    <ng-container
+      *ngTemplateOutlet="DETAILS; context: { money: money }"
+    ></ng-container>
+  </mat-tab>
+</mat-tab-group>
+} @else {
+<ng-container *ngTemplateOutlet="EMPTY"> </ng-container>
+} }
 
-<ng-template #simpleTable let-money="money">
+<ng-template #GROUPS>
+  @if(monthsData$ | async; as data) {
+  <!-- @if(data.categories.length) { -->
+  @if(data.categories; as categories) {
+  <table class="next-table mat-elevation-z8">
+    <tr>
+      <th>Miesiąc</th>
+      <th *ngFor="let category of categories">
+        <span>{{ category }}</span>
+      </th>
+    </tr>
+
+    <tr *ngFor="let item of data.months; let i = index; let last = last">
+      <td [ngClass]="{ last: last }">{{ item.period }}</td>
+
+      <td *ngFor="let category of categories">
+        <span [ngClass]="{ last: last }">
+          {{ getPriceByType(item.typePrices, category) }}
+        </span>
+      </td>
+    </tr>
+  </table>
+  } }
+</ng-template>
+
+<ng-template #DETAILS let-money="money">
   <div class="table mat-elevation-z8">
     <table
       mat-table
@@ -88,34 +113,7 @@
   </div>
 </ng-template>
 
-<ng-template #monthGroups>
-  <ng-container *ngIf="monthsData$ | async as data">
-    <ng-container *ngIf="data.categories.length; else noData">
-      <ng-container *ngIf="data.categories as categories">
-        <table class="next-table mat-elevation-z8">
-          <tr>
-            <th>Miesiąc</th>
-            <th *ngFor="let category of categories">
-              <span>{{ category }}</span>
-            </th>
-          </tr>
-
-          <tr *ngFor="let item of data.months; let i = index; let last = last">
-            <td [ngClass]="{ last: last }">{{ item.period }}</td>
-
-            <td *ngFor="let category of categories">
-              <span [ngClass]="{ last: last }">
-                {{ getPriceByType(item.typePrices, category) }}
-              </span>
-            </td>
-          </tr>
-        </table>
-      </ng-container>
-    </ng-container>
-  </ng-container>
-</ng-template>
-
-<ng-template #noData>
+<ng-template #EMPTY>
   <div class="no-data">
     <span class="title">Nic tu jeszcze nie ma</span>
     <span class="subtitle">Dodaj coś ☝️ (+)</span>
