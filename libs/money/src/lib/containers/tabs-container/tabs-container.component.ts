@@ -1,16 +1,24 @@
-import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  LOCALE_ID,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule, formatNumber } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MoneyService, compareBy } from '../../services/money.service';
+import { MoneyService } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Money,
   MoneyGroup,
   NUMBER_PRECISION,
-  Command,
   ZERO_DATA,
   dialogConfig,
+  compareBy,
 } from '@crown/data';
 import { filter, map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,14 +35,15 @@ import { ToastService } from '@crown/ui';
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',
 })
-export class TabsContainerComponent implements OnInit {
+export class TabsContainerComponent implements OnInit, AfterViewInit {
   dataSource!: MatTableDataSource<Money>;
 
   money$ = this.moneyService.money$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      // this.dataSource.paginator = this.paginator;
+      console.log('[data!]', data);
     })
   );
 
@@ -76,13 +85,49 @@ export class TabsContainerComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
+  @ViewChild('table') table: any;
 
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private dialog: MatDialog,
-    private moneyService: MoneyService,
-    private toastService: ToastService
-  ) {}
+    private moneyService: MoneyService, // TODO: private toastService: ToastService
+    private cdr: ChangeDetectorRef
+  ) {
+    this.dataSource = new MatTableDataSource([] as Money[]);
+    console.log('this.paginator', this.paginator);
+
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    console.log('this.dataSource | CTOR', this.dataSource);
+  }
+
+  initializePaginator() {
+    if (this.table && this.table._dataSource) {
+      this.table._dataSource.paginator = this.paginator;
+      console.log('[initializePaginator] PAGINATOR', this.paginator);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // The async pipe updates the table's dataSource, but you need to manually
+    // update the paginator for this dataSource.
+    setTimeout(() => {
+      this.initializePaginator();
+      // if (this.table && this.table._dataSource) {
+      //   console.log('[ngAfterViewInit] PAGINATOR', this.paginator);
+      //   this.table._dataSource.paginator = this.paginator;
+      //   this.cdr.detectChanges();
+      // } else {
+      //   console.log('[ngAfterViewInit] NO-PAGINATOR');
+      // }
+    },100);
+    // if (this.paginator) {
+    //   this.dataSource.paginator = this.paginator;
+    //   console.log('[ngAfterViewInit] PAGINATOR', this.paginator);
+    // } else {
+    //   console.log('[ngAfterViewInit] NO-PAGINATOR');
+    // }
+  }
 
   ngOnInit(): void {}
 
@@ -99,8 +144,7 @@ export class TabsContainerComponent implements OnInit {
   }
 
   edit(money: Money) {
-    console.log('[PRE.edit]', money);
-    // this.toast()
+    //TODO: this.toast()
     dialogConfig.data = money;
     const dialogRef = this.dialog.open(EditMoneyDialog, dialogConfig);
 
@@ -137,44 +181,12 @@ export class TabsContainerComponent implements OnInit {
       });
   }
 
-  // showInfo() {
-  //   this.toastService.showInfo('masz dostęp do wydatków');
-  // }
-  // showSuccess() {
-  //   this.toastService.showSuccess('Udało się!');
-  // }
-  // showWarning() {
-  //   this.toastService.showWarning('Ups');
-  // }
-  // showError() {
-  //   this.toastService.showError('Motyla noga!');
-  // }
-
   formatValue(value: number | string): string {
     if (typeof value === 'number') {
       return formatNumber(value, this.locale, '1.0-0');
     } else {
       return value;
     }
-  }
-
-  private openDialog(
-    command: Command,
-    dialogComponent: any,
-    data?: Money | number
-  ) {
-    if (data && (command === Command.ADD || command === Command.REMOVE)) {
-      dialogConfig.data = data;
-    }
-
-    console.log('dialogComponent, data', dialogComponent, data);
-
-    const dialogRef = this.dialog.open(dialogComponent, dialogConfig);
-
-    dialogRef
-      .afterClosed()
-      .pipe(filter((val) => !!val))
-      .subscribe();
   }
 }
 
@@ -183,7 +195,7 @@ function groupTypePrices(moneyGroups: MoneyGroup[]) {
   const flatTypePrices = moneyGroups.map((x) => x.typePrices).flat();
 
   const groupedByType = flatTypePrices.reduce((acc, item) => {
-    // Initialize the price with 0 if not yet in the acc
+    // Initialize the price with 0
     if (!acc[item.type]) {
       acc[item.type] = 0;
     }

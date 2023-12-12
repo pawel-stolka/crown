@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
-import { Status, Todo, dialogConfig } from '@crown/data';
+import { Status, Todo, compareBy, dialogConfig } from '@crown/data';
 import { TodoListComponent } from '../components/todo-list/todo-list.component';
 import { TodoService } from '../services/todo.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.compon
 import { filter, map, take, tap } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
 // TODO: add alias to tsconfig
-import { compareBy } from '../../../../money/src/lib/services/money.service';
+// import { compareBy } from '../../../../money/src/lib/services/money.service';
 
 @Component({
   selector: 'crown-todo-container',
@@ -44,12 +44,10 @@ export class TodoContainerComponent implements OnInit {
 
   add() {
     const dialogRef = this.dialog.open(AddTodoComponent, dialogConfig);
-
     this.handleDialog(dialogRef);
   }
 
   updateTodo(event: any) {
-    console.log('[updateTodo]', event);
     this.todoService.updateStatus(event);
   }
 

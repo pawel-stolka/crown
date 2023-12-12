@@ -20,3 +20,5 @@ export * from './lib/enums/TodoAction';
 export * from './lib/lists/PRIORITIES';
 export * from './lib/lists/STATUSES';
 // export * from './lib/lists';
+
+export * from './lib/tools'

@@ -83,7 +83,7 @@ export class AddDialogComponent {
 
     this.moneyService.create(changes).subscribe(() => {
       this.dialogRef.close();
-      this.toast('Dodałeś rachunek...');
+      // TODO(toast): this.toast('Dodałeś rachunek...');
     });
   }
 

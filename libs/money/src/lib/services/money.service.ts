@@ -12,7 +12,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Money, API_URL, MoneyGroup, TokenEmail } from '@crown/data';
+import { Money, API_URL, MoneyGroup, TokenEmail, groupBy, fixNumber, compareBy } from '@crown/data';
 import { AuthService } from '@crown/auth/service';
 
 @Injectable({
@@ -97,7 +97,6 @@ export class MoneyService {
       .post<Money>(this.URL, changes, { headers: this.headers })
       .pipe(
         tap((money) => {
-          console.log('created', money);
           const update: Money[] = [...this._moneySubj.value, money];
           this._moneySubj.next(update);
         })
@@ -158,7 +157,7 @@ export class MoneyService {
       const [period, moneyList] = data;
       const typePrices = groupBy(moneyList, (x: any) => x.type)
         .map(([type, price]) => ({
-          type, 
+          type,
           price: fixNumber(price.reduce((a: any, c: any) => a + +c.price, 0)),
         }))
         .sort(compareBy('price'));
@@ -190,30 +189,4 @@ function getMonth(date: Date) {
   return date.toString().substring(0, 7);
 }
 
-function groupBy(list: any[], prop: any) {
-  const map = new Map();
-  list.forEach((item) => {
-    const key = prop(item);
-    const collection = map.get(key);
-    if (!collection) {
-      map.set(key, [item]);
-    } else {
-      collection.push(item);
-    }
-  });
-  return Array.from(map);
-}
 
-function fixNumber(num: number): number {
-  return +num.toFixed(2);
-}
-
-export function compareBy(prop?: string, descending = false) {
-  const order = descending ? -1 : 1;
-  return function (a: any, b: any) {
-    const lowA = a.toString().toLowerCase();
-    const lowB = b.toString().toLowerCase();
-    if (!!prop) return order * (a[prop] <= b[prop] ? 1 : -1);
-    else return order * (lowA <= lowB ? 1 : -1);
-  };
-}
