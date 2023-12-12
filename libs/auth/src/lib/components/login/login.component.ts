@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MaterialModule } from '@crown/material';
 
+const TEST_EMAIL = 'test@test';
+const TEST_PASS = 'test';
+
 @Component({
   selector: 'crown-login',
   standalone: true,
@@ -26,8 +29,8 @@ export class LoginComponent {
     private auth: AuthService
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      email: [TEST_EMAIL, [Validators.required]],
+      password: [TEST_PASS, [Validators.required]],
     });
   }
 
