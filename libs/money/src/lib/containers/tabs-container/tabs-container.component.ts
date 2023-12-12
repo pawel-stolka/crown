@@ -42,7 +42,7 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
-      // this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.paginator;
       console.log('[data!]', data);
     })
   );
@@ -94,23 +94,40 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef
   ) {
     this.dataSource = new MatTableDataSource([] as Money[]);
-    console.log('this.paginator', this.paginator);
 
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    console.log('this.dataSource | CTOR', this.dataSource);
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // console.log('this.dataSource | CTOR', this.dataSource);
+  }
+
+  onTabChanged(index: number) {
+    // Check if the tab with your table is the one being activated
+    console.log('[this.onTabChanged]', index);
+    if (index === 1) {
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+
+      // setTimeout(() => {
+      //   this.dataSource.paginator = this.paginator;
+      //   // this.initializePaginator();
+      // });
+    }
   }
 
   initializePaginator() {
     if (this.table && this.table._dataSource) {
       this.table._dataSource.paginator = this.paginator;
       console.log('[initializePaginator] PAGINATOR', this.paginator);
+    } else {
+      console.log('[initializePaginator] ELSE PAGINATOR', this.paginator);
+      this.dataSource.paginator = this.paginator;
     }
   }
 
   ngAfterViewInit(): void {
     // The async pipe updates the table's dataSource, but you need to manually
     // update the paginator for this dataSource.
+    /*
     setTimeout(() => {
       this.initializePaginator();
       // if (this.table && this.table._dataSource) {
@@ -120,7 +137,7 @@ export class TabsContainerComponent implements OnInit, AfterViewInit {
       // } else {
       //   console.log('[ngAfterViewInit] NO-PAGINATOR');
       // }
-    },100);
+    });*/
     // if (this.paginator) {
     //   this.dataSource.paginator = this.paginator;
     //   console.log('[ngAfterViewInit] PAGINATOR', this.paginator);

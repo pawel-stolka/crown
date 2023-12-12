@@ -2,100 +2,90 @@
   <button mat-fab color="accent" (click)="add()">
     <mat-icon>add</mat-icon>
   </button>
-  <!-- <button mat-fab color="default" (click)="showInfo()">
-    Info
-  </button>
-  <button mat-fab color="primary" (click)="showSuccess()">
-    Success
-  </button>
-  <button mat-fab color="warn" (click)="showWarning()">
-    Warning
-  </button>
-  <button mat-fab color="accent" (click)="showError()">
-    Error
-  </button> -->
 </div>
 
-<mat-tab-group>
-  <mat-tab label="SUMY">
-    <ng-container *ngTemplateOutlet="monthGroups"></ng-container>
-  </mat-tab>
-  <mat-tab label="Wpisy">
-    <ng-container *ngTemplateOutlet="simpleTable"></ng-container>
-  </mat-tab>
-</mat-tab-group>
-
-<ng-template #simpleTable>
-  <ng-container *ngIf="money$ | async as money">
-    <ng-container *ngIf="money.length; else noData">
-      <div class="table mat-elevation-z8">
-        <table
-          mat-table
-          [dataSource]="dataSource"
-          matSort
-          matSortDisableClear
-          matSortActive="position"
-          matSortDirection="asc"
-          multiTemplateDataRows
-        >
-          <ng-container matColumnDef="fromWho">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              mat-sort-header
-              class="custom-header-cell"
-            >
-              sklep
-            </th>
-            <td mat-cell *matCellDef="let el">{{ el.fromWho }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
-            <td mat-cell *matCellDef="let el">{{ el.price }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>kategoria</th>
-            <td mat-cell *matCellDef="let el">{{ el.type }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="createdAt">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>data</th>
-            <td mat-cell *matCellDef="let el">
-              {{ el.createdAt | date : 'dd.MM.yyyy' }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let el">
-              <div class="actions-buttons">
-                <button mat-flat-button (click)="edit(el)">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <!-- confirmDialog="'Are you sure?'" -->
-                <button mat-flat-button (click)="remove(el.id)">
-                  <mat-icon>delete_forever</mat-icon>
-                </button>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="columns"></tr>
-          <tr mat-row *matRowDef="let row; columns: columns"></tr>
-        </table>
-
-        <mat-paginator
-          #paginator
-          [pageSize]="pageSize"
-          [pageSizeOptions]="pageSizeOptions"
-          showFirstLastButtons
-        >
-        </mat-paginator>
-      </div>
-    </ng-container>
+<ng-container *ngIf="money$ | async as money">
+  <ng-container *ngIf="money.length; else noData">
+    <mat-tab-group (selectedIndexChange)="onTabChanged($event)">
+      <mat-tab label="SUMY">
+        <ng-container *ngTemplateOutlet="monthGroups"></ng-container>
+      </mat-tab>
+      <mat-tab label="Wpisy">
+        <ng-container
+          *ngTemplateOutlet="simpleTable; context: { money: money }"
+        ></ng-container>
+      </mat-tab>
+    </mat-tab-group>
   </ng-container>
+</ng-container>
+
+<ng-template #simpleTable let-money="money">
+  <div class="table mat-elevation-z8">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      matSortDisableClear
+      matSortActive="position"
+      matSortDirection="asc"
+      multiTemplateDataRows
+    >
+      <ng-container matColumnDef="fromWho">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="custom-header-cell"
+        >
+          sklep
+        </th>
+        <td mat-cell *matCellDef="let el">{{ el.fromWho }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
+        <td mat-cell *matCellDef="let el">{{ el.price }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>kategoria</th>
+        <td mat-cell *matCellDef="let el">{{ el.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>data</th>
+        <td mat-cell *matCellDef="let el">
+          {{ el.createdAt | date : 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let el">
+          <div class="actions-buttons">
+            <button mat-flat-button (click)="edit(el)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <!-- confirmDialog="'Are you sure?'" -->
+            <button mat-flat-button (click)="remove(el.id)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+
+    <mat-paginator
+      #paginator
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      showFirstLastButtons
+    >
+    </mat-paginator>
+  </div>
 </ng-template>
 
 <ng-template #monthGroups>
