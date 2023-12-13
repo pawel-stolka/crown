@@ -41,7 +41,6 @@ export class MoneyService {
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    console.log('money service CTOR');
     this.data$().subscribe();
   }
 

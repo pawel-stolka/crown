@@ -47,7 +47,7 @@ export class TodoComponent {
   }
 
   edit() {
-    console.log('edit', this.todo);
+    // console.log('edit', this.todo);
     this.editting.emit(this.todo);
   }
 

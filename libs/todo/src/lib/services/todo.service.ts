@@ -40,7 +40,7 @@ export class TodoService {
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    console.log('todo service CTOR');
+    // console.log('todo service CTOR');
     this.data$().subscribe();
   }
 
@@ -77,7 +77,7 @@ export class TodoService {
           return throwError(err);
         }),
         tap(() => (this.dataLoaded = true)),
-        tap((all) => console.log('[fetchAll$]', all)),
+        // tap((all) => console.log('[fetchAll$]', all)),
         tap((todos: Todo[]) => this._todosSubj.next(todos)),
         shareReplay(1)
         // map((money: Money[]) => money.sort(compareBy('period', false))),
@@ -101,7 +101,6 @@ export class TodoService {
   create(changes?: Partial<Todo>) {
     return this.http.post<Todo>(this.URL, changes).pipe(
       tap((todo) => {
-        console.log('created | todo', todo);
         const todos: Todo[] = [...this._todosSubj.value, todo];
         this._todosSubj.next(todos);
       })
@@ -114,7 +113,6 @@ export class TodoService {
       ...this.todos[index],
       ...changes,
     };
-    console.log('[EDIT]', newTodo, changes);
 
 
     // copy of todos
@@ -131,7 +129,7 @@ export class TodoService {
           console.log(message, err);
           return throwError(err);
         }),
-        tap((x) => console.log('EDIT result', x)),
+        // tap((x) => console.log('EDIT result', x)),
         shareReplay()
       );
   }
