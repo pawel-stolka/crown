@@ -5,7 +5,7 @@
 </div>
 
 @if (money$ | async; as money) { @if (money.length) {
-<mat-tab-group (selectedIndexChange)="onTabChanged($event)">
+<mat-tab-group (selectedIndexChange)="tabChange($event)">
   <mat-tab label="{{ GROUPS_LABEL }}">
     <ng-container *ngTemplateOutlet="GROUPS"></ng-container>
   </mat-tab>

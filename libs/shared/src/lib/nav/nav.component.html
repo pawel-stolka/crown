@@ -53,7 +53,7 @@
     </div> -->
 
     <div class="actions">
-      <button mat-mini-fab color="accent" (click)="toggleNav()">
+      <button mat-mini-fab color="warn" (click)="toggleNav()">
         <mat-icon>error</mat-icon>
       </button>
 
@@ -70,7 +70,7 @@
         </button>
         <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
           <div class="email">{{ tokenEmail.email }}</div>
-          <button mat-flat-button color="warn" (click)="logout()">
+          <button mat-flat-button color="primary" (click)="logout()">
             <mat-icon>power_settings_new</mat-icon>
           </button>
         </ng-container>

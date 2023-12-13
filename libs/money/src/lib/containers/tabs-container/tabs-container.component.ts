@@ -41,7 +41,7 @@ export class TabsContainerComponent {
   DETAILS_LABEL = 'WSZYSTKO';
 
   pageSizeOptions = [5, 10, 25];
-  pageSize = this.pageSizeOptions[1];
+  pageSize = this.pageSizeOptions[0];
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
@@ -81,7 +81,7 @@ export class TabsContainerComponent {
     private moneyService: MoneyService // TODO: private toastService: ToastService
   ) {}
 
-  onTabChanged(index: number) {
+  tabChange(index: number) {
     if (index === 1) {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

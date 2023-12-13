@@ -32,29 +32,6 @@
     }
   </mat-form-field>
 
-  <!-- <mat-form-field appearance="outline">
-    <mat-label>kategoria</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="type"
-      placeholder="wybierz lub wpisz nową"
-      [matAutocomplete]="auto"
-    />
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option
-        *ngFor="let category of categoriesFiltered$ | async"
-        [value]="category"
-      >
-        {{ category }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-
-  <ng-container *ngIf="autoFiltered$ | async as autoFiltered">
-    <pre>{{ autoFiltered | json }}</pre>
-  </ng-container> -->
-
   <mat-form-field appearance="outline">
     <mat-label>kategoria</mat-label>
     <input
@@ -90,8 +67,8 @@
   <div class="divider">opcjonalnie</div>
 
   <mat-form-field appearance="outline">
-    <mat-label>dodatkowo</mat-label>
-    <input matInput formControlName="fromWho" />
+    <mat-label>info</mat-label>
+    <input matInput formControlName="fromWho" placeholder="np. sklep, adres, itp."/>
     @if (fromWho?.hasError('maxlength')) {
     <mat-error> Za długo!</mat-error>
     }
