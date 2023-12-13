@@ -23,10 +23,37 @@
   <mat-form-field appearance="outline">
     <mat-label>cena</mat-label>
     <input matInput formControlName="price" dotNumber />
-    @if (form.get('price')?.hasError('required')) {
+    @if (price?.hasError('required')) {
     <mat-error> Podaj cenę! </mat-error>
+    } @if (price?.hasError('min')) {
+    <mat-error> Za niska kwota! </mat-error>
+    } @if (price?.hasError('max')) {
+    <mat-error> Za wysoka kwota! </mat-error>
     }
   </mat-form-field>
+
+  <!-- <mat-form-field appearance="outline">
+    <mat-label>kategoria</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="type"
+      placeholder="wybierz lub wpisz nową"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let category of categoriesFiltered$ | async"
+        [value]="category"
+      >
+        {{ category }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <ng-container *ngIf="autoFiltered$ | async as autoFiltered">
+    <pre>{{ autoFiltered | json }}</pre>
+  </ng-container> -->
 
   <mat-form-field appearance="outline">
     <mat-label>kategoria</mat-label>
@@ -50,13 +77,24 @@
     >
       <mat-icon>cancel</mat-icon>
     </button>
+
+    @if (type?.hasError('required')) {
+    <mat-error> Podaj kategorię! </mat-error>
+    } @if (type?.hasError('minlength')) {
+    <mat-error> Za krótka nazwa! </mat-error>
+    } @if (type?.hasError('maxlength')) {
+    <mat-error> Za długo! </mat-error>
+    }
   </mat-form-field>
 
   <div class="divider">opcjonalnie</div>
 
   <mat-form-field appearance="outline">
-    <mat-label>sklep</mat-label>
+    <mat-label>dodatkowo</mat-label>
     <input matInput formControlName="fromWho" />
+    @if (fromWho?.hasError('maxlength')) {
+    <mat-error> Za długo!</mat-error>
+    }
   </mat-form-field>
 </mat-dialog-content>
 

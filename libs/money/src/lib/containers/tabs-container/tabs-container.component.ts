@@ -37,8 +37,8 @@ const COLUMNS_RENDERED = [
 export class TabsContainerComponent {
   dataSource!: MatTableDataSource<Money>;
   columns = COLUMNS_RENDERED;
-  GROUPS_LABEL = 'W MIESIĄCACH';
-  DETAILS_LABEL = 'DETALE';
+  GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
+  DETAILS_LABEL = 'WSZYSTKO';
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[1];

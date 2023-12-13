@@ -12,7 +12,15 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Money, API_URL, MoneyGroup, TokenEmail, groupBy, fixNumber, compareBy } from '@crown/data';
+import {
+  Money,
+  API_URL,
+  MoneyGroup,
+  TokenEmail,
+  groupBy,
+  fixNumber,
+  compareBy,
+} from '@crown/data';
 import { AuthService } from '@crown/auth/service';
 
 @Injectable({
@@ -69,6 +77,12 @@ export class MoneyService {
         return throwError(err);
       }),
       map((money: Money[]) => money.sort(compareBy('period', false))),
+      map((money) => {
+        return money.map((m) => ({
+          ...m,
+          type: m.type?.toLowerCase(),
+        }));
+      }),
       tap((money: Money[]) => this._moneySubj.next(money))
     );
   }
@@ -188,5 +202,3 @@ export class MoneyService {
 function getMonth(date: Date) {
   return date.toString().substring(0, 7);
 }
-
-

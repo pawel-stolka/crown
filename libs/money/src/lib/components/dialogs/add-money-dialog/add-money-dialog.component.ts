@@ -8,9 +8,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AUTH_TOKEN_EMAIL, DotNumberDirective, Money } from '@crown/data';
+import {
+  AUTH_TOKEN_EMAIL,
+  DotNumberDirective,
+  MAX_PRICE,
+  MAX_TEXT_LENGTH,
+  MIN_PRICE,
+  MIN_TEXT_LENGTH,
+  Money,
+} from '@crown/data';
 import { MaterialModule } from '@crown/material';
-import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 import { ToastService } from '@crown/ui';
 import { MoneyService } from '@crown/money';
 
@@ -32,28 +40,21 @@ export class AddDialogComponent {
 
   private getCategories$ = this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
+  // autoFiltered$: Observable<string[]> | undefined; // = [];
+  // autoFiltered: string[] | undefined; // = [];
 
   typeControl = new FormControl<string>('') as FormControl<string>;
 
-  ngOnInit() {
-    this.categoriesFiltered$ = combineLatest([
-      this.getCategories$,
-      this.typeControl.valueChanges.pipe(startWith('')),
-    ]).pipe(
-      map(([categories, input]) =>
-        categories.filter((c) =>
-          c.toLowerCase().includes((input || '').toLowerCase())
-        )
-      )
-    );
-  }
-
-  toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-    this.toastService.showToast('Sukces', message, 'icon-class', 5000);
-  }
-
   get type() {
     return this.form.get('type');
+  }
+
+  get price() {
+    return this.form.get('price');
+  }
+
+  get fromWho() {
+    return this.form.get('fromWho');
   }
 
   constructor(
@@ -68,14 +69,58 @@ export class AddDialogComponent {
       : null;
 
     this.form = this.fb.group({
-      userId: [email, [Validators.required]],
-      type: ['', [Validators.required]],
-      price: [null, [Validators.required]],
-      fromWho: [''],
+      userId: [email, [Validators.email, Validators.required]],
+      type: [
+        null,
+        [
+          Validators.minLength(MIN_TEXT_LENGTH),
+          Validators.maxLength(MAX_TEXT_LENGTH),
+          Validators.required,
+        ],
+      ],
+      price: [
+        null,
+        [
+          Validators.min(MIN_PRICE),
+          Validators.max(MAX_PRICE),
+          Validators.required,
+        ],
+      ],
+      fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
       createdAt: [new Date(), [Validators.required]],
-      details: [''],
-      extra: [''],
     });
+
+    // this.autoFiltered$ = this.type?.valueChanges.pipe(
+    //   startWith(''),
+    //   tap((a) => console.log('AUTO', a)),
+    //   map((value) => this._filter(value)) // Here the _filter method is used
+    // );
+  }
+
+  ngOnInit() {
+    this.categoriesFiltered$ = combineLatest([
+      this.getCategories$,
+      this.typeControl.valueChanges.pipe(startWith('')),
+    ]).pipe(
+      map(([categories, input]) =>
+        categories.filter((c) =>
+          c.toLowerCase().includes((input || '').toLowerCase())
+        )
+      )
+    );
+  }
+
+  // private _filter(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
+  //   let result = this.autoFiltered?.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+
+  //   return result ?? [];
+  // }
+
+  toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
+    this.toastService.showToast('Sukces', message, 'icon-class', 5000);
   }
 
   save() {
