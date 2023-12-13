@@ -23,13 +23,28 @@
   margin-top: 30px;
 }
 
-.mat-column-price,
-.mat-column-type,
 .mat-column-createdAt,
+.mat-column-type,
+.mat-column-price,
+.mat-column-fromWho,
+.mat-column-isVat,
 .mat-column-updatedAt,
 .mat-column-action {
   flex: 1 1 auto; /* Flex-grow, Flex-shrink, Flex-basis */
   text-align: center;
+}
+
+.mat-column-type {
+  width: 25%;
+
+}
+
+.mat-column-price {
+  width: 5%;
+}
+
+.mat-column-action {
+  width: 20%;
 }
 
 .table .mat-cell {

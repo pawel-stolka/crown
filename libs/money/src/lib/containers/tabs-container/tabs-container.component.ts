@@ -24,6 +24,7 @@ const COLUMNS_RENDERED = [
   'type',
   'price',
   'fromWho',
+  'isVat',
   'updatedAt',
   'action',
 ];
@@ -105,8 +106,8 @@ export class TabsContainerComponent {
     this.handleDialog(dialogRef);
   }
 
-  remove(id: number) {
-    dialogConfig.data = id;
+  remove(money: Money) {
+    dialogConfig.data = money;
     const dialogRef = this.dialog.open(DeleteDialogComponent, dialogConfig);
     this.handleDialog(dialogRef);
   }

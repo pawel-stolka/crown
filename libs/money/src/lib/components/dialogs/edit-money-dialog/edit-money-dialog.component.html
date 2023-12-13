@@ -6,6 +6,7 @@
 
 <mat-dialog-content [formGroup]="form">
   <mat-form-field appearance="outline">
+    <mat-label>data zakupu</mat-label>
     <input
       matInput
       [matDatepicker]="myDatepicker"
@@ -19,7 +20,70 @@
     <mat-datepicker #myDatepicker></mat-datepicker>
   </mat-form-field>
 
+  <span class="inline">
+    <mat-form-field appearance="outline">
+      <mat-label>cena</mat-label>
+      <input matInput formControlName="price" dotNumber />
+      @if (price?.hasError('required')) {
+      <mat-error> Podaj cenę! </mat-error>
+      } @if (price?.hasError('min')) {
+      <mat-error> Za niska kwota! </mat-error>
+      } @if (price?.hasError('max')) {
+      <mat-error> Za wysoka kwota! </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-checkbox matInput formControlName="isVat">VAT</mat-checkbox>
+  </span>
+
   <mat-form-field appearance="outline">
+    <mat-label>kategoria</mat-label>
+    <input
+      type="text"
+      matInput
+      lowercase
+      formControlName="type"
+      [matAutocomplete]="auto"
+    />
+
+    <mat-autocomplete #auto="matAutocomplete">
+      @for (category of categoriesFiltered$ | async; track category) {
+      <mat-option [value]="category">{{ category }} </mat-option>
+      }
+    </mat-autocomplete>
+    <button
+      matSuffix
+      mat-icon-button
+      *ngIf="type?.value"
+      (click)="type?.setValue('')"
+    >
+      <mat-icon>cancel</mat-icon>
+    </button>
+
+    @if (type?.hasError('required')) {
+    <mat-error> Podaj kategorię! </mat-error>
+    } @if (type?.hasError('minlength')) {
+    <mat-error> Za krótka nazwa! </mat-error>
+    } @if (type?.hasError('maxlength')) {
+    <mat-error> Za długo! </mat-error>
+    }
+  </mat-form-field>
+
+  <div class="divider">opcjonalnie</div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>info</mat-label>
+    <input
+      matInput
+      formControlName="fromWho"
+      placeholder="np. sklep, adres, itp."
+    />
+    @if (fromWho?.hasError('maxlength')) {
+    <mat-error> Za długo!</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- <mat-form-field appearance="outline">
     <mat-label>Cena</mat-label>
     <input matInput formControlName="price" />
   </mat-form-field>
@@ -32,7 +96,7 @@
   <mat-form-field appearance="outline">
     <mat-label>Kategoria</mat-label>
     <input matInput formControlName="type" />
-  </mat-form-field>
+  </mat-form-field> -->
 </mat-dialog-content>
 
 <mat-dialog-actions class="actions">

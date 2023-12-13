@@ -31,7 +31,7 @@ import { MoneyService } from '@crown/money';
     MaterialModule,
     ReactiveFormsModule,
     DotNumberDirective,
-    LowercaseDirective
+    LowercaseDirective,
   ],
   templateUrl: './add-money-dialog.component.html',
   styleUrl: './add-money-dialog.component.scss',
@@ -43,7 +43,7 @@ export class AddDialogComponent {
   private getCategories$ = this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
 
-  typeControl = new FormControl<string>('') as FormControl<string>;
+  typeControl = new FormControl<string>('');
 
   get type() {
     return this.form.get('type');
@@ -112,8 +112,6 @@ export class AddDialogComponent {
 
   save() {
     const changes: Partial<Money> = this.form.value;
-    console.log('[save]', changes);
-
 
     this.moneyService.create(changes).subscribe(() => {
       this.dialogRef.close();

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MoneyService } from '../../../services/money.service';
 import { MaterialModule } from '@crown/material';
+import { Money } from '@crown/data';
 
 @Component({
   selector: 'crown-delete-dialog',
@@ -12,14 +13,15 @@ import { MaterialModule } from '@crown/material';
   styleUrl: './delete-money-dialog.component.scss',
 })
 export class DeleteDialogComponent {
-  private id: string;
+  title = `Jesteś pewny, że chcesz to usunąć?`;
+  data: Money;
 
   constructor(
     private dialogRef: MatDialogRef<DeleteDialogComponent>,
     private moneyService: MoneyService,
-    @Inject(MAT_DIALOG_DATA) id: string
+    @Inject(MAT_DIALOG_DATA) data: Money
   ) {
-    this.id = id;
+    this.data = data;
   }
 
   close() {
@@ -27,7 +29,7 @@ export class DeleteDialogComponent {
   }
 
   delete() {
-    this.moneyService.delete(this.id).subscribe();
+    this.moneyService.delete(this.data?.id).subscribe();
     this.dialogRef.close();
   }
 }

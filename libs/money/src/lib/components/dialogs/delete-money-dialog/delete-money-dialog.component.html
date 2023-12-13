@@ -1,8 +1,24 @@
+<div class="dialog-title" mat-dialog-title>{{ title }}</div>
+<div class="details">
+  <div class="row">
+    <div class="label">typ:</div>
+    <div>{{ data.type }}</div>
+  </div>
+  <div class="row">
+    <div class="label">cena:</div>
+    <div>{{ data.price }}</div>
+  </div>
+  <div class="row">
+    <div class="label">z dnia:</div>
+    <div>{{ data.createdAt | date : 'dd.MM.yyyy' }}</div>
+  </div>
+</div>
+
 <mat-dialog-content>
-  <mat-dialog-actions>
+  <mat-dialog-actions class="actions">
     <button mat-raised-button (click)="close()">Cancel</button>
 
-    <button mat-raised-button color="primary" #saveButton (click)="delete()">
+    <button mat-raised-button color="warn" #saveButton (click)="delete()">
       Delete it!
     </button>
   </mat-dialog-actions>
