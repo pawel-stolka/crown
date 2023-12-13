@@ -29,8 +29,8 @@ export class LoginComponent {
     private auth: AuthService
   ) {
     this.form = this.fb.group({
-      email: [TEST_EMAIL, [Validators.required]],
-      password: [TEST_PASS, [Validators.required]],
+      email: [null, [Validators.required]],
+      password: [null, [Validators.required]],
     });
   }
 
