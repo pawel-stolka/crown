@@ -1,5 +1,3 @@
-
-
 $demo-primary-background: #d8d5cd;
 $demo-basic: #f4ffff;
 $demo-primary: #fbe6bf;
@@ -10,11 +8,10 @@ $demo-danger: #102839af;
 $demo-danger2: #10283994;
 
 $danger: $demo-danger;
-$warning: $demo-accent2;// orange;
-$success: $demo-primary;// yellowgreen;
+$warning: $demo-accent2; // orange;
+$success: $demo-primary; // yellowgreen;
 
 $disabled: $demo-primary-background;
-
 
 // colors - to check
 $black: #000;
@@ -24,3 +21,4 @@ $warn: #b20909;
 $warn-light: #ffb302;
 $blue: #009ee6;
 $dark-blue: #2f3291;
+$grey: rgba(0, 0, 0, 0.6);

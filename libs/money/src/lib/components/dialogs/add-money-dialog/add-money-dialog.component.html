@@ -3,7 +3,7 @@
 <!-- <loading></loading>
 
 <messages></messages> -->
-
+<!-- <pre>{{ form.value | json }}</pre> -->
 <mat-dialog-content [formGroup]="form">
   <mat-form-field appearance="outline">
     <mat-label>kiedy</mat-label>
@@ -20,17 +20,21 @@
     <mat-datepicker #datepicker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>cena</mat-label>
-    <input matInput formControlName="price" dotNumber />
-    @if (price?.hasError('required')) {
-    <mat-error> Podaj cenę! </mat-error>
-    } @if (price?.hasError('min')) {
-    <mat-error> Za niska kwota! </mat-error>
-    } @if (price?.hasError('max')) {
-    <mat-error> Za wysoka kwota! </mat-error>
-    }
-  </mat-form-field>
+  <span class="inline">
+    <mat-form-field appearance="outline">
+      <mat-label>cena</mat-label>
+      <input matInput formControlName="price" dotNumber />
+      @if (price?.hasError('required')) {
+      <mat-error> Podaj cenę! </mat-error>
+      } @if (price?.hasError('min')) {
+      <mat-error> Za niska kwota! </mat-error>
+      } @if (price?.hasError('max')) {
+      <mat-error> Za wysoka kwota! </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-checkbox matInput formControlName="isVat">VAT</mat-checkbox>
+  </span>
 
   <mat-form-field appearance="outline">
     <mat-label>kategoria</mat-label>
@@ -68,7 +72,11 @@
 
   <mat-form-field appearance="outline">
     <mat-label>info</mat-label>
-    <input matInput formControlName="fromWho" placeholder="np. sklep, adres, itp."/>
+    <input
+      matInput
+      formControlName="fromWho"
+      placeholder="np. sklep, adres, itp."
+    />
     @if (fromWho?.hasError('maxlength')) {
     <mat-error> Za długo!</mat-error>
     }

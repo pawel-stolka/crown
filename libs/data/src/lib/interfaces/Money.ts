@@ -5,6 +5,8 @@ export interface Money {
   price: number;
   fromWho: string;
   createdAt: Date;
+  isVat?: boolean;
+  isDeleted?: boolean;
   details?: string;
   extra?: string;
 }

@@ -18,7 +18,7 @@ import {
   Money,
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
-import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
+import { Observable, combineLatest, map, startWith } from 'rxjs';
 import { ToastService } from '@crown/ui';
 import { MoneyService } from '@crown/money';
 
@@ -40,8 +40,6 @@ export class AddDialogComponent {
 
   private getCategories$ = this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
-  // autoFiltered$: Observable<string[]> | undefined; // = [];
-  // autoFiltered: string[] | undefined; // = [];
 
   typeControl = new FormControl<string>('') as FormControl<string>;
 
@@ -86,15 +84,11 @@ export class AddDialogComponent {
           Validators.required,
         ],
       ],
+      isVat: [false],
+      isDeleted: [false],
       fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
       createdAt: [new Date(), [Validators.required]],
     });
-
-    // this.autoFiltered$ = this.type?.valueChanges.pipe(
-    //   startWith(''),
-    //   tap((a) => console.log('AUTO', a)),
-    //   map((value) => this._filter(value)) // Here the _filter method is used
-    // );
   }
 
   ngOnInit() {
@@ -110,21 +104,14 @@ export class AddDialogComponent {
     );
   }
 
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-  //   let result = this.autoFiltered?.filter((option) =>
-  //     option.toLowerCase().includes(filterValue)
-  //   );
-
-  //   return result ?? [];
-  // }
-
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
     this.toastService.showToast('Sukces', message, 'icon-class', 5000);
   }
 
   save() {
     const changes: Partial<Money> = this.form.value;
+    console.log('[save]', changes);
+
 
     this.moneyService.create(changes).subscribe(() => {
       this.dialogRef.close();

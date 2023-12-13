@@ -76,6 +76,7 @@ export class MoneyService {
         console.log(message, err);
         return throwError(err);
       }),
+      map((money: Money[]) => money.filter((x) => !x.isDeleted)),
       map((money: Money[]) => money.sort(compareBy('period', false))),
       map((money) => {
         return money.map((m) => ({

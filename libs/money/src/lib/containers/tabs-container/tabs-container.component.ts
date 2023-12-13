@@ -24,7 +24,7 @@ const COLUMNS_RENDERED = [
   'type',
   'price',
   'fromWho',
-  // 'updatedAt'
+  'updatedAt',
   'action',
 ];
 @Component({
