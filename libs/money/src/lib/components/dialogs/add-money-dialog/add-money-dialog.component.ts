@@ -11,6 +11,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import {
   AUTH_TOKEN_EMAIL,
   DotNumberDirective,
+  LowercaseDirective,
   MAX_PRICE,
   MAX_TEXT_LENGTH,
   MIN_PRICE,
@@ -30,6 +31,7 @@ import { MoneyService } from '@crown/money';
     MaterialModule,
     ReactiveFormsModule,
     DotNumberDirective,
+    LowercaseDirective
   ],
   templateUrl: './add-money-dialog.component.html',
   styleUrl: './add-money-dialog.component.scss',

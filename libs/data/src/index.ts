@@ -10,7 +10,8 @@ export * from './lib/configs/constants';
 export * from './lib/configs/Colors';
 export * from './lib/configs/dialogConfig';
 
-export * from './lib/directives/DotNumber.directive';
+export * from './lib/directives/dotNumber/dotNumber.directive';
+export * from './lib/directives/lowercase/lowercase.directive';
 
 export * from './lib/enums/Command';
 export * from './lib/enums/Status';
@@ -21,4 +22,4 @@ export * from './lib/lists/PRIORITIES';
 export * from './lib/lists/STATUSES';
 // export * from './lib/lists';
 
-export * from './lib/tools'
+export * from './lib/tools';

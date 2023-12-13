@@ -101,7 +101,7 @@ export class MoneyService {
           return throwError(err);
         }),
         map((countedCats) =>
-          countedCats.map((c) => c.type.trim().toLowerCase())
+          countedCats.map((c) => c.type.trim())
         ),
         map((c) => [...new Set(c)])
       );
