@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
-  AUTH_TOKEN_EMAIL,
+  AUTH_TOKEN_EMAIL_ROLE,
   DotNumberDirective,
   LowercaseDirective,
   MAX_PRICE,
@@ -63,7 +63,7 @@ export class AddDialogComponent {
     private moneyService: MoneyService,
     private toastService: ToastService
   ) {
-    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
+    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE) ?? null;
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
       : null;

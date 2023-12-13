@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
+import {
+  ACCESS_ROLE,
+  API_URL,
+  AUTH_TOKEN_EMAIL_ROLE,
+  TokenEmail,
+} from '@crown/data';
 import {
   BehaviorSubject,
   Observable,
@@ -16,19 +21,22 @@ import {
 })
 export class AuthService {
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
+  private _accessRoleSubj = new BehaviorSubject<string | undefined>(undefined);
 
+  // TODO: _accesRole below !!!
   tokenEmail$: Observable<TokenEmail | null> =
     this._tokenEmailSubj.asObservable();
 
   isLoggedIn$: Observable<boolean>;
   isLoggedOut$: Observable<boolean>;
+  accessRole$: Observable<string | undefined>;
 
   constructor(private http: HttpClient) {
     this.isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
+    this.accessRole$ = this.tokenEmail$.pipe(map(tokenEmail => tokenEmail?.role))
 
-    const token = localStorage.getItem(AUTH_TOKEN_EMAIL);
-
+    const token = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE);
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));
     }
@@ -43,7 +51,7 @@ export class AuthService {
       }),
       tap((res) => {
         this._tokenEmailSubj.next(res);
-        localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
+        localStorage.setItem(AUTH_TOKEN_EMAIL_ROLE, JSON.stringify(res));
       }),
       shareReplay()
     );
@@ -51,6 +59,6 @@ export class AuthService {
 
   logout() {
     this._tokenEmailSubj.next(null);
-    localStorage.removeItem(AUTH_TOKEN_EMAIL);
+    localStorage.removeItem(AUTH_TOKEN_EMAIL_ROLE);
   }
 }

@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  AUTH_TOKEN_EMAIL,
+  AUTH_TOKEN_EMAIL_ROLE,
   PRIORITIES,
   Priority,
   SHOW_PRIORITY,
@@ -45,7 +45,7 @@ export class EditTodoComponent {
 
     const { userId, title, description, status, priority, createdAt } = todo;
 
-    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
+    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE) ?? null;
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
       : null;

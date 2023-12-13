@@ -1,9 +1,21 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TodoService } from '../../../services/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AUTH_TOKEN_EMAIL, PRIORITIES, Priority, SHOW_PRIORITY, Status, Todo } from '@crown/data';
+import {
+  AUTH_TOKEN_EMAIL_ROLE,
+  PRIORITIES,
+  Priority,
+  SHOW_PRIORITY,
+  Status,
+  Todo,
+} from '@crown/data';
 import { MaterialModule } from '@crown/material';
 
 @Component({
@@ -22,9 +34,9 @@ export class AddTodoComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddTodoComponent>,
-    private todoService: TodoService,
+    private todoService: TodoService
   ) {
-    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
+    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE) ?? null;
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
       : null;
@@ -34,22 +46,19 @@ export class AddTodoComponent {
       title: ['', [Validators.required]],
       description: [null, [Validators.required]],
       status: [Status.TO_DO, [Validators.required]],
-      priority: [null, [Validators.required]]
+      priority: [null, [Validators.required]],
     });
   }
 
   showPriority = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
 
-
   save() {
     const changes: Partial<Todo> = this.form.value;
 
-    this.todoService
-      .create(changes)
-      .subscribe(() => {
-        this.dialogRef.close()
-        // this.toast('Dodałeś rachunek...')
-      });
+    this.todoService.create(changes).subscribe(() => {
+      this.dialogRef.close();
+      // this.toast('Dodałeś rachunek...')
+    });
   }
 
   close() {

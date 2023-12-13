@@ -19,6 +19,7 @@ import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.com
   styleUrl: './todo-container.component.scss',
 })
 export class TodoContainerComponent implements OnInit {
+  accessRole$ = this.todoService.accessRole$;
   all$ = this.todoService.todos$;
 
   todos$ = this.all$.pipe(
@@ -57,17 +58,17 @@ export class TodoContainerComponent implements OnInit {
     dialogConfig.data = todo;
     const dialogRef = this.dialog.open(EditTodoComponent, dialogConfig);
 
-    // this.handleDialog(dialogRef);
-    dialogRef
-      .afterClosed()
-      .pipe(
-        tap((x) => console.log('[this.edit]', x)),
-        // tap((_) => this.showInfo()),
-        filter((val) => !!val)
-      )
-      .subscribe((_) => {
-        console.log('[this.edit sub]', _);
-      });
+    this.handleDialog(dialogRef);
+    // dialogRef
+    //   .afterClosed()
+    //   .pipe(
+    //     tap((x) => console.log('[this.edit]', x)),
+    //     // tap((_) => this.showInfo()),
+    //     filter((val) => !!val)
+    //   )
+    //   .subscribe((_) => {
+    //     console.log('[this.edit sub]', _);
+    //   });
   }
 
   updatePriority(todo: Todo) {
