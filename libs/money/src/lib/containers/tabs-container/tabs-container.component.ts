@@ -12,12 +12,14 @@ import {
   dialogConfig,
   compareBy,
 } from '@crown/data';
-import { filter, map, tap } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
+import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
+import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -31,7 +33,12 @@ const COLUMNS_RENDERED = [
 @Component({
   selector: 'crown-tabs-container',
   standalone: true,
-  imports: [CommonModule, MaterialModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    GroupsTabComponent,
+    DetailsTabComponent,
+  ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',
 })
@@ -77,7 +84,7 @@ export class TabsContainerComponent {
   );
 
   constructor(
-    @Inject(LOCALE_ID) private locale: string,
+    @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,
     private moneyService: MoneyService // TODO: private toastService: ToastService
   ) {}
@@ -87,12 +94,6 @@ export class TabsContainerComponent {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
-  }
-
-  getPriceByType(typePrices: any[], type: string): number | string {
-    const found = typePrices.find((tp) => tp.type === type);
-    const result = found ? found.price : ZERO_DATA;
-    return this.formatValue(result);
   }
 
   add() {
@@ -112,6 +113,16 @@ export class TabsContainerComponent {
     this.handleDialog(dialogRef);
   }
 
+  getPriceByType(
+    typePrices: any[],
+    type: string,
+    locale: string
+  ): number | string {
+    const found = typePrices.find((tp) => tp.type === type);
+    const result = found ? found.price : ZERO_DATA;
+    return formatValue(result, locale);
+  }
+
   private handleDialog(dialogRef: MatDialogRef<any>) {
     dialogRef
       .afterClosed()
@@ -120,12 +131,22 @@ export class TabsContainerComponent {
         // this.toast();
       });
   }
+}
 
-  formatValue(value: number | string): string {
-    return typeof value === 'number'
-      ? formatNumber(value, this.locale, '1.0-0')
-      : value;
-  }
+// export function getPriceByType(
+//   typePrices: any[],
+//   type: string,
+//   locale: string
+// ): number | string {
+//   const found = typePrices.find((tp) => tp.type === type);
+//   const result = found ? found.price : ZERO_DATA;
+//   return formatValue(result, locale);
+// }
+
+export function formatValue(value: number | string, locale: string): string {
+  return typeof value === 'number'
+    ? formatNumber(value, locale, '1.0-0')
+    : value;
 }
 
 function groupTypePrices(moneyGroups: MoneyGroup[]) {

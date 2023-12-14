@@ -1,0 +1,35 @@
+@import '@colors';
+
+:host {
+  display: flex;
+  justify-content: center;
+  // border: 2px dotted;
+}
+
+.table {
+  width: 95%;
+  margin-top: 20px;
+
+  tr > th {
+    border: 1px solid $danger;
+    text-align: center;
+    background-color: dodgerblue;
+  }
+  tr > td {
+    text-align: center;
+    height: 40px;
+    border: 1px dotted $blue;
+    background-color: $demo-primary-0;
+  }
+
+  tr:last-child > td {
+    background-color: $demo-accent1;
+  }
+}
+
+.last {
+  font-size: 1.3rem;
+  // border: 2px solid $black;
+  // background-color: $white;
+  // font-weight: bolder;
+}

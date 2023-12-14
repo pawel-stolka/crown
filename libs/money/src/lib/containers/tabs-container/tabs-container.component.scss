@@ -1,72 +1,7 @@
 .actions {
   display: flex;
-  justify-content:space-around;
+  justify-content: space-around;
   margin: 15px 0;
-}
-
-.next-table {
-  width: 100%;
-
-  tr > th {
-    border: 2px solid dodgerblue;
-    text-align: center;
-  }
-  tr > td {
-    text-align: center;
-    height: 40px;
-    border: 1px dotted dodgerblue;
-  }
-}
-
-.next-table,
-.table {
-  margin-top: 30px;
-}
-
-.mat-column-createdAt,
-.mat-column-type,
-.mat-column-price,
-.mat-column-fromWho,
-.mat-column-isVat,
-.mat-column-updatedAt,
-.mat-column-action {
-  flex: 1 1 auto; /* Flex-grow, Flex-shrink, Flex-basis */
-  text-align: center;
-}
-
-.mat-column-type {
-  width: 25%;
-
-}
-
-.mat-column-price {
-  width: 5%;
-}
-
-.mat-column-action {
-  width: 20%;
-}
-
-.table .mat-cell {
-  text-align: center;
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.table .mat-table .mat-header-row {
-  display: flex;
-}
-
-::ng-deep .mat-sort-header-container {
-  padding-left: 12px;
-  justify-content: center;
-}
-
-.last {
-  font-size: 1.3rem;
-  // font-weight: bolder;
 }
 
 .no-data {
@@ -80,8 +15,5 @@
   .title {
     font-size: large;
     margin: 20px 0;
-  }
-  .subtitle {
-    // font-size: larger;
   }
 }
