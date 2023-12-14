@@ -96,6 +96,17 @@ export class TabsContainerComponent {
     }
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    console.log('[this.applyFilter]', this.dataSource.filter);
+
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
+  }
+
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
     this.handleDialog(dialogRef);

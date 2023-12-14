@@ -40,6 +40,7 @@ const COLUMNS_RENDERED = [
 })
 export class DetailsTabComponent implements AfterViewInit, OnChanges {
   @Input() money!: Money[] | undefined;
+  @Input() filter = '';
 
   dataSource!: MatTableDataSource<Money>;
 
@@ -57,22 +58,15 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.money);
-    this._update();
+    this.dataSource.filter = this.filter;
+    this.updateSortPag();
   }
 
   ngAfterViewInit(): void {
-    this._update();
+    this.updateSortPag();
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    // this.dataSource.filterPredicate = (this.money, filterValue) = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
@@ -91,7 +85,7 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
     this.handleDialog(dialogRef);
   }
 
-  private _update() {
+  private updateSortPag() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
