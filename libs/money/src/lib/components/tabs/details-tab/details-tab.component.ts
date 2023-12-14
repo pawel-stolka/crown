@@ -64,6 +64,16 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
     this._update();
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    // this.dataSource.filterPredicate = (this.money, filterValue) = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
     this.handleDialog(dialogRef);

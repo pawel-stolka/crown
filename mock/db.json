@@ -38,19 +38,266 @@
       "createdAt": "2023-12-12T19:50:11.774Z",
       "updatedAt": "2023-12-12T19:53:42.599Z",
       "extra": ""
+    },
+    {
+      "id": "c594210b-d80d-4afa-a231-1f5c49e8e58d",
+      "userId": "test@test",
+      "type": "test",
+      "price": 2024,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2024-01-18T23:00:00.000Z",
+      "updatedAt": "2023-12-12T20:41:51.334Z",
+      "extra": ""
+    },
+    {
+      "id": "c4259ea1-08a3-49b3-a676-9202c5ee5711",
+      "userId": "test@test",
+      "type": "test",
+      "price": 5,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2022-11-03T23:00:00.000Z",
+      "updatedAt": "2023-12-12T20:42:58.067Z",
+      "extra": ""
+    },
+    {
+      "id": "b9c2b14c-d559-47a0-afd9-417676b5f0b2",
+      "userId": "test@test",
+      "type": "chemia",
+      "price": 123,
+      "fromWho": "żabka",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T21:44:19.483Z",
+      "updatedAt": "2023-12-12T21:44:34.496Z",
+      "extra": ""
+    },
+    {
+      "id": "ad081ebb-ba8c-4e31-85dc-504bf4c08beb",
+      "userId": "test@test",
+      "type": "chemia",
+      "price": 123,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T21:52:27.933Z",
+      "updatedAt": "2023-12-12T21:52:38.117Z",
+      "extra": ""
+    },
+    {
+      "id": "2541b437-84ee-41f1-8a05-09824602165c",
+      "userId": "test@test",
+      "type": "chemia",
+      "price": 1,
+      "fromWho": "ąćęłóśżźń",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T21:53:54.716Z",
+      "updatedAt": "2023-12-12T21:55:01.450Z",
+      "extra": ""
+    },
+    {
+      "id": "5a2fd550-f28f-4192-9848-c1420074a285",
+      "userId": "test@test",
+      "type": "ąćęłńóśźż",
+      "price": 1234,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T21:56:11.864Z",
+      "updatedAt": "2023-12-12T21:56:55.997Z",
+      "extra": ""
+    },
+    {
+      "id": "e7e48f37-b6c7-456b-9e01-6e8d69fbd649",
+      "userId": "test@test",
+      "type": "Pierdyliard",
+      "price": 1234,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T21:57:52.705Z",
+      "updatedAt": "2023-12-12T22:01:13.614Z",
+      "extra": ""
+    },
+    {
+      "id": "9274d3e5-11bb-4a62-b6a1-67f01470d91e",
+      "userId": "test@test",
+      "type": "Albo Mai",
+      "price": 44,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T22:14:52.546Z",
+      "updatedAt": "2023-12-12T22:15:33.243Z",
+      "extra": ""
+    },
+    {
+      "id": "33caad1d-749c-47f5-9941-e8fb0f10b2e7",
+      "userId": "test@test",
+      "type": "Christo… kasztanie ",
+      "price": 100,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T22:17:15.533Z",
+      "updatedAt": "2023-12-12T22:17:35.033Z",
+      "extra": ""
+    },
+    {
+      "id": "3cc910d3-2f6d-458d-af85-c6c78bb717be",
+      "userId": "test@test",
+      "type": "Niemieckie wiatraki, życiowa rola Maji Ostaszewskiej",
+      "price": 12,
+      "fromWho": "Helios",
+      "isVat": null,
+      "isDeleted": true,
+      "details": "",
+      "createdAt": "2023-12-12T22:13:58.694Z",
+      "updatedAt": "2023-12-12T22:14:43.515Z",
+      "extra": ""
+    },
+    {
+      "id": "ac89be22-63ae-4257-8e05-47af21db3e29",
+      "userId": "test@test",
+      "type": "Hrabia… No nie Monte Cristo. Chodzi o Bula-Komorowskiego. Nie mylić z Borem-Komorowskim. Ten ostatni nie ukradł żyrandola. ",
+      "price": 665,
+      "fromWho": "",
+      "isVat": null,
+      "isDeleted": true,
+      "details": "",
+      "createdAt": "2023-12-12T22:15:41.031Z",
+      "updatedAt": "2023-12-12T23:02:39.187Z",
+      "extra": ""
+    },
+    {
+      "id": "2095ac47-1be8-4818-baa4-010b334588d0",
+      "userId": "test@test",
+      "type": "Kategoria jaka jest każdy widzi",
+      "price": 100.3,
+      "fromWho": "Żabka",
+      "isVat": null,
+      "isDeleted": true,
+      "details": "",
+      "createdAt": "2023-12-12T21:33:14.126Z",
+      "updatedAt": "2023-12-12T21:33:53.198Z",
+      "extra": ""
+    },
+    {
+      "id": "a38ab72c-6ca2-4092-80e4-483b96e21722",
+      "userId": "test@test",
+      "type": "Grupa",
+      "price": 24,
+      "fromWho": null,
+      "isVat": false,
+      "isDeleted": false,
+      "details": null,
+      "createdAt": "2023-10-31T23:00:00.000Z",
+      "updatedAt": "2023-12-13T15:24:10.553Z",
+      "extra": null
+    },
+    {
+      "id": "bb31064a-8107-416a-9f4d-226496f101e8",
+      "userId": "test@test",
+      "type": "test 3",
+      "price": 131,
+      "fromWho": "postman :)",
+      "isVat": null,
+      "isDeleted": null,
+      "details": null,
+      "createdAt": "2023-12-14T11:03:19.846Z",
+      "updatedAt": "2023-12-14T11:19:44.142Z",
+      "extra": null
+    },
+    {
+      "id": "6a876278-ab75-44b3-a9e5-317ca9085988",
+      "userId": "test@test",
+      "type": "test",
+      "price": 105,
+      "fromWho": null,
+      "isVat": false,
+      "isDeleted": null,
+      "details": null,
+      "createdAt": "2023-12-13T14:25:20.877Z",
+      "updatedAt": "2023-12-14T17:50:57.878Z",
+      "extra": null
+    },
+    {
+      "id": "a1d4b436-8ce2-4794-bb38-393ee0d77fdd",
+      "userId": "test@test",
+      "type": "grupa",
+      "price": 1212,
+      "fromWho": "SFSGsfsf",
+      "isVat": false,
+      "isDeleted": false,
+      "details": null,
+      "createdAt": "2023-08-31T22:00:00.000Z",
+      "updatedAt": "2023-12-14T17:56:01.460Z",
+      "extra": null
+    },
+    {
+      "id": "5b4bd6c9-b817-41df-8840-2b40c40528a3",
+      "userId": "test@test",
+      "type": "bitwa",
+      "price": 1410,
+      "fromWho": "14 lipca",
+      "isVat": true,
+      "isDeleted": false,
+      "details": null,
+      "createdAt": "2023-07-13T22:00:00.000Z",
+      "updatedAt": "2023-12-14T17:56:11.939Z",
+      "extra": null
+    },
+    {
+      "id": "65dd818f-7fe0-4dba-b6c3-20b79303b003",
+      "userId": "test@test",
+      "type": "grupa",
+      "price": 12,
+      "fromWho": null,
+      "isVat": true,
+      "isDeleted": false,
+      "details": null,
+      "createdAt": "2023-12-13T15:22:58.921Z",
+      "updatedAt": "2023-12-14T17:56:18.604Z",
+      "extra": null
+    },
+    {
+      "id": "8a959845-7e4c-48a9-8a2f-8b7f8a60af63",
+      "userId": "test@test",
+      "type": "test",
+      "price": 555,
+      "fromWho": null,
+      "isVat": true,
+      "isDeleted": false,
+      "details": null,
+      "createdAt": "2023-12-14T19:41:24.968Z",
+      "updatedAt": "2023-12-14T19:49:16.037Z",
+      "extra": null
     }
   ],
   "todo": [
     {
       "title": "unit-testy",
       "description": "zacząć od serwisów",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "-lZT7yO"
     },
     {
       "title": "Role",
       "description": "admin, user, reader",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "K1ETGpt"
     },
     {
@@ -68,49 +315,49 @@
     {
       "title": "stan",
       "description": "zarządzanie stanem",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "dd9C7sU"
     },
     {
       "title": "gwiazdki w todo",
       "description": "priorytety - ControlValueAccessor",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "Sq6l2Kh"
     },
     {
       "title": "mobilka",
       "description": "dodaj responsywność",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "VBh6ZF4"
     },
     {
       "title": "rejestracja",
       "description": "dodaj max 10 userów",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "gp1bMAq"
     },
     {
       "title": "wersja appki",
       "description": "gdzieś na górze",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "f7IOtFQ"
     },
     {
       "title": "API",
       "description": "w NX",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "Yvh2J5z"
     },
     {
       "title": "scroll w todo",
       "description": "po lewej stronie",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "N4GZALk"
     },
     {
       "title": "todosy",
       "description": " w API",
-      "status": "TO DO",
+      "status": "TO_DO",
       "id": "u5HfqjR"
     }
   ]
