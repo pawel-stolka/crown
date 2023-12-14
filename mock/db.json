@@ -1,5 +1,46 @@
 {
-  "todos": [
+  "money": [
+    {
+      "id": "c686c3ce-965e-417c-9e0e-6f4c1ff9922e",
+      "userId": "test@test",
+      "type": "ququ",
+      "price": 4500,
+      "fromWho": null,
+      "isVat": false,
+      "isDeleted": false,
+      "details": null,
+      "createdAt": "2023-12-14T11:20:10.142Z",
+      "updatedAt": "2023-12-14T17:44:18.621Z",
+      "extra": null
+    },
+    {
+      "id": "cb302e49-c544-4951-b255-e734440dabb2",
+      "userId": "test@test",
+      "type": "pierdyliard",
+      "price": 333,
+      "fromWho": null,
+      "isVat": false,
+      "isDeleted": null,
+      "details": null,
+      "createdAt": "2023-12-13T14:20:05.472Z",
+      "updatedAt": "2023-12-13T17:26:14.851Z",
+      "extra": null
+    },
+    {
+      "id": "ec39001c-f034-42d5-93f7-d847410d5f1a",
+      "userId": "test@test",
+      "type": "Chemia",
+      "price": 33,
+      "fromWho": "Żabka ",
+      "isVat": null,
+      "isDeleted": null,
+      "details": "",
+      "createdAt": "2023-12-12T19:50:11.774Z",
+      "updatedAt": "2023-12-12T19:53:42.599Z",
+      "extra": ""
+    }
+  ],
+  "todo": [
     {
       "title": "unit-testy",
       "description": "zacząć od serwisów",
