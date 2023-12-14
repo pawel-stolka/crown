@@ -5,7 +5,7 @@ export const AUTH_TOKEN = 'auth_token';
 export const AUTH_TOKEN_EMAIL_ROLE = 'AUTH_TOKEN_EMAIL_ROLE';
 export const ACCESS_ROLE = 'ACCESS_ROLE';
 
-export const ZERO_DATA = '-';
+export const ZERO_DATA = '';
 export const NUMBER_PRECISION = 0;
 
 // validators
