@@ -10,6 +10,7 @@
 <mat-form-field appearance="outline">
   <mat-label>Rok</mat-label>
   <mat-select [(value)]="year" (selectionChange)="changeYear(year)">
+  <!-- <mat-select [value]="year" (selectionChange)="changeYear(year)"> -->
     @for (option of availableYears; track option) {
       <mat-option [value]="option">{{ option }}</mat-option>
     }

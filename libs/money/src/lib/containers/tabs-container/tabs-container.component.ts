@@ -2,7 +2,7 @@ import { Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { CommonModule, formatNumber } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MoneyService } from '../../services/money.service';
+import { MoneyService, getYear } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Money,
@@ -62,28 +62,30 @@ export class TabsContainerComponent {
   pageSize = this.pageSizeOptions[0];
 
   availableYears: number[] = [];
+  availableYears$ = this.moneyService.availableYears$;
+
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  private _selectedYearSubj = new BehaviorSubject<number>(0);
-  selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
+  selectedYear$: Observable<number> = this.moneyService.selectedYear$;
 
-  money$ = this.moneyService.money$.pipe(
-    tap((data) => {
-      this.availableYears = [
-        ...new Set(data.map((d) => getYear(d.createdAt))),
-      ].sort();
+  // money$ = this.moneyService.money$.pipe(
+  //   tap((data) => {
+  //     this.availableYears = [
+  //       ...new Set(data.map((d) => getYear(d.createdAt))),
+  //     ].sort();
 
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }),
-    shareReplay()
-  );
+  //     this.dataSource = new MatTableDataSource(data);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   }),
+  //   shareReplay()
+  // );
 
-  yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
-    map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year)),
+  yearMoney$ = this.moneyService.yearMoney$.pipe(
+  // yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
+  //   map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year)),
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
@@ -148,9 +150,11 @@ export class TabsContainerComponent {
     }
   }
 
+  // TODO: move to service
   changeYear(year: number) {
     console.log('[changeYear]', year);
-    this._selectedYearSubj.next(year);
+    // this._selectedYearSubj.next(year);
+    this.moneyService.changeYear(year);
   }
 
   applyFilter(event: Event) {
@@ -242,6 +246,4 @@ function uniqueCategories(moneyGroups: MoneyGroup[]) {
   return uniqueSortedTypes;
 }
 
-function getYear(datetime: any) {
-  return +datetime.toString().slice(0, 4);
-}
+

@@ -5,7 +5,7 @@
 </div>
 <div class="filters">
   <crown-year-filter
-    [availableYears]="availableYears"
+    [availableYears]="availableYears$ | async"
     (currentYear)="changeYear($event)"
   ></crown-year-filter>
   <mat-form-field appearance="outline">
@@ -22,7 +22,7 @@
 <div>{{ yearMonthsData | json }}</div>
 }}
 <hr /> -->
-@if (money$ | async; as money) { @if (money.length) {
+@if (yearMonthsData$ | async; as money) { @if (money.months.length) {
 <mat-tab-group (selectedIndexChange)="tabChange($event)">
   <mat-tab label="{{ GROUPS_LABEL }}">
     <crown-groups-tab [data]="yearMonthsData$ | async"></crown-groups-tab>

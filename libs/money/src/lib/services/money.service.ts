@@ -4,6 +4,7 @@ import {
   BehaviorSubject,
   Observable,
   catchError,
+  combineLatest,
   filter,
   map,
   of,
@@ -29,10 +30,33 @@ import { AuthService } from '@crown/auth/service';
 export class MoneyService {
   private URL = `${API_URL}/api/money`;
   private _moneySubj = new BehaviorSubject<Money[]>([]);
+  private _availableYearsSubj = new BehaviorSubject<number[]>([]);
+  private _selectedYearSubj = new BehaviorSubject<number>(0);
+
   money$ = this._moneySubj.asObservable();
-  moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
+  availableYears$: Observable<number[] | null> = this.money$.pipe(
+    map((money) => [...new Set(money.map((d) => getYear(d.createdAt)))]),
+    map((m) => m.sort())
+  );
+  // availableYears$ = this._availableYearsSubj.asObservable();
+  selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
+
+  yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
+    map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year))
+    // tap((data) => {
+    //   this.dataSource = new MatTableDataSource(data);
+    //   this.dataSource.sort = this.sort;
+    //   this.dataSource.paginator = this.paginator;
+    // })
+  );
+
+  // moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
+  //   map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
+  // );
+  moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
+
   headers!: { Authorization: string };
   tokenEmail: TokenEmail | null = null;
 
@@ -87,6 +111,11 @@ export class MoneyService {
     );
   }
 
+  changeYear(year: number) {
+    console.log('[changeYear | service]', year);
+    this._selectedYearSubj.next(year);
+  }
+
   // TODO: check if needed
   getCategories$() {
     const URL = `${API_URL}/api/unique-types-grouped`;
@@ -99,9 +128,7 @@ export class MoneyService {
           console.log(message, err);
           return throwError(err);
         }),
-        map((countedCats) =>
-          countedCats.map((c) => c.type.trim())
-        ),
+        map((countedCats) => countedCats.map((c) => c.type.trim())),
         map((c) => [...new Set(c)])
       );
   }
@@ -201,4 +228,8 @@ export class MoneyService {
 
 function getMonth(date: Date) {
   return date.toString().substring(0, 7);
+}
+
+export function getYear(datetime: any) {
+  return +datetime.toString().slice(0, 4);
 }

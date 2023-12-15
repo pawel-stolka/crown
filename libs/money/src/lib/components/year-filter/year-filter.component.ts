@@ -18,15 +18,15 @@ import { MaterialModule } from '@crown/material';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class YearFilterComponent {
-  private _availableYears!: number[];
-  @Input() set availableYears(years: number[]) {
+  private _availableYears!: number[] |  null;
+  @Input() set availableYears(years: number[] | null) {
     this._availableYears = years;
     this.year = getCurrentYear(this.availableYears);
     this.changeYear(this.year);
   }
   @Output() currentYear = new EventEmitter();
 
-  get availableYears(): number[] {
+  get availableYears(): number[]  |  null {
     return this._availableYears;
   }
 
@@ -37,7 +37,7 @@ export class YearFilterComponent {
   }
 }
 
-function getCurrentYear(years: number[]) {
+function getCurrentYear(years: number[] | null) {
   const currentYear = new Date().getFullYear();
-  return years.length ? currentYear : 0;
+  return years?.length ? currentYear : 0;
 }
