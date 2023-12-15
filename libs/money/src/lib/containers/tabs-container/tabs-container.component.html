@@ -17,11 +17,11 @@
 <!-- @if (yearMoney$ | async; as yearMoney) { @if (yearMoney.length) {
   <div>{{ yearMoney | json }}</div>
 }} -->
-@if (yearMonthsData$ | async; as yearMonthsData) { @if
+<!-- @if (yearMonthsData$ | async; as yearMonthsData) { @if
 (yearMonthsData.months.length) {
-<div>{{ yearMonthsData.categories | json }}</div>
+<div>{{ yearMonthsData | json }}</div>
 }}
-<hr />
+<hr /> -->
 @if (money$ | async; as money) { @if (money.length) {
 <mat-tab-group (selectedIndexChange)="tabChange($event)">
   <mat-tab label="{{ GROUPS_LABEL }}">

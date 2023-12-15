@@ -72,10 +72,8 @@ export class TabsContainerComponent {
   money$ = this.moneyService.money$.pipe(
     tap((data) => {
       this.availableYears = [
-        ...new Set(data.map((d) => +d.createdAt.toString().slice(0, 4))),
+        ...new Set(data.map((d) => getYear(d.createdAt))),
       ].sort();
-
-      // console.log('[years]', this.availableYears);
 
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
@@ -116,7 +114,15 @@ export class TabsContainerComponent {
 
   yearMonthsData$ = combineLatest([this.monthsData$, this.selectedYear$]).pipe(
     map(([data, year]) => {
-      const months = data.months.filter((m) => getYear(m.period) === year);
+      const monthsFiltered = data.months.filter(
+        (m) => getYear(m.period) === year
+      );
+      const typePrices = groupTypePrices(monthsFiltered);
+      const summary: MoneyGroup = {
+        period: 'SUMA',
+        typePrices,
+      };
+      const months = [...monthsFiltered, summary];
       const allCategories = data.months
         .map(({ typePrices }) => typePrices)
         .map((tps) => tps.map((tp) => tp.type))
