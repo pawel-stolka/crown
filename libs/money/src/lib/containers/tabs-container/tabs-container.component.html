@@ -3,21 +3,33 @@
     <mat-icon>add</mat-icon>
   </button>
 </div>
-<div class="filter">
+<div class="filters">
+  <crown-year-filter
+    [availableYears]="availableYears"
+    (currentYear)="changeYear($event)"
+  ></crown-year-filter>
   <mat-form-field appearance="outline">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />
   </mat-form-field>
 </div>
 
+<!-- @if (yearMoney$ | async; as yearMoney) { @if (yearMoney.length) {
+  <div>{{ yearMoney | json }}</div>
+}} -->
+@if (yearMonthsData$ | async; as yearMonthsData) { @if
+(yearMonthsData.months.length) {
+<div>{{ yearMonthsData.categories | json }}</div>
+}}
+<hr />
 @if (money$ | async; as money) { @if (money.length) {
 <mat-tab-group (selectedIndexChange)="tabChange($event)">
   <mat-tab label="{{ GROUPS_LABEL }}">
-    <crown-groups-tab [data]="monthsData$ | async"></crown-groups-tab>
+    <crown-groups-tab [data]="yearMonthsData$ | async"></crown-groups-tab>
   </mat-tab>
   <mat-tab label="{{ DETAILS_LABEL }}">
     <crown-details-tab
-      [money]="(money$ | async) || undefined"
+      [money]="(yearMoney$ | async) || undefined"
       [filter]="this.dataSource.filter"
     ></crown-details-tab>
   </mat-tab>

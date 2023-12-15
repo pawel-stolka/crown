@@ -12,7 +12,15 @@ import {
   dialogConfig,
   compareBy,
 } from '@crown/data';
-import { Observable, filter, map, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  filter,
+  map,
+  shareReplay,
+  tap,
+} from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
@@ -20,6 +28,7 @@ import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dia
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
 import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
+import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -38,6 +47,7 @@ const COLUMNS_RENDERED = [
     MaterialModule,
     GroupsTabComponent,
     DetailsTabComponent,
+    YearFilterComponent,
   ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',
@@ -51,10 +61,31 @@ export class TabsContainerComponent {
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[0];
 
+  availableYears: number[] = [];
+
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
+  private _selectedYearSubj = new BehaviorSubject<number>(0);
+  selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
+
   money$ = this.moneyService.money$.pipe(
+    tap((data) => {
+      this.availableYears = [
+        ...new Set(data.map((d) => +d.createdAt.toString().slice(0, 4))),
+      ].sort();
+
+      // console.log('[years]', this.availableYears);
+
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }),
+    shareReplay()
+  );
+
+  yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
+    map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year)),
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
@@ -68,7 +99,7 @@ export class TabsContainerComponent {
       const typePrices = groupTypePrices(moneyGroups);
 
       const summary: MoneyGroup = {
-        period: 'TOTAL',
+        period: 'SUMA',
         userId: '',
         typePrices,
       };
@@ -76,6 +107,21 @@ export class TabsContainerComponent {
       const months = [...moneyGroups, summary];
       const categories = uniqueCategories(moneyGroups);
 
+      return {
+        months,
+        categories,
+      };
+    })
+  );
+
+  yearMonthsData$ = combineLatest([this.monthsData$, this.selectedYear$]).pipe(
+    map(([data, year]) => {
+      const months = data.months.filter((m) => getYear(m.period) === year);
+      const allCategories = data.months
+        .map(({ typePrices }) => typePrices)
+        .map((tps) => tps.map((tp) => tp.type))
+        .flat();
+      const categories = [...new Set(allCategories)];
       return {
         months,
         categories,
@@ -94,6 +140,11 @@ export class TabsContainerComponent {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
+  }
+
+  changeYear(year: number) {
+    console.log('[changeYear]', year);
+    this._selectedYearSubj.next(year);
   }
 
   applyFilter(event: Event) {
@@ -144,16 +195,6 @@ export class TabsContainerComponent {
   }
 }
 
-// export function getPriceByType(
-//   typePrices: any[],
-//   type: string,
-//   locale: string
-// ): number | string {
-//   const found = typePrices.find((tp) => tp.type === type);
-//   const result = found ? found.price : ZERO_DATA;
-//   return formatValue(result, locale);
-// }
-
 export function formatValue(value: number | string, locale: string): string {
   return typeof value === 'number'
     ? formatNumber(value, locale, '1.0-0')
@@ -193,4 +234,8 @@ function uniqueCategories(moneyGroups: MoneyGroup[]) {
   );
 
   return uniqueSortedTypes;
+}
+
+function getYear(datetime: any) {
+  return +datetime.toString().slice(0, 4);
 }

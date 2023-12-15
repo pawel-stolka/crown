@@ -4,13 +4,12 @@
   margin: 15px 0;
 }
 
-.filter {
-  font-size: 14px;
-  // width: 80%;
-  // margin: 10px;
+.filters {
   display: flex;
   justify-content: center;
+  align-content: center;
   margin: 10px 50px;
+  font-size: 14px;
 }
 
 .mat-mdc-form-field {
