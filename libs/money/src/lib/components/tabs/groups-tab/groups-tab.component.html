@@ -1,22 +1,25 @@
 <!-- @if(data) { -->
 @if(data && data.categories; as categories) {
-<table class="table _mat-elevation-z8">
+<table class="table __mat-elevation-z8">
   <tr>
     <!-- <th>Miesiąc</th> -->
     <th></th>
     <th *ngFor="let category of categories">
       <span>{{ category }}</span>
     </th>
+    <th class="summary">Ʃ</th>
   </tr>
 
   <tr *ngFor="let item of data?.months; let i = index; let last = last">
-    <td [ngClass]="{ last: last }">{{ item.period }}</td>
+    <td>{{ item.period }}</td>
 
-    <td *ngFor="let category of categories">
+    <td *ngFor="let category of categories; let last2 = last">
       <span [ngClass]="{ last: last }">
         {{ getPriceByType(item.typePrices, category) }}
       </span>
+      <!-- <span [ngClass]="{ last2: last }"> here</span> -->
     </td>
+    <td>{{ getSumByMonth(item.typePrices) }}</td>
   </tr>
 </table>
 } @else { NO-DATA }

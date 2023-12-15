@@ -48,7 +48,7 @@
     <ng-container matColumnDef="updatedAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>data wpisu</th>
       <td mat-cell *matCellDef="let el">
-        {{ el.updatedAt | date : 'dd.MM.yyyy' }}
+        {{ el.updatedAt | date : 'dd.MM.yyyy HH:mm' }}
       </td>
     </ng-container>
 

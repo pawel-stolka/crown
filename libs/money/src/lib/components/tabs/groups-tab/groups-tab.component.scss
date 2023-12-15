@@ -11,6 +11,7 @@
   margin-top: 20px;
 
   tr > th:not(:first-child) {
+    // tr > th {
     border: 1px solid $danger;
     text-align: center;
     background-color: $demo-accent1;
@@ -22,14 +23,32 @@
     background-color: $demo-primary-0;
   }
 
+  tr > td:last-child {
+    // background-color: $blue;
+    background-color: lightgray;
+    border: 3px solid $blue;
+    font-size: 1.2rem;
+  }
+  tr:last-child > td:last-child {
+    border: 3px solid $warn;
+    background-color: $demo-accent2;
+  }
+
   tr:last-child > td:first-child {
     background-color: $demo-primary-background;
     border: 1px solid $demo-primary-background;
   }
 
-  tr:last-child > td:not(:first-child) {
+  // SUMMARY ROW
+  tr:last-child > td:not(:first-child):not(:last-child) {
     background-color: $demo-accent1;
     border: 2px solid $black;
+  }
+
+  .summary {
+    font-size: 1.2rem;
+    background-color: lightgray;
+    border: 3px solid dodgerblue;
   }
 }
 
@@ -39,3 +58,8 @@
   // background-color: $white;
   // font-weight: bolder;
 }
+
+// .first {
+//   border: 5px dotted magenta;
+//   background-color: yellowgreen;
+// }
