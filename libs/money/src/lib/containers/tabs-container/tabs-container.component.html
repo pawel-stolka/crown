@@ -2,26 +2,18 @@
   <button mat-fab color="primary" (click)="add()">
     <mat-icon>add</mat-icon>
   </button>
-</div>
-<div class="filters">
-  <crown-year-filter
-    [availableYears]="availableYears$ | async"
-    (currentYear)="changeYear($event)"
-  ></crown-year-filter>
-  <mat-form-field appearance="outline">
+  <div class="filters">
+    <crown-year-filter
+      [availableYears]="availableYears$ | async"
+      (currentYear)="changeYear($event)"
+    ></crown-year-filter>
+    <!-- <mat-form-field appearance="outline">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />
-  </mat-form-field>
+  </mat-form-field> -->
+  </div>
 </div>
 
-<!-- @if (yearMoney$ | async; as yearMoney) { @if (yearMoney.length) {
-  <div>{{ yearMoney | json }}</div>
-}} -->
-<!-- @if (yearMonthsData$ | async; as yearMonthsData) { @if
-(yearMonthsData.months.length) {
-<div>{{ yearMonthsData | json }}</div>
-}}
-<hr /> -->
 @if (yearMonthsData$ | async; as money) { @if (money.months.length) {
 <mat-tab-group (selectedIndexChange)="tabChange($event)">
   <mat-tab label="{{ GROUPS_LABEL }}">

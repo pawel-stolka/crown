@@ -13,7 +13,6 @@ import {
   compareBy,
 } from '@crown/data';
 import {
-  BehaviorSubject,
   Observable,
   combineLatest,
   filter,
@@ -64,28 +63,12 @@ export class TabsContainerComponent {
   availableYears: number[] = [];
   availableYears$ = this.moneyService.availableYears$;
 
-
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
   selectedYear$: Observable<number> = this.moneyService.selectedYear$;
 
-  // money$ = this.moneyService.money$.pipe(
-  //   tap((data) => {
-  //     this.availableYears = [
-  //       ...new Set(data.map((d) => getYear(d.createdAt))),
-  //     ].sort();
-
-  //     this.dataSource = new MatTableDataSource(data);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   }),
-  //   shareReplay()
-  // );
-
   yearMoney$ = this.moneyService.yearMoney$.pipe(
-  // yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
-  //   map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year)),
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
@@ -152,8 +135,6 @@ export class TabsContainerComponent {
 
   // TODO: move to service
   changeYear(year: number) {
-    console.log('[changeYear]', year);
-    // this._selectedYearSubj.next(year);
     this.moneyService.changeYear(year);
   }
 
@@ -245,5 +226,3 @@ function uniqueCategories(moneyGroups: MoneyGroup[]) {
 
   return uniqueSortedTypes;
 }
-
-
