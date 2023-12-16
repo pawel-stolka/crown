@@ -12,12 +12,21 @@ import { MaterialModule } from '@crown/material';
 })
 export class DataFilterComponent {
   private _filterSubj = new BehaviorSubject<string>('');
+  filterValue$ = this._filterSubj.asObservable();
+
   @Output() filter = new EventEmitter();
+  filterValue: any;
 
   applyFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const filterValue = inputElement ? inputElement.value.trim().toLowerCase() : '';
-    // this._filterSubj.next(filterValue);
+    this.filterValue = filterValue.trim().toLowerCase();
+    this._filterSubj.next(filterValue);
     this.filter.emit(filterValue);
+  }
+  clearFilter() {
+    this.filterValue = '';
+    this.filter.emit(this.filterValue);
+    this._filterSubj.next(this.filterValue);
   }
 }
