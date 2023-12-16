@@ -6,7 +6,7 @@ import {
   LOCALE_ID,
 } from '@angular/core';
 import { CommonModule, formatNumber } from '@angular/common';
-import { MoneyGroup, TypePrice, ZERO_DATA } from '@crown/data';
+import { MoneyGroup, OnlyMonthPipe, TypePrice, ZERO_DATA } from '@crown/data';
 import { formatValue } from '../../../containers/tabs-container/tabs-container.component';
 
 interface MonthsCategories {
@@ -15,12 +15,12 @@ interface MonthsCategories {
 }
 
 @Component({
-  selector: 'crown-groups-tab',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './groups-tab.component.html',
-  styleUrl: './groups-tab.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'crown-groups-tab',
+    standalone: true,
+    templateUrl: './groups-tab.component.html',
+    styleUrl: './groups-tab.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, OnlyMonthPipe]
 })
 export class GroupsTabComponent {
   @Input() data!: MonthsCategories | null;

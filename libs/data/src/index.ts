@@ -23,3 +23,4 @@ export * from './lib/lists/STATUSES';
 // export * from './lib/lists';
 
 export * from './lib/tools';
+export * from './lib/pipes/onlyMonth/onlyMonth.pipe';

@@ -30,7 +30,6 @@ import { AuthService } from '@crown/auth/service';
 export class MoneyService {
   private URL = `${API_URL}/api/money`;
   private _moneySubj = new BehaviorSubject<Money[]>([]);
-  private _availableYearsSubj = new BehaviorSubject<number[]>([]);
   private _selectedYearSubj = new BehaviorSubject<number>(0);
 
   money$ = this._moneySubj.asObservable();
@@ -38,7 +37,6 @@ export class MoneyService {
     map((money) => [...new Set(money.map((d) => getYear(d.createdAt)))]),
     map((m) => m.sort())
   );
-  // availableYears$ = this._availableYearsSubj.asObservable();
   selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
 
   yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
@@ -50,9 +48,6 @@ export class MoneyService {
     // })
   );
 
-  // moneyGroups$: Observable<MoneyGroup[]> = this.money$.pipe(
-  //   map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
-  // );
   moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
@@ -99,7 +94,7 @@ export class MoneyService {
         console.log(message, err);
         return throwError(err);
       }),
-      map((money: Money[]) => money.filter((x) => !x.isDeleted)),
+      // map((money: Money[]) => money.filter((x) => !x.isDeleted)),
       map((money: Money[]) => money.sort(compareBy('period', false))),
       map((money) => {
         return money.map((m) => ({
