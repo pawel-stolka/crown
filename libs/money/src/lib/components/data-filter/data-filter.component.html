@@ -1,5 +1,4 @@
 <mat-form-field appearance="outline" class="all-width">
-  <!-- <mat-icon>search</mat-icon> -->
   <mat-icon matPrefix>search</mat-icon>
   <input
     matInput
@@ -11,5 +10,4 @@
   <mat-icon matSuffix *ngIf="filterValue$ | async" (click)="clearFilter()"
     >close</mat-icon
   >
-  <!-- Close Icon at the end -->
 </mat-form-field>
