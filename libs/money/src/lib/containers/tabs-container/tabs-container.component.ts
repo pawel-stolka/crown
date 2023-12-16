@@ -11,8 +11,10 @@ import {
   ZERO_DATA,
   dialogConfig,
   compareBy,
+  Colors,
 } from '@crown/data';
 import {
+  BehaviorSubject,
   Observable,
   combineLatest,
   filter,
@@ -28,6 +30,7 @@ import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit
 import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
+import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -47,6 +50,7 @@ const COLUMNS_RENDERED = [
     GroupsTabComponent,
     DetailsTabComponent,
     YearFilterComponent,
+    DataFilterComponent,
   ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',
@@ -67,6 +71,9 @@ export class TabsContainerComponent {
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
   selectedYear$: Observable<number> = this.moneyService.selectedYear$;
+
+  private _filterPhraseSubj = new BehaviorSubject<string>('');
+  filterPhrase$ = this._filterPhraseSubj.asObservable();
 
   yearMoney$ = this.moneyService.yearMoney$.pipe(
     tap((data) => {
@@ -97,25 +104,54 @@ export class TabsContainerComponent {
     })
   );
 
-  yearMonthsData$ = combineLatest([this.monthsData$, this.selectedYear$]).pipe(
-    map(([data, year]) => {
-      const monthsFiltered = data.months.filter(
+  yearMonthsData$ = combineLatest([
+    this.monthsData$,
+    this.selectedYear$,
+    this.filterPhrase$,
+  ]).pipe(
+    map(([data, year, filterPhrase]) => {
+      console.log('[filterPhrase]', filterPhrase);
+
+      const monthsByYear = data.months.filter(
         (m) => getYear(m.period) === year
       );
+      const monthsFiltered = monthsByYear.filter((mby) => {
+        // console.log('[mby]', mby);
+        let res = {
+          ...mby,
+          typePrices: mby.typePrices
+            .map(({ type }) => type)
+            .filter(type => type.includes(filterPhrase)),
+        };
+        let all = mby.typePrices.map(({ type }) => type); //.includes(filterPhrase)
+        // console.log('[monthsFiltered]', res);
+
+        return res;
+      });
+      console.log('[monthsFiltered]', monthsFiltered);
+
+      // const typePrices = groupTypePrices(monthsByYear);
       const typePrices = groupTypePrices(monthsFiltered);
       const summary: MoneyGroup = {
         period: 'SUMA',
         typePrices,
       };
+      // const months = [...monthsByYear, summary];
       const months = [...monthsFiltered, summary];
+      console.log('%c [mnths]', Colors.BLACK, months);
+
       const allCategories = data.months
         .map(({ typePrices }) => typePrices)
         .map((tps) => tps.map((tp) => tp.type))
         .flat();
+
       const categories = [...new Set(allCategories)];
+      const categoriesFiltered = categories.filter((c) =>
+        c.includes(filterPhrase)
+      );
       return {
         months,
-        categories,
+        categories: categoriesFiltered,
       };
     })
   );
@@ -138,11 +174,13 @@ export class TabsContainerComponent {
     this.moneyService.changeYear(year);
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    console.log('[this.applyFilter]', this.dataSource.filter);
+  applyFilter(filter: string) {
+    // Event) {
+    // const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filter;
+    this._filterPhraseSubj.next(filter);
+    // console.log('[this.applyFilter]', filter);
 
     // if (this.dataSource.paginator) {
     //   this.dataSource.paginator.firstPage();

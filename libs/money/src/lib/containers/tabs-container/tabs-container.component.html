@@ -7,6 +7,7 @@
       [availableYears]="availableYears$ | async"
       (currentYear)="changeYear($event)"
     ></crown-year-filter>
+    <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
     <!-- <mat-form-field appearance="outline">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />

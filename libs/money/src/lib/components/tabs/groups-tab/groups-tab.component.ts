@@ -5,7 +5,7 @@ import {
   Input,
   LOCALE_ID,
 } from '@angular/core';
-import { CommonModule, formatNumber } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MoneyGroup, NoYearPipe, TypePrice, ZERO_DATA } from '@crown/data';
 import { formatValue } from '../../../containers/tabs-container/tabs-container.component';
 

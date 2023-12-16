@@ -6,10 +6,15 @@
 
 .filters {
   display: flex;
-  justify-content: center;
+  width: 100%;
+  justify-content:space-between;
   align-content: center;
   margin: 10px 50px;
   font-size: 14px;
+
+  .data-filter {
+    width: 80%;
+  }
 }
 
 .mat-mdc-form-field {
