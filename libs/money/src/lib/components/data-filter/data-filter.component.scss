@@ -1,3 +1,5 @@
+@import '@colors';
+
 :host {
   width: 100%;
   margin: 0 20px 0;
@@ -5,8 +7,19 @@
   mat-icon {
     cursor: pointer;
   }
-}
 
-.all-width {
-  width: 100%;
+  mat-form-field {
+    width: 80px; /* Set your minimum width */
+    height: 56px;
+    background: transparent;
+    // transition: width 0.5s ease-in-out, background 0.5s ease-in-out;
+    transition: border 0.3s ease, width 0.3s ease, background 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .active-field {
+    width: 100%;
+    font-size: larger;
+    background: $white;
+  }
 }

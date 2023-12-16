@@ -1,19 +1,27 @@
 .actions {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   margin: 15px 0;
-}
 
-.filters {
-  display: flex;
-  width: 100%;
-  justify-content:space-between;
-  align-content: center;
-  margin: 10px 50px;
-  font-size: 14px;
+  // button {
+  //   width: 20%;
+  // }
 
-  .data-filter {
-    width: 80%;
+  .filters {
+    // border: 5px dotted;
+    display: flex;
+    width: 100%;
+    height: 56px;
+    justify-content: space-between;
+    gap: 10px;
+    align-content: center;
+    margin: 10px 50px;
+    font-size: 14px;
+
+    .data-filter {
+      width: 30%;
+    }
   }
 }
 

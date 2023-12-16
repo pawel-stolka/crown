@@ -1,17 +1,13 @@
 <div class="actions">
-  <button mat-fab color="primary" (click)="add()">
-    <mat-icon>add</mat-icon>
-  </button>
   <div class="filters">
     <crown-year-filter
       [availableYears]="availableYears$ | async"
       (currentYear)="changeYear($event)"
     ></crown-year-filter>
     <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
-    <!-- <mat-form-field appearance="outline">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" #input />
-  </mat-form-field> -->
+    <button mat-fab color="primary" (click)="add()">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
 </div>
 
