@@ -12,7 +12,7 @@
   </tr>
 
   <tr *ngFor="let item of data?.months; let last = last">
-    <td>{{ item.period | onlyMonth}}</td>
+    <td class="period">{{ item.period | noYear }}</td>
 
     <td *ngFor="let category of data?.categories">
       <span [ngClass]="{ last: last }">

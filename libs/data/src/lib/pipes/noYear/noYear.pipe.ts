@@ -1,14 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'onlyMonth',
+  name: 'noYear',
   standalone: true,
 })
-export class OnlyMonthPipe implements PipeTransform {
-  transform(value: string, ...args: unknown[]): unknown {
-    const [, month] = value.split('-');
+export class NoYearPipe implements PipeTransform {
+  transform(value: string, ...args: unknown[]): string {
+    const [, month, day] = value.split('-');
+    const formatDay = day?.slice(0, 2);
 
-    return nameAMonth(+month);
+    const hasDay = formatDay ? `${formatDay} ` : '';
+    return `${hasDay}${nameAMonth(+month)}`;
   }
 }
 
