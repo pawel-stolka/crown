@@ -116,19 +116,34 @@ export class TabsContainerComponent {
         (m) => getYear(m.period) === year
       );
       const monthsFiltered = monthsByYear.filter((mby) => {
+        let months = mby.period;
         // console.log('[mby]', mby);
         let res = {
           ...mby,
           typePrices: mby.typePrices
-            .map(({ type }) => type)
-            .filter(type => type.includes(filterPhrase)),
+            // .map(({ type }) => type)
+            .filter((tps) => tps.type.includes(filterPhrase)),
         };
-        let all = mby.typePrices.map(({ type }) => type); //.includes(filterPhrase)
-        // console.log('[monthsFiltered]', res);
+        // res.typePrices.filter(tps => tps.length>0)
+        // let all = mby.typePrices.map(({ type }) => type); //.includes(filterPhrase)
+        console.log('[INNER monthsFiltered]', res);
 
         return res;
       });
-      console.log('[monthsFiltered]', monthsFiltered);
+      /*
+      function filterArray(dataArray: DataObject[], userInput: string): DataObject[] {
+        return dataArray.filter(dataObj =>
+            dataObj.typePrices.some(typePrice => typePrice.type.includes(userInput))
+        );
+      }
+  */
+      let monthsFiltered2 = monthsFiltered.filter((mf) => {
+        let inner = mf.typePrices.some(typePrice => typePrice.type.includes(filterPhrase));
+        console.log('%c[inner]', Colors.YELLOW, inner);
+
+        return inner;
+      });
+      console.log('%c[monthsFiltered-2]', Colors.MAG, monthsFiltered2);
 
       // const typePrices = groupTypePrices(monthsByYear);
       const typePrices = groupTypePrices(monthsFiltered);
@@ -137,7 +152,7 @@ export class TabsContainerComponent {
         typePrices,
       };
       // const months = [...monthsByYear, summary];
-      const months = [...monthsFiltered, summary];
+      const months = [...monthsFiltered2, summary];
       console.log('%c [mnths]', Colors.BLACK, months);
 
       const allCategories = data.months
