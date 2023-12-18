@@ -1,4 +1,5 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
+import { EMPTY_STRING } from '@crown/data';
 
 @Directive({
   selector: '[dotNumber]',
@@ -13,7 +14,7 @@ export class DotNumberDirective {
     let inputValue = inputElement.value;
 
     // Remove any non-numeric and non-dot or comma characters
-    inputValue = inputValue.replace(/[^0-9.,]/g, '');
+    inputValue = inputValue.replace(/[^0-9.,]/g, EMPTY_STRING);
 
     // Replace commas with dots
     inputValue = inputValue.replace(/,/g, '.');

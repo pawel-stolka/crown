@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Money, dialogConfig, NoYearPipe } from '@crown/data';
+import { Money, dialogConfig, NoYearPipe, EMPTY_STRING } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dialog.component';
@@ -40,7 +40,7 @@ const COLUMNS_RENDERED = [
 })
 export class DetailsTabComponent implements AfterViewInit, OnChanges {
   @Input() money!: Money[] | undefined;
-  @Input() filter = '';
+  @Input() filter = EMPTY_STRING;
 
   dataSource!: MatTableDataSource<Money>;
 

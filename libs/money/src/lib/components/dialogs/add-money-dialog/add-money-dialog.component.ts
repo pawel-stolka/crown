@@ -11,6 +11,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import {
   AUTH_TOKEN_EMAIL_ROLE,
   DotNumberDirective,
+  EMPTY_STRING,
   LowercaseDirective,
   MAX_PRICE,
   MAX_TEXT_LENGTH,
@@ -43,7 +44,7 @@ export class AddDialogComponent {
   private getCategories$ = this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
 
-  typeControl = new FormControl<string>('');
+  typeControl = new FormControl<string>(EMPTY_STRING);
 
   get type() {
     return this.form.get('type');
@@ -96,11 +97,11 @@ export class AddDialogComponent {
   ngOnInit() {
     this.categoriesFiltered$ = combineLatest([
       this.getCategories$,
-      this.typeControl.valueChanges.pipe(startWith('')),
+      this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
     ]).pipe(
       map(([categories, input]) =>
         categories.filter((c) =>
-          c.toLowerCase().includes((input || '').toLowerCase())
+          c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
         )
       )
     );

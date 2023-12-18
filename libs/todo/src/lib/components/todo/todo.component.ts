@@ -12,6 +12,7 @@ import {
   StatusChange,
   Priority,
   SHOW_PRIORITY,
+  EMPTY_STRING,
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { TodoPriorityComponent } from '../todo-priority/todo-priority.component';
@@ -68,7 +69,7 @@ export class TodoComponent {
       case Priority.WHO_CARES:
         return 'info';
       default:
-        return '';
+        return EMPTY_STRING;
     }
   }
 

@@ -10,6 +10,7 @@ import { TodoService } from '../../../services/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
   AUTH_TOKEN_EMAIL_ROLE,
+  EMPTY_STRING,
   PRIORITIES,
   Priority,
   SHOW_PRIORITY,
@@ -43,7 +44,7 @@ export class AddTodoComponent {
 
     this.form = this.fb.group({
       userId: [email],
-      title: ['', [Validators.required]],
+      title: [EMPTY_STRING, [Validators.required]],
       description: [null, [Validators.required]],
       status: [Status.TO_DO, [Validators.required]],
       priority: [null, [Validators.required]],

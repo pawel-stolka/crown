@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import {
   AUTH_TOKEN_EMAIL_ROLE,
+  EMPTY_STRING,
   MAX_PRICE,
   MAX_TEXT_LENGTH,
   MIN_PRICE,
@@ -35,7 +36,7 @@ export class EditMoneyDialog {
   private getCategories$ = this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
 
-  typeControl = new FormControl<string>('');
+  typeControl = new FormControl<string>(EMPTY_STRING);
 
   get type() {
     return this.form.get('type');
@@ -87,11 +88,11 @@ export class EditMoneyDialog {
   ngOnInit() {
     this.categoriesFiltered$ = combineLatest([
       this.getCategories$,
-      this.typeControl.valueChanges.pipe(startWith('')),
+      this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
     ]).pipe(
       map(([categories, input]) =>
         categories.filter((c) =>
-          c.toLowerCase().includes((input || '').toLowerCase())
+          c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
         )
       )
     );

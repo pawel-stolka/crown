@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import {
   AUTH_TOKEN_EMAIL_ROLE,
+  EMPTY_STRING,
   PRIORITIES,
   Priority,
   SHOW_PRIORITY,
@@ -56,7 +57,7 @@ export class EditTodoComponent {
       userId: [user, Validators.required],
       title: [title, Validators.required],
       description: [description, Validators.required],
-      status: [status ?? '', Validators.required],
+      status: [status ?? EMPTY_STRING, Validators.required],
       priority: [priority ?? 0], //, Validators.min(0), Validators.max(5)],
       createdAt: [createdAt],
     });

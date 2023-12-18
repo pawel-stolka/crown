@@ -6,7 +6,7 @@ import {
   LOCALE_ID,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MoneyGroup, NoYearPipe, TypePrice, ZERO_DATA } from '@crown/data';
+import { Colors, MoneyGroup, NoYearPipe, TypePrice, ZERO_DATA } from '@crown/data';
 import { formatValue } from '../../../containers/tabs-container/tabs-container.component';
 
 interface MonthsCategories {
@@ -32,6 +32,8 @@ export class GroupsTabComponent {
   getPriceByType(typePrices: TypePrice[], type: string): number | string {
     const found = typePrices.find((tp) => tp.type === type);
     const result = found ? found.price : ZERO_DATA;
+    console.log('%c this.getPriceByType', Colors.MAG, result);
+
     return formatValue(result, this.locale);
   }
 

@@ -1,4 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Colors } from '../../configs/Colors';
+import { EMPTY_STRING } from '@crown/data';
 
 @Pipe({
   name: 'noYear',
@@ -6,17 +8,24 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class NoYearPipe implements PipeTransform {
   transform(value: string, ...args: unknown[]): string {
+    if (!value || !value.includes('-')) {
+      return EMPTY_STRING;
+    }
+
     const [, month, day] = value.split('-');
     const formatDay = day?.slice(0, 2);
 
-    const hasDay = formatDay ? `${formatDay} ` : '';
-    return `${hasDay}${nameAMonth(+month)}`;
+    const hasDay = formatDay ? `${formatDay} ` : EMPTY_STRING;
+    let res = `${hasDay}${nameAMonth(+month)}`;
+    if (res) {
+    }
+    return res;
   }
 }
 
 function nameAMonth(monthNumber: number): string {
   const months: string[] = [
-    '', // no month 0
+    EMPTY_STRING, // no month 0
     'styczeń',
     'luty',
     'marzec',

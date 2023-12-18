@@ -11,6 +11,8 @@ import {
   ZERO_DATA,
   dialogConfig,
   compareBy,
+  Colors,
+  EMPTY_STRING,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -71,7 +73,7 @@ export class TabsContainerComponent {
 
   selectedYear$: Observable<number> = this.moneyService.selectedYear$;
 
-  private _filterPhraseSubj = new BehaviorSubject<string>('');
+  private _filterPhraseSubj = new BehaviorSubject<string>(EMPTY_STRING);
   filterPhrase$ = this._filterPhraseSubj.asObservable();
 
   yearMoney$ = this.moneyService.yearMoney$.pipe(
@@ -88,8 +90,8 @@ export class TabsContainerComponent {
       const typePrices = groupTypePrices(moneyGroups);
 
       const summary: MoneyGroup = {
-        period: 'SUMA',
-        userId: '',
+        period: EMPTY_STRING,
+        userId: EMPTY_STRING,
         typePrices,
       };
 
@@ -150,9 +152,9 @@ export class TabsContainerComponent {
       let suma = {
         months,
         categories: categoriesFiltered,
-        total: categoriesFiltered.length,
+        total: categoriesFiltered?.length,
       };
-      // console.log('%c[SUMMARY]', Colors.GREEN, suma.categories.length);
+      console.log('%c[SUMMARY]', Colors.GREEN, suma.categories.length);
 
       return suma;
     })

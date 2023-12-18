@@ -1,4 +1,5 @@
 import { NoYearPipe } from './noYear.pipe';
+import { EMPTY_STRING } from '@crown/data';
 
 describe('NoYearPipe', () => {
   const pipe = new NoYearPipe();
@@ -23,5 +24,17 @@ describe('NoYearPipe', () => {
     let input = '2023-12-15T18:23:01.864Z';
     const result = pipe.transform(input);
     expect(result).toBe('15 grudzień');
+  });
+
+  it("should return '' name if 'SUMA' provided", () => {
+    let input = 'SUMA';
+    const result = pipe.transform(input);
+    expect(result).toBe(EMPTY_STRING);
+  });
+  
+  it("should return '' name if '' provided", () => {
+    let input = EMPTY_STRING;
+    const result = pipe.transform(input);
+    expect(result).toBe(EMPTY_STRING);
   });
 });
