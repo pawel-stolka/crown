@@ -22,6 +22,6 @@ interface MonthsCategories {
   imports: [CommonModule, NoYearPipe, SumByMonthPipe, PriceByTypePipe],
 })
 export class GroupsTabComponent {
-  @Input() data!: MonthsCategories | null | any;
+  @Input() data!: MonthsCategories | null | any; // TODO: no any
   @Input() filtered = false;
 }

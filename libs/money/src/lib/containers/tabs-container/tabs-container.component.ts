@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
-import { CommonModule, formatNumber } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MoneyService, getYear } from '../../services/money.service';
@@ -7,14 +7,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import {
   Money,
   MoneyGroup,
-  NUMBER_PRECISION,
   ZERO_DATA,
   dialogConfig,
   compareBy,
-  Colors,
   EMPTY_STRING,
   TypePrice,
   formatValue,
+  fixNumber,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -22,7 +21,6 @@ import {
   combineLatest,
   filter,
   map,
-  shareReplay,
   tap,
 } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
@@ -35,15 +33,9 @@ import { DetailsTabComponent } from '../../components/tabs/details-tab/details-t
 import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 
-const COLUMNS_RENDERED = [
-  'createdAt',
-  'type',
-  'price',
-  'fromWho',
-  'isVat',
-  'updatedAt',
-  'action',
-];
+
+const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
+const DETAILS_LABEL = 'WSZYSTKO';
 @Component({
   selector: 'crown-tabs-container',
   standalone: true,
@@ -60,9 +52,8 @@ const COLUMNS_RENDERED = [
 })
 export class TabsContainerComponent {
   dataSource!: MatTableDataSource<Money>;
-  columns = COLUMNS_RENDERED;
-  GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
-  DETAILS_LABEL = 'WSZYSTKO';
+  GROUPS_LABEL = GROUPS_LABEL;
+  DETAILS_LABEL = DETAILS_LABEL;
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[0];
@@ -117,34 +108,27 @@ export class TabsContainerComponent {
         ({ period }) => getYear(period) === year
       );
 
-      let monthsByFilter = monthsByYear
+      const monthsByFilter: (MoneyGroup | null)[] = monthsByYear
         .map((month) => {
-          // Filter typePrices to include only those that match the filterPhrase
-          const filteredTypePrices = month.typePrices.filter((tp) =>
-            tp.type.includes(filterPhrase)
+          // 1.Filter typePrices to include only those that match the filterPhrase
+          const typePricesByPhrase = month.typePrices.filter(({ type }) =>
+            type.includes(filterPhrase)
           );
-
-          // If there are any filtered typePrices, return a new object with updated sum
-          if (filteredTypePrices.length > 0) {
+          // 2.If there are any filtered typePrices, return a new object with updated sum
+          if (typePricesByPhrase.length > 0) {
             return {
               ...month,
-              typePrices: filteredTypePrices,
-              sum: filteredTypePrices.reduce((acc, cur) => acc + cur.price, 0),
+              typePrices: typePricesByPhrase,
+              sum: typePricesByPhrase.reduce((acc, cur) => acc + cur.price, 0),
             };
           }
-
-          // If no typePrices match, return null (to be filtered out)
+          // 3.If no typePrices match, return null (to be filtered out)
           return null;
         })
         .filter((month) => month !== null); // Filter out the nulls
-      // let monthsByFilter = monthsByYear.filter(({ typePrices }) =>
-      //   typePrices.some(({ type }) => type.includes(filterPhrase))
-      // );
-      console.log('%c[monthsByFilter]', Colors.MAG, monthsByFilter);
 
       const typePrices = groupTypePrices(monthsByFilter);
-      const summary: MoneyGroup = {
-        period: 'SUMA',
+      const summary: Partial<MoneyGroup> = {
         typePrices,
       };
       const _months = [...monthsByFilter, summary];
@@ -159,15 +143,12 @@ export class TabsContainerComponent {
       const categories = types.filter((c: string | any[]) =>
         c.includes(filterPhrase)
       );
-      let suma = {
+      return {
         months: _months,
         categories,
         total: categories?.length,
       };
-
-      return suma;
     })
-    // tap((suma) => console.log('%c[SUMMARY]', Colors.GREEN, suma))
   );
 
   constructor(
@@ -233,32 +214,27 @@ export class TabsContainerComponent {
   }
 }
 
-// function groupTypePrices(moneyGroups: MoneyGroup[]) {
-function groupTypePrices(moneyGroups: {
-  typePrices: TypePrice[];
-  sum: number;
-  period: string;
-  userId?: string | undefined;
-}[] | any) {
-  const flatTypePrices = moneyGroups.map((x: { typePrices: any; }) => x.typePrices).flat();
-  const groups = flatTypePrices.reduce((acc: { [x: string]: any; }, item: { type: string | number; price: any; }) => {
-    // Initialize the price with 0
-    if (!acc[item.type]) {
-      acc[item.type] = 0;
-    }
-    acc[item.type] += item.price;
-    return acc;
-  }, {} as Record<string, number>);
+function groupTypePrices(moneyGroups: (MoneyGroup | null)[]) {
+  if (moneyGroups) {
+    const flatTypePrices = moneyGroups.map((x: any) => x.typePrices).flat();
+    const groups = flatTypePrices.reduce((acc, item: TypePrice) => {
+      // Initialize the price with 0
+      if (!acc[item.type]) {
+        acc[item.type] = 0;
+      }
+      acc[item.type] += item.price;
+      return acc;
+    }, {} as Record<string, number>);
 
-  // Convert the object into an array of objects
-  const typePrices = Object.keys(groups).map((type) => ({
-    type,
-    price: +groups[type].toFixed(NUMBER_PRECISION),
-  }));
+    // Convert the object into an array of objects
+    const typePrices: TypePrice[] = Object.keys(groups).map((type) => ({
+      type,
+      price: fixNumber(groups[type]),
+    }));
 
-  console.log('%c[TPS]', Colors.YELLOW, typePrices);
-
-  return typePrices;
+    return typePrices;
+  }
+  return [];
 }
 
 function uniqueCategories(moneyGroups: MoneyGroup[]) {

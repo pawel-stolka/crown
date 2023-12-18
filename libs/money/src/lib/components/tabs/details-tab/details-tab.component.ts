@@ -4,7 +4,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -46,15 +45,12 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[0];
-  columns = COLUMNS_RENDERED;
+  COLUMNS = COLUMNS_RENDERED;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  constructor(
-    // @Inject(LOCALE_ID) public locale: string,
-    private dialog: MatDialog
-  ) {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.money);
@@ -65,8 +61,6 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
   ngAfterViewInit(): void {
     this.updateSortPag();
   }
-
-
 
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);

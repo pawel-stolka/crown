@@ -1,24 +1,23 @@
+
+<!-- TODO: make it nice -->
 <!-- @if(data) { -->
 <!-- @if(data && data.categories; as categories) { -->
+<!-- @if(data) { -->
 @if(data) {
+<!-- <ng-container *ngIf="data && data.total > 0; else noData"> -->
+@if(filtered) {
 <div class="query-result">
-  <!-- @if(filtered) {
-  <div class="message">
-    <ng-container *ngIf="data && data.total > 0; else zero">
-      <span>odnaleziono: {{ data.total | json }} </span>
-      <span *ngIf="data.total === 1">kategorię</span>
-      <span *ngIf="data.total > 1 && data.total < 5">kategorie</span>
-      <span *ngIf="data.total >= 5">kategorii</span>
-    </ng-container>
-    <ng-template #zero>
-      <span>nic nie odnaleziono.</span>
-    </ng-template>
+  <div class="_message">
+    <span>wynik: {{ data.total | json }}</span>
+    <span>{{ data?.categories | json }}</span>
+    <span *ngIf="data.total === 1">kategorię</span>
+    <span *ngIf="data.total > 1 && data.total < 5">kategorie</span>
+    <span *ngIf="data.total >= 5">kategorii</span>
   </div>
-  } -->
 </div>
+} @if (data.total > 0) {
 <table class="table __mat-elevation-z8">
   <tr>
-    <!-- <th>Miesiąc</th> -->
     <th></th>
     <th *ngFor="let category of data?.categories">
       <span>{{ category }}</span>
@@ -36,16 +35,14 @@
     </td>
     <!-- summary column -->
     <td>{{ item.typePrices | sumByMonth }}</td>
-    <!-- <td>{{ item | json }}</td> -->
   </tr>
-  <!-- <tr>
-    <td>SUMA</td>
-    <td *ngFor="let category of data?.categories">
-      <span>{{ category }}</span>
-    </td>
-  </tr> -->
 </table>
-} @else {
-<div>NO-DATA</div>
+} } @if(data.total === 0) {
+<!-- (data.total === 0)*/ { -->
+<div>nic tu nie ma.</div>
 
 }
+<!-- </ng-container> -->
+<!-- <ng-template #noData>
+  <div>nic tu nie ma.</div>
+</ng-template> -->
