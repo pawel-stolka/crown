@@ -1,17 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  MoneyGroup,
+  MonthsCategories,
   NoYearPipe,
   PriceByTypePipe,
   SumByMonthPipe,
 } from '@crown/data';
-
-interface MonthsCategories {
-  months: MoneyGroup[];
-  categories: string[];
-  total: number;
-}
+import { SearchResultsComponent } from '../../search-results/search-results.component';
 
 @Component({
   selector: 'crown-groups-tab',
@@ -19,7 +14,13 @@ interface MonthsCategories {
   templateUrl: './groups-tab.component.html',
   styleUrl: './groups-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NoYearPipe, SumByMonthPipe, PriceByTypePipe],
+  imports: [
+    CommonModule,
+    SearchResultsComponent,
+    NoYearPipe,
+    SumByMonthPipe,
+    PriceByTypePipe,
+  ],
 })
 export class GroupsTabComponent {
   @Input() data!: MonthsCategories | null | any; // TODO: no any

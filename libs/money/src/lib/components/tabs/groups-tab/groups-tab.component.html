@@ -7,13 +7,8 @@
 <!-- <ng-container *ngIf="data && data.total > 0; else noData"> -->
 @if(filtered) {
 <div class="query-result">
-  <div class="_message">
-    <span>wynik: {{ data.total | json }}</span>
-    <span>{{ data?.categories | json }}</span>
-    <span *ngIf="data.total === 1">kategorię</span>
-    <span *ngIf="data.total > 1 && data.total < 5">kategorie</span>
-    <span *ngIf="data.total >= 5">kategorii</span>
-  </div>
+  <crown-search-results [results]="data"></crown-search-results>
+  
 </div>
 } @if (data.total > 0) {
 <table class="table __mat-elevation-z8">

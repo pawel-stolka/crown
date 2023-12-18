@@ -1,0 +1,16 @@
+<!-- <div class="_message"> -->
+<div class="message" *ngIf="results.total > 0; else nothing">
+  <div>znaleziono: {{ results.total }}</div>
+  <!-- <span *ngIf="results.total === 1">kategorię</span>
+    <span *ngIf="results.total > 1 && results.total < 5">kategorie</span>
+    <span *ngIf="results.total >= 5">kategorii</span>
+    <span *ngIf="results.total === 0">kategorii</span> -->
+  <div class="inline">
+    <div class="chip" *ngFor="let category of results?.categories">
+      {{ category }}
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+
+<ng-template #nothing> Nic nie znaleziono. </ng-template>
