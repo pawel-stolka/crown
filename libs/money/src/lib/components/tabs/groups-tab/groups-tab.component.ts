@@ -12,6 +12,7 @@ import { formatValue } from '../../../containers/tabs-container/tabs-container.c
 interface MonthsCategories {
   months: MoneyGroup[];
   categories: string[];
+  total: number;
 }
 
 @Component({
@@ -24,6 +25,7 @@ interface MonthsCategories {
 })
 export class GroupsTabComponent {
   @Input() data!: MonthsCategories | null;
+  @Input() filtered = false;
 
   constructor(@Inject(LOCALE_ID) public locale: string) {}
 
@@ -34,8 +36,6 @@ export class GroupsTabComponent {
   }
 
   getSumByMonth(typePrices: TypePrice[]) {
-    // console.log('[getSumByMonth]', typePrices);
-
     let result = typePrices.reduce((sum, el) => {
       return (sum = sum + el.price);
     }, 0);

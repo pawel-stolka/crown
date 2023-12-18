@@ -12,9 +12,10 @@
 </div>
 
 @if (yearMonthsData$ | async; as money) { @if (money.months.length) {
+  <!-- <div>wynik: {{money.total }}</div> -->
 <mat-tab-group (selectedIndexChange)="tabChange($event)">
   <mat-tab label="{{ GROUPS_LABEL }}">
-    <crown-groups-tab [data]="yearMonthsData$ | async"></crown-groups-tab>
+    <crown-groups-tab [data]="yearMonthsData$ | async" [filtered]="!!(filterPhrase$ | async)"></crown-groups-tab>
   </mat-tab>
   <mat-tab label="{{ DETAILS_LABEL }}">
     <crown-details-tab

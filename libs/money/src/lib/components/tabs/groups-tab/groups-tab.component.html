@@ -1,6 +1,21 @@
 <!-- @if(data) { -->
 <!-- @if(data && data.categories; as categories) { -->
 @if(data) {
+<div class="query-result">
+  @if(filtered) {
+  <div class="message">
+    <ng-container *ngIf="data && data.total > 0; else zero">
+      <span>odnaleziono: {{ data.total | json }} </span>
+      <span *ngIf="data.total === 1">kategorię</span>
+      <span *ngIf="data.total > 1 && data.total < 5">kategorie</span>
+      <span *ngIf="data.total >= 5">kategorii</span>
+    </ng-container>
+    <ng-template #zero>
+      <span>nic nie odnaleziono.</span>
+    </ng-template>
+  </div>
+  }
+</div>
 <table class="table __mat-elevation-z8">
   <tr>
     <!-- <th>Miesiąc</th> -->

@@ -1,9 +1,30 @@
 @import '@colors';
 
 :host {
-  display: flex;
-  justify-content: center;
+  // display: flex;
+  // justify-content: center;
   // border: 2px dotted;
+  display: flex;
+  flex-direction: column;
+
+  .query-result {
+    display: flex;
+    flex-direction: column;
+    // align-content: center;
+    // justify-content:space-around;
+    justify-items: center;
+    margin: 10px 0;
+
+    .message {
+      margin: 5px;
+      
+      span {
+        border: 2px solid dodgerblue;
+        border-radius: 4px;
+        padding: 5px;
+      }
+    }
+  }
 }
 
 .table {
