@@ -13,6 +13,7 @@ import {
   compareBy,
   Colors,
   EMPTY_STRING,
+  TypePrice,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -106,58 +107,45 @@ export class TabsContainerComponent {
   );
 
   yearMonthsData$ = combineLatest([
-    this.monthsData$,
+    this.monthsData$.pipe(map(({ months }) => months)),
     this.selectedYear$,
     this.filterPhrase$,
   ]).pipe(
-    map(([data, year, filterPhrase]) => {
-      const monthsByYear = data.months.filter(
-        (m: { period: any }) => getYear(m.period) === year
-      );
-      const monthsFiltered = monthsByYear.filter(
-        (mby: { typePrices: { type: string }[] }) => {
-          let res = {
-            ...mby,
-            typePrices: mby.typePrices.filter((tps) =>
-              tps.type.includes(filterPhrase)
-            ),
-          };
-
-          return res;
-        }
+    map(([months, year, filterPhrase]) => {
+      const monthsByYear = months.filter(
+        ({ period }) => getYear(period) === year
       );
 
-      let monthsFiltered2 = monthsFiltered.filter((mf: { typePrices: any[] }) =>
-        mf.typePrices.some((typePrice: { type: string[] }) =>
-          typePrice.type.includes(filterPhrase)
-        )
+      let monthsFiltered = monthsByYear.filter(({ typePrices }) =>
+        typePrices.some(({ type }) => type.includes(filterPhrase))
       );
 
-      const typePrices = groupTypePrices(monthsFiltered2);
+      const typePrices = groupTypePrices(monthsFiltered);
       const summary: MoneyGroup = {
         period: 'SUMA',
         typePrices,
       };
-      const months = [...monthsFiltered2, summary];
+      const _months = [...monthsFiltered, summary];
 
-      const allCategories = data.months
+      const _types = months
         .map(({ typePrices }) => typePrices)
-        .map((tps: any[]) => tps.map((tp: { type: any }) => tp.type))
-        .flat();
+        .flat()
+        .sort((a, b) => b.price - a.price)
+        .map(({ type }) => type);
 
-      const categories = [...new Set(allCategories)];
-      const categoriesFiltered = categories.filter((c: string | any[]) =>
+      const types = [...new Set(_types)];
+      const categories = types.filter((c: string | any[]) =>
         c.includes(filterPhrase)
       );
       let suma = {
-        months,
-        categories: categoriesFiltered,
-        total: categoriesFiltered?.length,
+        months: _months,
+        categories,
+        total: categories?.length,
       };
-      console.log('%c[SUMMARY]', Colors.GREEN, suma.categories.length);
 
       return suma;
     })
+    // tap((suma) => console.log('%c[SUMMARY]', Colors.GREEN, suma))
   );
 
   constructor(
