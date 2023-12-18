@@ -21,7 +21,8 @@ import {
 })
 export class AuthService {
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
-  private _accessRoleSubj = new BehaviorSubject<string | undefined>(undefined);
+  private _accessRoleSubj = new BehaviorSubject<string | null>(null);
+  private _isAdminSubj = new BehaviorSubject<boolean>(false);
 
   // TODO: _accesRole below !!!
   tokenEmail$: Observable<TokenEmail | null> =
@@ -29,12 +30,18 @@ export class AuthService {
 
   isLoggedIn$: Observable<boolean>;
   isLoggedOut$: Observable<boolean>;
-  accessRole$: Observable<string | undefined>;
+  accessRole$: Observable<string | null>;
+  isAdmin$: Observable<boolean>;
 
   constructor(private http: HttpClient) {
     this.isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
-    this.accessRole$ = this.tokenEmail$.pipe(map(tokenEmail => tokenEmail?.role))
+    this.accessRole$ = this.tokenEmail$.pipe(
+      map((tokenEmail) => tokenEmail?.role ?? null)
+    );
+    this.isAdmin$ = this.accessRole$.pipe(
+      map(role => role === 'admin')
+    )
 
     const token = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE);
     if (!!token) {

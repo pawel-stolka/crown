@@ -30,7 +30,7 @@ export class TodoService {
   private _todosSubj = new BehaviorSubject<Todo[]>([]);
 
   todos$: Observable<Todo[]> = this._todosSubj.asObservable();
-  accessRole$: Observable<string | undefined> = this.authService.accessRole$;
+  accessRole$: Observable<string | null> = this.authService.accessRole$;
 
   headers!: { Authorization: string };
   tokenEmail: TokenEmail | null = null;

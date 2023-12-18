@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { AuthGuard } from '@crown/auth';
+import { AdminGuard, AuthGuard } from '@crown/auth';
 
 export const appRoutes: Route[] = [
   {
@@ -21,6 +21,11 @@ export const appRoutes: Route[] = [
     path: 'todo',
     loadComponent: () =>
       import('@crown/todo').then((m) => m.TodoContainerComponent),
+  },
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    loadChildren: () => import('@crown/admin').then((m) => m.AdminModule),
   },
   {
     path: 'not-authorized',
