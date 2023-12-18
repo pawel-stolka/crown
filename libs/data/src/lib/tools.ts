@@ -1,3 +1,5 @@
+import { formatNumber } from '@angular/common';
+
 export function groupBy(list: any[], prop: any) {
   const map = new Map();
   list.forEach((item) => {
@@ -24,4 +26,14 @@ export function compareBy(prop?: string, descending = false) {
     if (!!prop) return order * (a[prop] <= b[prop] ? 1 : -1);
     else return order * (lowA <= lowB ? 1 : -1);
   };
+}
+
+export function formatValue(value: number | string, locale: string): string {
+  return typeof value === 'number'
+    ? formatNumber(value, locale, '1.0-0')
+    : value;
+}
+
+export function lowIt(value: string) {
+  return value.trim().toLowerCase();
 }

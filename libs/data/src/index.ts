@@ -24,3 +24,5 @@ export * from './lib/lists/STATUSES';
 
 export * from './lib/tools';
 export * from './lib/pipes/noYear/noYear.pipe';
+export * from './lib/pipes/priceByType/priceByType.pipe';
+export * from './lib/pipes/sumByMonth/sumByMonth.pipe';

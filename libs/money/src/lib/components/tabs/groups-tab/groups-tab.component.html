@@ -2,7 +2,7 @@
 <!-- @if(data && data.categories; as categories) { -->
 @if(data) {
 <div class="query-result">
-  @if(filtered) {
+  <!-- @if(filtered) {
   <div class="message">
     <ng-container *ngIf="data && data.total > 0; else zero">
       <span>odnaleziono: {{ data.total | json }} </span>
@@ -14,7 +14,7 @@
       <span>nic nie odnaleziono.</span>
     </ng-template>
   </div>
-  }
+  } -->
 </div>
 <table class="table __mat-elevation-z8">
   <tr>
@@ -27,15 +27,16 @@
   </tr>
 
   <tr *ngFor="let item of data?.months; let last = last">
-    <td class="period" *ngIf="true"> {{ item.period | noYear }}</td>
+    <td class="period" *ngIf="true">{{ item.period | noYear }}</td>
 
     <td *ngFor="let category of data?.categories">
       <span [ngClass]="{ last: last }">
-        {{ getPriceByType(item.typePrices, category) }}
+        {{ item.typePrices | priceByType : category }}
       </span>
     </td>
     <!-- summary column -->
-    <td>{{ getSumByMonth(item.typePrices) }}</td>
+    <td>{{ item.typePrices | sumByMonth }}</td>
+    <!-- <td>{{ item | json }}</td> -->
   </tr>
   <!-- <tr>
     <td>SUMA</td>
@@ -45,6 +46,6 @@
   </tr> -->
 </table>
 } @else {
-  <div>NO-DATA</div>
+<div>NO-DATA</div>
 
 }

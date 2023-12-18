@@ -14,6 +14,7 @@ import {
   Colors,
   EMPTY_STRING,
   TypePrice,
+  formatValue,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -116,16 +117,37 @@ export class TabsContainerComponent {
         ({ period }) => getYear(period) === year
       );
 
-      let monthsFiltered = monthsByYear.filter(({ typePrices }) =>
-        typePrices.some(({ type }) => type.includes(filterPhrase))
-      );
+      let monthsByFilter = monthsByYear
+        .map((month) => {
+          // Filter typePrices to include only those that match the filterPhrase
+          const filteredTypePrices = month.typePrices.filter((tp) =>
+            tp.type.includes(filterPhrase)
+          );
 
-      const typePrices = groupTypePrices(monthsFiltered);
+          // If there are any filtered typePrices, return a new object with updated sum
+          if (filteredTypePrices.length > 0) {
+            return {
+              ...month,
+              typePrices: filteredTypePrices,
+              sum: filteredTypePrices.reduce((acc, cur) => acc + cur.price, 0),
+            };
+          }
+
+          // If no typePrices match, return null (to be filtered out)
+          return null;
+        })
+        .filter((month) => month !== null); // Filter out the nulls
+      // let monthsByFilter = monthsByYear.filter(({ typePrices }) =>
+      //   typePrices.some(({ type }) => type.includes(filterPhrase))
+      // );
+      console.log('%c[monthsByFilter]', Colors.MAG, monthsByFilter);
+
+      const typePrices = groupTypePrices(monthsByFilter);
       const summary: MoneyGroup = {
         period: 'SUMA',
         typePrices,
       };
-      const _months = [...monthsFiltered, summary];
+      const _months = [...monthsByFilter, summary];
 
       const _types = months
         .map(({ typePrices }) => typePrices)
@@ -161,18 +183,13 @@ export class TabsContainerComponent {
     }
   }
 
-  // TODO: move to service
   changeYear(year: number) {
     this.moneyService.changeYear(year);
   }
 
   applyFilter(filter: string) {
-    // Event) {
-    // const filterValue = (event.target as HTMLInputElement).value;
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
     this.dataSource.filter = filter;
     this._filterPhraseSubj.next(filter);
-    // console.log('[this.applyFilter]', filter);
 
     // if (this.dataSource.paginator) {
     //   this.dataSource.paginator.firstPage();
@@ -216,15 +233,15 @@ export class TabsContainerComponent {
   }
 }
 
-export function formatValue(value: number | string, locale: string): string {
-  return typeof value === 'number'
-    ? formatNumber(value, locale, '1.0-0')
-    : value;
-}
-
-function groupTypePrices(moneyGroups: MoneyGroup[]) {
-  const flatTypePrices = moneyGroups.map((x) => x.typePrices).flat();
-  const groupedByType = flatTypePrices.reduce((acc, item) => {
+// function groupTypePrices(moneyGroups: MoneyGroup[]) {
+function groupTypePrices(moneyGroups: {
+  typePrices: TypePrice[];
+  sum: number;
+  period: string;
+  userId?: string | undefined;
+}[] | any) {
+  const flatTypePrices = moneyGroups.map((x: { typePrices: any; }) => x.typePrices).flat();
+  const groups = flatTypePrices.reduce((acc: { [x: string]: any; }, item: { type: string | number; price: any; }) => {
     // Initialize the price with 0
     if (!acc[item.type]) {
       acc[item.type] = 0;
@@ -234,10 +251,12 @@ function groupTypePrices(moneyGroups: MoneyGroup[]) {
   }, {} as Record<string, number>);
 
   // Convert the object into an array of objects
-  const typePrices = Object.keys(groupedByType).map((type) => ({
+  const typePrices = Object.keys(groups).map((type) => ({
     type,
-    price: +groupedByType[type].toFixed(NUMBER_PRECISION),
+    price: +groups[type].toFixed(NUMBER_PRECISION),
   }));
+
+  console.log('%c[TPS]', Colors.YELLOW, typePrices);
 
   return typePrices;
 }

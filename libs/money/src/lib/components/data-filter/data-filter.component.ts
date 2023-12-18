@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '@crown/material';
-import { EMPTY_STRING } from '@crown/data';
+import { EMPTY_STRING, lowIt } from '@crown/data';
 
 @Component({
   selector: 'crown-data-filter',
@@ -18,12 +18,11 @@ export class DataFilterComponent {
   @Output() filter = new EventEmitter();
   filterValue: any;
 
-  applyFilter(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const filterValue = inputElement
-      ? inputElement.value.trim().toLowerCase()
-      : EMPTY_STRING;
-    this.filterValue = filterValue.trim().toLowerCase();
+  applyFilter({ target }: Event) {
+    const input = target as HTMLInputElement;
+    const filterValue = input ? lowIt(input.value) : EMPTY_STRING;
+
+    this.filterValue = lowIt(filterValue);
     this._filterSubj.next(filterValue);
     this.filter.emit(filterValue);
   }
