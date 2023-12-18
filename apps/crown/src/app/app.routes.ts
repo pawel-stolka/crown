@@ -19,6 +19,17 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'todo',
-    loadComponent: () => import('@crown/todo').then((m) => m.TodoContainerComponent),
+    loadComponent: () =>
+      import('@crown/todo').then((m) => m.TodoContainerComponent),
+  },
+  {
+    path: 'not-authorized',
+    loadComponent: () =>
+      import('@crown/auth').then((m) => m.NotAuthorizedComponent),
+  },
+
+  {
+    path: '**',
+    loadComponent: () => import('@crown/auth').then((m) => m.NotFoundComponent),
   },
 ];
