@@ -9,7 +9,7 @@ import {
 import { TodoService } from '../../../services/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
-  AUTH_TOKEN_EMAIL_ROLE,
+  AUTH_TOKEN_EMAIL,
   EMPTY_STRING,
   PRIORITIES,
   Priority,
@@ -37,7 +37,7 @@ export class AddTodoComponent {
     private dialogRef: MatDialogRef<AddTodoComponent>,
     private todoService: TodoService
   ) {
-    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE) ?? null;
+    const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
       : null;

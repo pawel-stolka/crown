@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {
   ACCESS_ROLE,
   API_URL,
-  AUTH_TOKEN_EMAIL_ROLE,
+  AUTH_TOKEN_EMAIL,
   TokenEmail,
 } from '@crown/data';
 import {
@@ -43,7 +43,7 @@ export class AuthService {
       map(role => role === 'admin')
     )
 
-    const token = localStorage.getItem(AUTH_TOKEN_EMAIL_ROLE);
+    const token = localStorage.getItem(AUTH_TOKEN_EMAIL);
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));
     }
@@ -58,7 +58,7 @@ export class AuthService {
       }),
       tap((res) => {
         this._tokenEmailSubj.next(res);
-        localStorage.setItem(AUTH_TOKEN_EMAIL_ROLE, JSON.stringify(res));
+        localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
       }),
       shareReplay()
     );
@@ -66,6 +66,6 @@ export class AuthService {
 
   logout() {
     this._tokenEmailSubj.next(null);
-    localStorage.removeItem(AUTH_TOKEN_EMAIL_ROLE);
+    localStorage.removeItem(AUTH_TOKEN_EMAIL);
   }
 }

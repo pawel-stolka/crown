@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  AUTH_TOKEN_EMAIL_ROLE,
+  AUTH_TOKEN_EMAIL,
   EMPTY_STRING,
   MAX_PRICE,
   MAX_TEXT_LENGTH,
