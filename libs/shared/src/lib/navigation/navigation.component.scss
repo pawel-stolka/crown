@@ -1,0 +1,41 @@
+@import '@colors';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  // border: 5px dotted magenta;
+  height: 100vh;
+  background-color: $demo-primary-background;
+  align-content: space-between;
+  // align-items: center;
+}
+
+.title {
+  // border: 5px dotted;
+  display: flex;
+  justify-content:space-around;
+  // align-items: center;
+}
+
+.routes {
+  border: 3px dotted dodgerblue;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 10px 0;
+
+  .active-link {
+    text-underline-position: under;
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.admin {
+  border: 3px dotted dodgerblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: space-around;
+  height: 10%;
+
+}

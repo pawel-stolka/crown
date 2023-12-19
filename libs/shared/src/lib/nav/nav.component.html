@@ -3,6 +3,25 @@
     <mat-icon>menu</mat-icon>
   </button>
 
+  <div class="auth">
+    <button
+      *ngIf="isLoggedOut$ | async"
+      mat-flat-button
+      color="basic"
+      routerLink="auth/login"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Zaloguj
+    </button>
+    <ng-container *ngIf="tokenEmail$ | async as tokenEmail">
+      <!-- <div class="email">{{ tokenEmail.email }}</div> -->
+      <button mat-flat-button color="primary" (click)="logout()">
+        <mat-icon>power_settings_new</mat-icon>
+      </button>
+    </ng-container>
+  </div>
+
 </mat-toolbar>
 <hr>
 <mat-toolbar color="primary">

@@ -4,24 +4,23 @@
 <mat-sidenav-container class="sidenav-container">
   <!-- [mode]="mode.value || 'over'" -->
   <!-- (openedStart)="onLeftSidenavOpen()" -->
-  <mat-sidenav #menuSidenav mode="side">
-    <!-- Left sidenav content -->
-    <!-- Place your menu and routing links here -->
-    <crown-nav
+  <mat-sidenav #menuSidenav [mode]="menuMode.value || 'over'">
+    <!-- (openedStart)="onMenuSidenavOpen($event)" -->
+    <crown-navigation
+      (toggleMenu)="toggleMenu()"
+      (toggle)="toggleTodos()"
+    ></crown-navigation>
+    <!-- <crown-nav
       (toggle)="sidenav.toggle()"
       (toggleMenu)="onMenuSidenavOpen($event)"
-    ></crown-nav>
+    ></crown-nav> -->
   </mat-sidenav>
-  <!-- <mat-sidenav #rightSidenav mode="side" position="end"> -->
-  <!-- Right sidenav content
-    Place the content of your other component here -->
-  <!-- </mat-sidenav> -->
 
   <mat-sidenav
-    #sidenav
+    #todoSidenav
     position="end"
-    mode="over"
-    (openedStart)="onSidenavOpen()"
+    [mode]="todoMode.value || 'over'"
+    (openedStart)="onMenuSidenavOpen($event)"
   >
     <!-- [mode]="mode.value || 'over'" -->
     <div class="sidenav-buttons">
@@ -30,10 +29,14 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <crown-nav
-      (toggle)="sidenav.toggle()"
+    <crown-main-toolbar
+      (toggle)="todoSidenav.toggle()"
       (toggleMenu)="onMenuSidenavOpen($event)"
-    ></crown-nav>
+    ></crown-main-toolbar>
+    <!-- <crown-nav
+      (toggle)="todoSidenav.toggle()"
+      (toggleMenu)="onMenuSidenavOpen($event)"
+    ></crown-nav> -->
     <div class="wrapper">
       <router-outlet></router-outlet>
     </div>

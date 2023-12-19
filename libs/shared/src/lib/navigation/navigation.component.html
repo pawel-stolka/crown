@@ -1,0 +1,43 @@
+<!-- <div class="title"> -->
+<button
+  class="title"
+  mat-button
+  routerLink=""
+  routerLinkActive="active-link"
+  [routerLinkActiveOptions]="{ exact: true }"
+  (click)="openRoutes()"
+>
+  CROWN
+</button>
+<!-- </div> -->
+
+<div class="routes" *ngIf="isLoggedIn$ | async">
+  <button
+    mat-stroked-button
+    routerLink="money"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="openRoutes()"
+  >
+    Wydatki
+  </button>
+  <div class="divider">o</div>
+  <!-- <button mat-mini-fab color="primary" (click)="toggleTodos()"> -->
+  <button mat-stroked-button color="primary" (click)="toggleTodos()">
+    <mat-icon>info</mat-icon>błędy
+  </button>
+</div>
+<div class="admin">
+  <button
+    mat-stroked-button
+    routerLink="admin"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="openRoutes()"
+  >
+    Admin
+  </button>
+  <div class="info">
+    <crown-app-info></crown-app-info>
+  </div>
+</div>
