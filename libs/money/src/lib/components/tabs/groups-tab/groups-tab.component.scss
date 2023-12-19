@@ -15,7 +15,7 @@
     justify-items: center;
     margin: 10px 0;
 
-    
+
   }
 }
 
@@ -83,7 +83,16 @@
   // font-weight: bolder;
 }
 
-// .first {
-//   border: 5px dotted magenta;
-//   background-color: yellowgreen;
-// }
+/* Responsive styles for mobile */
+@media screen and (max-width: 600px) {
+  .table {
+      /* Adjustments for smaller screens */
+      border: 10px dotted;
+  }
+
+  .period, .summary {
+      display: none; /* Example: hide certain columns on mobile */
+  }
+
+  /* Additional styles for mobile view */
+}

@@ -8,7 +8,7 @@
 @if(filtered) {
 <div class="query-result">
   <crown-search-results [results]="data"></crown-search-results>
-  
+
 </div>
 } @if (data.total > 0) {
 <table class="table __mat-elevation-z8">
@@ -20,7 +20,7 @@
     <th class="summary">Ʃ</th>
   </tr>
 
-  <tr *ngFor="let item of data?.months; let last = last">
+  <tr *ngFor="let item of data?.months; let last = last; let id=index">
     <td class="period" *ngIf="true">{{ item.period | noYear }}</td>
 
     <td *ngFor="let category of data?.categories">
