@@ -16,6 +16,7 @@ export class NavComponent {
   isLoggedIn$ = this.authService.isLoggedIn$;
   isLoggedOut$ = this.authService.isLoggedOut$;
   @Output() toggle = new EventEmitter();
+  @Output() toggleMenu = new EventEmitter();
 
   splineColor = '#ffc83d';
   splineBackground = '#3f51b5';
@@ -30,5 +31,11 @@ export class NavComponent {
 
   toggleNav() {
     this.toggle.emit('try');
+  }
+
+  openRoutes() {
+    this.toggleMenu.emit('left');
+    console.log('openRoutes()');
+
   }
 }

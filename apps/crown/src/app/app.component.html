@@ -1,20 +1,39 @@
 <!-- TODO -->
 <!-- <ng-template #toastContainer></ng-template> -->
 
-<mat-sidenav-container class="example-container">
+<mat-sidenav-container class="sidenav-container">
+  <!-- [mode]="mode.value || 'over'" -->
+  <!-- (openedStart)="onLeftSidenavOpen()" -->
+  <mat-sidenav #menuSidenav mode="side">
+    <!-- Left sidenav content -->
+    <!-- Place your menu and routing links here -->
+    <crown-nav
+      (toggle)="sidenav.toggle()"
+      (toggleMenu)="onMenuSidenavOpen($event)"
+    ></crown-nav>
+  </mat-sidenav>
+  <!-- <mat-sidenav #rightSidenav mode="side" position="end"> -->
+  <!-- Right sidenav content
+    Place the content of your other component here -->
+  <!-- </mat-sidenav> -->
+
   <mat-sidenav
     #sidenav
     position="end"
-    [mode]="mode.value || 'over'"
+    mode="over"
     (openedStart)="onSidenavOpen()"
   >
+    <!-- [mode]="mode.value || 'over'" -->
     <div class="sidenav-buttons">
       <crown-todo-container></crown-todo-container>
     </div>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <crown-nav (toggle)="sidenav.toggle()"></crown-nav>
+    <crown-nav
+      (toggle)="sidenav.toggle()"
+      (toggleMenu)="onMenuSidenavOpen($event)"
+    ></crown-nav>
     <div class="wrapper">
       <router-outlet></router-outlet>
     </div>

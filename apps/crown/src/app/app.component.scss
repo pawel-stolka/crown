@@ -5,6 +5,14 @@
   // border: 5px dotted;
 }
 
+.sidenav-container {
+  height: 100%;
+}
+
+mat-sidenav {
+  width: 250px; /* Adjust as needed */
+}
+
 // #toastContainer {
 //   position: fixed;
 //   top: 0;
@@ -35,8 +43,7 @@
   overflow: visible; /* Ensure this allows showing all toasts */
 }
 
-// sidenav
-.example-container {
+.sidenav-container0 {
   // border: 5px dotted;
   display: flex;
   flex-direction: column;
