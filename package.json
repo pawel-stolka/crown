@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start:mock": "json-server --routes ./mock/routes.json --watch ./mock/db.json --port 3000"
+    "start:mock": "json-server --routes ./mock/routes.json --watch ./mock/db.json --port 3000",
+    "start:ssl": "npx nx run crown:serve --port=4900 -o --ssl true --ssl-key ./ssl/server.key  --ssl-cert ./ssl/server.crt"
   },
   "private": true,
   "dependencies": {
