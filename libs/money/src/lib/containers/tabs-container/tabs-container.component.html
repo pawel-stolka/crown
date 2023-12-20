@@ -16,17 +16,32 @@
 </ng-container>
 
 <ng-template #DATA>
-  <ng-container *ngIf="invisibleColumns$ | async as visibleColumns">
-  <div class="hop">
-    <pre>{{ visibleColumns | json }}</pre>
+  <div class="index">
+    <button (click)="prevCurrentIndex()">prev</button>
+    <button (click)="nextCurrentIndex()">next</button>
+  </div>
+
+  <ng-container *ngIf="subColumns$ | async as all">
+    <div class="all">
+      <pre *ngFor="let sub of all">{{ sub | json }}</pre>
     </div>
   </ng-container>
-  <hr>
-  <!-- <ng-container *ngIf="displayedData$ | async as displayedColumns">
-    <div class="hop">
-      <pre>{{ displayedColumns | json }}</pre>
-    </div>
-  </ng-container> -->
+  <div class="in-vis">
+    <ng-container *ngIf="visibleColumns2$ | async as visible">
+      <div class="hop">
+        <h2>visible</h2>
+        <pre>{{ visible | json }}</pre>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="invisibleColumns$ | async as invisible">
+      <div class="hop">
+        <h2>invisible</h2>
+        <pre>{{ invisible | json }}</pre>
+      </div>
+    </ng-container>
+  </div>
+  <hr />
+
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
     <mat-tab label="{{ GROUPS_LABEL }}">
       <!-- <crown-groups-tab

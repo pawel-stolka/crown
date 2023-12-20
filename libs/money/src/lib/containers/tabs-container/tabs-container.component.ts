@@ -14,6 +14,7 @@ import {
   TypePrice,
   formatValue,
   fixNumber,
+  Colors,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -98,29 +99,29 @@ export class TabsContainerComponent {
   );
 
   private testInvisible = [
-    'ququ',
-    'bitwa',
-    'hrabia… no nie monte cristo. chodzi o bula-komorowskiego. nie mylić z borem-komorowskim. ten ostatni nie ukradł żyrandola. ',
-    'niemieckie wiatraki, życiowa rola maji ostaszewskiej',
-    'kategoria jaka jest każdy widzi',
-    'ąćęłńóśźż',
-    'christo… kasztanie ',
-    // pablo
-    'darowizna',
-    'poczta',
-    'słodycze ',
-    'prowizje',
-    'bilety',
-    'leki',
-    'gitara',
-    'edukacja',
-    'ubrania',
+    // 'ququ',
+    // 'bitwa',
+    // 'hrabia… no nie monte cristo. chodzi o bula-komorowskiego. nie mylić z borem-komorowskim. ten ostatni nie ukradł żyrandola. ',
+    // 'niemieckie wiatraki, życiowa rola maji ostaszewskiej',
+    // 'kategoria jaka jest każdy widzi',
+    // 'ąćęłńóśźż',
+    // 'christo… kasztanie ',
+    // // pablo
+    // 'darowizna',
+    // 'poczta',
+    // 'słodycze ',
+    // 'prowizje',
+    // 'bilety',
+    // 'leki',
+    // 'gitara',
+    // 'edukacja',
+    // 'ubrania',
   ];
 
   private _invisibleColumnsSubj = new BehaviorSubject<string[]>(
     this.testInvisible
   );
-  invisibleColumns$ = this._invisibleColumnsSubj.asObservable();
+  // invisibleColumns$ = this._invisibleColumnsSubj.asObservable();
 
   yearMonthsData$ = combineLatest([
     this.monthsData$.pipe(map(({ months }) => months)),
@@ -175,17 +176,88 @@ export class TabsContainerComponent {
     })
   );
 
+  private _currentSubArrayIndexSubj = new BehaviorSubject<number>(0);
+  currentSubArrayIndex$ = this._currentSubArrayIndexSubj.asObservable();
+
+  get currentSubArrayIndex() {
+    return this._currentSubArrayIndexSubj.value;
+  }
+  get subColumnsLength() {
+    return this._subColumnsLengthSubj.value;
+  }
+
+  private _subColumnsLengthSubj = new BehaviorSubject(0);
+  subColumnsLength$ = this._subColumnsLengthSubj.asObservable();
+
+  subColumns$ = this.yearMonthsData$.pipe(
+    map((data) => {
+      const { months, categories } = data;
+      let subArrays = [];
+      let chunkSize = 4;
+      for (let i = 0; i < categories.length; i += chunkSize) {
+        subArrays.push(categories.slice(i, i + chunkSize));
+      }
+      return subArrays;
+    }),
+    tap((x) => {
+      this._subColumnsLengthSubj.next(x.length);
+      console.log('[this.subColumnsLength$]', x.length);
+    })
+  );
+
+  nextCurrentIndex = () => {
+    let next = this.currentSubArrayIndex + 1;
+    if (this.currentSubArrayIndex < this.subColumnsLength - 1) {
+      this._currentSubArrayIndexSubj.next(next);
+    }
+  };
+  prevCurrentIndex = () => {
+    let prev = this.currentSubArrayIndex - 1;
+    if (this.currentSubArrayIndex > 0) {
+      this._currentSubArrayIndexSubj.next(prev);
+    }
+  };
+
+  visibleColumns2$ = combineLatest([
+    this.subColumns$,
+    this.currentSubArrayIndex$,
+  ]).pipe(
+    map(([subColumns, current]) => {
+      return subColumns[current];
+    }),
+    tap((x) => console.log('%c[visibleColumns]', Colors.MAG, x))
+  );
+
+  invisibleColumns$ = combineLatest([
+    this.subColumns$,
+    this.currentSubArrayIndex$,
+  ]).pipe(
+    map(([subColumns, current]) => {
+      // Filter out the currently visible subarray
+      let res = subColumns.filter((_, index) => index !== current); //.flat();
+      // console.log('invisibleColumns #0', res);
+
+      return res;
+    }),
+    tap((x) => console.log('invisibleColumns #1', x)),
+    map((x) => x.flat()),
+    tap((x) => console.log('%c[invisibleColumns #FIN]', Colors.GREEN, x))
+  );
+
   displayedData$ = combineLatest([
     this.yearMonthsData$,
     this.invisibleColumns$,
   ]).pipe(
-    map(([data, invisible]) => {
-      let result = {
-        ...data,
-        categories: data.categories.filter((c) => !invisible.includes(c)),
-      };
-      return result;
-    })
+    map(([data, invisible]) => ({
+      ...data,
+      categories: data.categories.filter((c) => !invisible.includes(c)),
+      months: data.months.map((month) => ({
+        ...month,
+        typePrices: month?.typePrices?.filter(
+          (tp) => !invisible.includes(tp.type)
+        ),
+      })),
+    }))
   );
 
   constructor(

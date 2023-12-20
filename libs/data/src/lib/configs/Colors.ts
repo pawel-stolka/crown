@@ -1,9 +1,10 @@
 export enum Colors {
   dots = 'border: 3px dotted;',
-  BLACK = 'border: 7px dotted;',
-  GREEN = 'border: 7px dotted green;',
-  RED = 'border: 7px dotted red;',
+  BLACK = 'border: 5px dashed;',
+  GREEN = 'border: 5px dashed green;',
+  RED = 'border: 5px dotted red;',
   // RED = 'border: 3px dotted; background-color: red;',
-  MAG = 'border: 3px dotted; background-color: magenta;',
-  YELLOW = 'background: yellow'
+  MAG = 'border: 3px dashed; color: magenta;',
+  YELLOW = 'background: yellow',
+  ORANGERED = 'background: orangered'
 }

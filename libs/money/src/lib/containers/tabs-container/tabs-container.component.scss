@@ -1,3 +1,34 @@
+.index {
+  border: 3px dotted;
+}
+.all {
+  border: 5px dotted magenta;
+  display: flex;
+  // flex-direction: row;
+  justify-content: space-between;
+  display: none;
+}
+
+.in-vis {
+  border: 5px dotted dodgerblue;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  width: 100%;
+  display: none;
+
+  div {
+    width: 100%;
+    background-color: palegreen;
+
+    h2 {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+}
+
 .actions {
   display: flex;
   justify-content: space-around;
