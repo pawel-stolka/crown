@@ -14,14 +14,19 @@
     // justify-content:space-around;
     justify-items: center;
     margin: 10px 0;
-
-
   }
 }
 
 .table {
   width: 95%;
   margin-top: 20px;
+
+  // tr > th:first-child
+  .mobile {
+    // border: 5px solid brown;
+    // display: none;
+    visibility: hidden;
+  }
 
   tr > th:not(:first-child) {
     // tr > th {
@@ -86,12 +91,23 @@
 /* Responsive styles for mobile */
 @media screen and (max-width: 600px) {
   .table {
-      /* Adjustments for smaller screens */
-      border: 10px dotted;
+    /* Adjustments for smaller screens */
+    border: 10px dotted;
+    .mobile {
+      visibility: visible;
+      display: block;
+      border: 5px solid brown;
+    }
   }
 
-  .period, .summary {
-      display: none; /* Example: hide certain columns on mobile */
+
+  .period,
+  .summary {
+    display: none; /* Example: hide certain columns on mobile */
+
+    &-mobile {
+      display: block;
+    }
   }
 
   /* Additional styles for mobile view */

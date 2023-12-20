@@ -16,10 +16,25 @@
 </ng-container>
 
 <ng-template #DATA>
+  <ng-container *ngIf="invisibleColumns$ | async as visibleColumns">
+  <div class="hop">
+    <pre>{{ visibleColumns | json }}</pre>
+    </div>
+  </ng-container>
+  <hr>
+  <!-- <ng-container *ngIf="displayedData$ | async as displayedColumns">
+    <div class="hop">
+      <pre>{{ displayedColumns | json }}</pre>
+    </div>
+  </ng-container> -->
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
     <mat-tab label="{{ GROUPS_LABEL }}">
-      <crown-groups-tab
+      <!-- <crown-groups-tab
         [data]="yearMonthsData$ | async"
+        [filtered]="!!(filterPhrase$ | async)"
+      ></crown-groups-tab> -->
+      <crown-groups-tab
+        [data]="displayedData$ | async"
         [filtered]="!!(filterPhrase$ | async)"
       ></crown-groups-tab>
     </mat-tab>

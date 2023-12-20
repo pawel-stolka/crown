@@ -33,7 +33,6 @@ import { DetailsTabComponent } from '../../components/tabs/details-tab/details-t
 import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 
-
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WSZYSTKO';
 @Component({
@@ -98,6 +97,31 @@ export class TabsContainerComponent {
     })
   );
 
+  private testInvisible = [
+    'ququ',
+    'bitwa',
+    'hrabia… no nie monte cristo. chodzi o bula-komorowskiego. nie mylić z borem-komorowskim. ten ostatni nie ukradł żyrandola. ',
+    'niemieckie wiatraki, życiowa rola maji ostaszewskiej',
+    'kategoria jaka jest każdy widzi',
+    'ąćęłńóśźż',
+    'christo… kasztanie ',
+    // pablo
+    'darowizna',
+    'poczta',
+    'słodycze ',
+    'prowizje',
+    'bilety',
+    'leki',
+    'gitara',
+    'edukacja',
+    'ubrania',
+  ];
+
+  private _invisibleColumnsSubj = new BehaviorSubject<string[]>(
+    this.testInvisible
+  );
+  invisibleColumns$ = this._invisibleColumnsSubj.asObservable();
+
   yearMonthsData$ = combineLatest([
     this.monthsData$.pipe(map(({ months }) => months)),
     this.selectedYear$,
@@ -148,6 +172,19 @@ export class TabsContainerComponent {
         categories,
         total: categories?.length,
       };
+    })
+  );
+
+  displayedData$ = combineLatest([
+    this.yearMonthsData$,
+    this.invisibleColumns$,
+  ]).pipe(
+    map(([data, invisible]) => {
+      let result = {
+        ...data,
+        categories: data.categories.filter((c) => !invisible.includes(c)),
+      };
+      return result;
     })
   );
 

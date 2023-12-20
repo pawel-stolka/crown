@@ -8,27 +8,21 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/crown",
         "index": "apps/crown/src/index.html",
         "browser": "apps/crown/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/crown/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/crown/src/favicon.ico",
-          "apps/crown/src/assets"
-        ],
+        "assets": ["apps/crown/src/favicon.ico", "apps/crown/src/assets"],
         "styles": [
           "@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/crown/src/styles/_colors.scss",
-          "apps/crown/src/styles/styles.scss",
-          "apps/crown/src/styles/_dialogs.scss"
+          "apps/crown/src/styles/_helpers.scss",
+          "apps/crown/src/styles/_dialogs.scss",
+          "apps/crown/src/styles/styles.scss"
         ],
         "scripts": []
       },
@@ -77,21 +71,14 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/crown/**/*.ts",
-          "apps/crown/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/crown/**/*.ts", "apps/crown/**/*.html"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/crown/jest.config.ts"
       }
