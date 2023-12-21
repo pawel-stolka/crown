@@ -39,29 +39,38 @@ import { MoneyService } from '@crown/money';
 })
 export class AddDialogComponent {
   title = 'Dodaj rachunek';
-  form: FormGroup;
+  form!: FormGroup;
 
   private getCategories$ = this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
 
-  typeControl = new FormControl<string>(EMPTY_STRING);
+  // typeControl = new FormControl<string>(EMPTY_STRING);
 
   // START EXAMPLE --------------
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]> = // | undefined =
-    this.myControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value))
-    );
+  // myControl = new FormControl();
+  // options: string[] = ['paliwo', 'Two', 'Three'];
+  filteredCategories$: Observable<string[]> | undefined;
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  // filteredOptions: Observable<string[]> = // | undefined =
+  //   this.myControl.valueChanges.pipe(
+  //     startWith(''),
+  //     map((value) => this._filter(value))
+  //   );
 
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
-  }
+  // private _filter2(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
+
+  //   return this.options.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+  // }
+  // private _filter(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
+
+  //   return this.options.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+  // }
   // STOP EXAMPLE --------------
 
   get type() {
@@ -82,6 +91,10 @@ export class AddDialogComponent {
     private moneyService: MoneyService,
     private toastService: ToastService
   ) {
+
+  }
+
+  ngOnInit() {
     const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
@@ -110,12 +123,12 @@ export class AddDialogComponent {
       fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
       createdAt: [new Date(), [Validators.required]],
     });
-  }
 
-  ngOnInit() {
-    this.categoriesFiltered$ = combineLatest([
+    this.filteredCategories$ = combineLatest([
       this.getCategories$,
-      this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
+      this.type
+        ? this.type.valueChanges.pipe(startWith(EMPTY_STRING))
+        : EMPTY_STRING,
     ]).pipe(
       map(([categories, input]) =>
         categories.filter((c) =>
@@ -123,6 +136,21 @@ export class AddDialogComponent {
         )
       )
     );
+    // this.filteredCategories$ = this.form.get('type')?.valueChanges.pipe(
+    //   startWith(EMPTY_STRING),
+    //   map((value) => this._filter2(value))
+    // )
+
+    // this.categoriesFiltered$ = combineLatest([
+    //   this.getCategories$,
+    //   this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
+    // ]).pipe(
+    //   map(([categories, input]) =>
+    //     categories.filter((c) =>
+    //       c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
+    //     )
+    //   )
+    // );
   }
 
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {

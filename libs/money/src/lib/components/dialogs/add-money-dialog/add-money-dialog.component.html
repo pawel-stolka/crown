@@ -36,7 +36,7 @@
   </span>
 
   <!-- START EXAMPLE  -->
-  <mat-form-field class="EXAMPLE">
+  <!-- <mat-form-field class="EXAMPLE">
     <input
       type="text"
       placeholder="Pick one"
@@ -53,28 +53,48 @@
         {{ option }}
       </mat-option>
     </mat-autocomplete>
-  </mat-form-field>
+  </mat-form-field> -->
   <!-- STOP EXAMPLE  -->
 
   <!-- TEST EXAMPLE  -->
-  <mat-form-field  appearance="outline" class="TEST">
+  <mat-form-field  appearance="outline">
     <input
       type="text"
       matInput
-      [formControl]="myControl"
+      lowercase
+      formControlName="type"
       [matAutocomplete]="auto2"
     />
     <mat-autocomplete #auto2="matAutocomplete">
       <mat-option
-        *ngFor="let option of filteredOptions | async"
+        *ngFor="let option of filteredCategories$ | async"
         [value]="option"
       >
         {{ option }}
       </mat-option>
     </mat-autocomplete>
+
+    <button
+      matSuffix
+      mat-icon-button
+      *ngIf="type?.value"
+      (click)="type?.setValue('')"
+    >
+      <mat-icon>cancel</mat-icon>
+    </button>
+
+    @if (type?.hasError('required')) {
+      <mat-error> Podaj kategorię! </mat-error>
+      } @if (type?.hasError('minlength')) {
+      <mat-error> Za krótka nazwa! </mat-error>
+      } @if (type?.hasError('maxlength')) {
+      <mat-error> Za długo! </mat-error>
+      }
+
   </mat-form-field>
   <!-- STOP TEST  -->
 
+  <!--
   <mat-form-field appearance="outline">
     <mat-label>kategoria</mat-label>
     <input
@@ -84,7 +104,6 @@
       formControlName="type"
       [matAutocomplete]="auto"
     />
-
     <mat-autocomplete #auto="matAutocomplete">
       @for (category of categoriesFiltered$ | async; track category) {
       <mat-option [value]="category">{{ category }} </mat-option>
@@ -106,7 +125,8 @@
     } @if (type?.hasError('maxlength')) {
     <mat-error> Za długo! </mat-error>
     }
-  </mat-form-field>
+  </mat-form-field> -->
+
 
   <div class="divider">opcjonalnie</div>
 
