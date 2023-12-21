@@ -12,6 +12,9 @@
       #searchInput
       formControlName="createdAt"
     />
+    @if (date?.hasError('required')) {
+    <mat-error> Podaj datę! </mat-error>
+    }
 
     <mat-datepicker-toggle matSuffix [for]="datepicker">
     </mat-datepicker-toggle>
@@ -35,29 +38,8 @@
     <mat-checkbox matInput formControlName="isVat">VAT</mat-checkbox>
   </span>
 
-  <!-- START EXAMPLE  -->
-  <!-- <mat-form-field class="EXAMPLE">
-    <input
-      type="text"
-      placeholder="Pick one"
-      aria-label="Number"
-      matInput
-      [formControl]="myControl"
-      [matAutocomplete]="auto1"
-    />
-    <mat-autocomplete #auto1="matAutocomplete">
-      <mat-option
-        *ngFor="let option of filteredOptions | async"
-        [value]="option"
-      >
-        {{ option }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field> -->
-  <!-- STOP EXAMPLE  -->
-
-  <!-- TEST EXAMPLE  -->
-  <mat-form-field  appearance="outline">
+  <mat-form-field appearance="outline">
+    <mat-label>kategoria</mat-label>
     <input
       type="text"
       matInput
@@ -84,49 +66,13 @@
     </button>
 
     @if (type?.hasError('required')) {
-      <mat-error> Podaj kategorię! </mat-error>
-      } @if (type?.hasError('minlength')) {
-      <mat-error> Za krótka nazwa! </mat-error>
-      } @if (type?.hasError('maxlength')) {
-      <mat-error> Za długo! </mat-error>
-      }
-
-  </mat-form-field>
-  <!-- STOP TEST  -->
-
-  <!--
-  <mat-form-field appearance="outline">
-    <mat-label>kategoria</mat-label>
-    <input
-      type="text"
-      matInput
-      lowercase
-      formControlName="type"
-      [matAutocomplete]="auto"
-    />
-    <mat-autocomplete #auto="matAutocomplete">
-      @for (category of categoriesFiltered$ | async; track category) {
-      <mat-option [value]="category">{{ category }} </mat-option>
-      }
-    </mat-autocomplete>
-    <button
-      matSuffix
-      mat-icon-button
-      *ngIf="type?.value"
-      (click)="type?.setValue('')"
-    >
-      <mat-icon>cancel</mat-icon>
-    </button>
-
-    @if (type?.hasError('required')) {
     <mat-error> Podaj kategorię! </mat-error>
     } @if (type?.hasError('minlength')) {
     <mat-error> Za krótka nazwa! </mat-error>
     } @if (type?.hasError('maxlength')) {
     <mat-error> Za długo! </mat-error>
     }
-  </mat-form-field> -->
-
+  </mat-form-field>
 
   <div class="divider">opcjonalnie</div>
 

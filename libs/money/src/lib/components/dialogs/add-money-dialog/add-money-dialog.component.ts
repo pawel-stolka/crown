@@ -42,36 +42,11 @@ export class AddDialogComponent {
   form!: FormGroup;
 
   private getCategories$ = this.moneyService.getCategories$();
-  categoriesFiltered$!: Observable<string[]>;
-
-  // typeControl = new FormControl<string>(EMPTY_STRING);
-
-  // START EXAMPLE --------------
-  // myControl = new FormControl();
-  // options: string[] = ['paliwo', 'Two', 'Three'];
   filteredCategories$: Observable<string[]> | undefined;
 
-  // filteredOptions: Observable<string[]> = // | undefined =
-  //   this.myControl.valueChanges.pipe(
-  //     startWith(''),
-  //     map((value) => this._filter(value))
-  //   );
-
-  // private _filter2(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-
-  //   return this.options.filter((option) =>
-  //     option.toLowerCase().includes(filterValue)
-  //   );
-  // }
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-
-  //   return this.options.filter((option) =>
-  //     option.toLowerCase().includes(filterValue)
-  //   );
-  // }
-  // STOP EXAMPLE --------------
+  get date() {
+    return this.form.get('createdAt');
+  }
 
   get type() {
     return this.form.get('type');
@@ -90,9 +65,7 @@ export class AddDialogComponent {
     private dialogRef: MatDialogRef<AddDialogComponent>,
     private moneyService: MoneyService,
     private toastService: ToastService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
@@ -121,7 +94,8 @@ export class AddDialogComponent {
       isVat: [false],
       isDeleted: [false],
       fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
-      createdAt: [new Date(), [Validators.required]],
+      createdAt: [null, [Validators.required]],
+      // createdAt: [new Date(), [Validators.required]],
     });
 
     this.filteredCategories$ = combineLatest([
@@ -136,21 +110,6 @@ export class AddDialogComponent {
         )
       )
     );
-    // this.filteredCategories$ = this.form.get('type')?.valueChanges.pipe(
-    //   startWith(EMPTY_STRING),
-    //   map((value) => this._filter2(value))
-    // )
-
-    // this.categoriesFiltered$ = combineLatest([
-    //   this.getCategories$,
-    //   this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
-    // ]).pipe(
-    //   map(([categories, input]) =>
-    //     categories.filter((c) =>
-    //       c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
-    //     )
-    //   )
-    // );
   }
 
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
