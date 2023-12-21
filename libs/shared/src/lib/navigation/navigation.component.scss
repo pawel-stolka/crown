@@ -18,7 +18,7 @@
 }
 
 .routes {
-  border: 3px dotted dodgerblue;
+  // border: 3px dotted dodgerblue;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -30,12 +30,17 @@
   }
 }
 
-.admin {
-  border: 3px dotted dodgerblue;
+.info {
+  // border: 3px dotted dodgerblue;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: space-around;
   height: 10%;
+}
 
+.admin {
+  button {
+  color: $demo-danger;
+  }
 }

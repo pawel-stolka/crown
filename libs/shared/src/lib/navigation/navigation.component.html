@@ -27,17 +27,18 @@
     <mat-icon>info</mat-icon>błędy
   </button>
 </div>
-<div class="admin">
+<div class="info">
   <button
     mat-stroked-button
     routerLink="admin"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
     (click)="openRoutes()"
+    color="warn"
   >
-    Admin
+    admin
   </button>
-  <div class="info">
+  <div class="a-info">
     <crown-app-info></crown-app-info>
   </div>
 </div>

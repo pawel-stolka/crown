@@ -8,4 +8,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app-info.component.html',
   styleUrl: './app-info.component.scss',
 })
-export class AppInfoComponent {}
+export class AppInfoComponent {
+  version = '0.7.0'
+}
