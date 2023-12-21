@@ -46,6 +46,24 @@ export class AddDialogComponent {
 
   typeControl = new FormControl<string>(EMPTY_STRING);
 
+  // START EXAMPLE --------------
+  myControl = new FormControl();
+  options: string[] = ['One', 'Two', 'Three'];
+  filteredOptions: Observable<string[]> = // | undefined =
+    this.myControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value))
+    );
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+  // STOP EXAMPLE --------------
+
   get type() {
     return this.form.get('type');
   }
