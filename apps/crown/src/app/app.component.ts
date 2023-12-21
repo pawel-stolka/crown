@@ -33,28 +33,22 @@ import { TodoService } from 'libs/todo/src/lib/services/todo.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  @ViewChild('toastContainer', { read: ViewContainerRef })
-  toastContainerRef!: ViewContainerRef;
+  title = 'crown';
   @ViewChild('menuSidenav') menuSidenav!: MatSidenav;
   @ViewChild('todoSidenav') todoSidenav!: MatSidenav;
-
-  onMenuSidenavOpen(event: any) {
-    this.menuSidenav.toggle();
-    console.log('[onMenuSidenavOpen]', event);
-  }
-
-  title = 'crown';
+  // @ViewChild('toastContainer', { read: ViewContainerRef })
+  // toastContainerRef!: ViewContainerRef;
 
   menuMode = new FormControl('over' as MatDrawerMode);
   todoMode = new FormControl('over' as MatDrawerMode);
 
   constructor(
-    private toastService: ToastService,
+    // private toastService: ToastService,
     private todoService: TodoService
   ) {}
 
   ngAfterViewInit() {
-    this.toastService.setToastContainer(this.toastContainerRef);
+    // this.toastService.setToastContainer(this.toastContainerRef);
   }
 
   toggleTodos() {

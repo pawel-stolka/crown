@@ -2,27 +2,19 @@
 <!-- <ng-template #toastContainer></ng-template> -->
 
 <mat-sidenav-container class="sidenav-container">
-  <!-- [mode]="mode.value || 'over'" -->
-  <!-- (openedStart)="onLeftSidenavOpen()" -->
   <mat-sidenav #menuSidenav [mode]="menuMode.value || 'over'">
-    <!-- (openedStart)="onMenuSidenavOpen($event)" -->
     <crown-navigation
       (toggleMenu)="toggleMenu()"
       (toggle)="toggleTodos()"
     ></crown-navigation>
-    <!-- <crown-nav
-      (toggle)="sidenav.toggle()"
-      (toggleMenu)="onMenuSidenavOpen($event)"
-    ></crown-nav> -->
   </mat-sidenav>
 
   <mat-sidenav
     #todoSidenav
     position="end"
     [mode]="todoMode.value || 'over'"
-    (openedStart)="onMenuSidenavOpen($event)"
+    (openedStart)="toggleMenu()"
   >
-    <!-- [mode]="mode.value || 'over'" -->
     <div class="sidenav-buttons">
       <crown-todo-container></crown-todo-container>
     </div>
@@ -31,12 +23,8 @@
   <mat-sidenav-content>
     <crown-main-toolbar
       (toggle)="todoSidenav.toggle()"
-      (toggleMenu)="onMenuSidenavOpen($event)"
+      (toggleMenu)="toggleMenu()"
     ></crown-main-toolbar>
-    <!-- <crown-nav
-      (toggle)="todoSidenav.toggle()"
-      (toggleMenu)="onMenuSidenavOpen($event)"
-    ></crown-nav> -->
     <div class="wrapper">
       <router-outlet></router-outlet>
     </div>
