@@ -23,17 +23,6 @@ import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith } from 'rxjs';
 import { ToastService } from '@crown/ui';
 import { MoneyService } from '@crown/money';
-import 'moment/locale/pl';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MAT_MOMENT_DATE_FORMATS,
-} from '@angular/material-moment-adapter';
-import {
-  MAT_DATE_LOCALE,
-  DateAdapter,
-  MAT_DATE_FORMATS,
-} from '@angular/material/core';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -44,20 +33,6 @@ import {
     ReactiveFormsModule,
     DotNumberDirective,
     LowercaseDirective,
-  ],
-  providers: [
-    // The locale would typically be provided on the root module of your application. We do it at
-    // the component level here, due to limitations of our example generation script.
-    { provide: MAT_DATE_LOCALE, useValue: 'pl' },
-    // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
-    // `MatMomentDateModule` in your applications root module. We provide it at the component level
-    // here, due to limitations of our example generation script.
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
   ],
   templateUrl: './add-money-dialog.component.html',
   styleUrl: './add-money-dialog.component.scss',
