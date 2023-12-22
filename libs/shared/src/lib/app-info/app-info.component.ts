@@ -9,5 +9,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app-info.component.scss',
 })
 export class AppInfoComponent {
-  version = '0.7.0'
+  version = '0.7.5'
+  update = '22.12.2023'
 }
