@@ -21,6 +21,7 @@ import {
   groupBy,
   fixNumber,
   compareBy,
+  Colors,
 } from '@crown/data';
 import { AuthService } from '@crown/auth/service';
 
@@ -129,14 +130,14 @@ export class MoneyService {
   }
 
   create(changes?: Partial<Money>) {
-    return this.http
-      .post<Money>(this.URL, changes, { headers: this.headers })
-      .pipe(
-        tap((money) => {
-          const update: Money[] = [...this._moneySubj.value, money];
-          this._moneySubj.next(update);
-        })
-      );
+    let fix: Partial<Money> = fixHours_setNoon(changes);
+
+    return this.http.post<Money>(this.URL, fix, { headers: this.headers }).pipe(
+      tap((money) => {
+        const update: Money[] = [...this._moneySubj.value, money];
+        this._moneySubj.next(update);
+      })
+    );
   }
 
   edit(id: string, changes: Partial<Money>) {
@@ -227,4 +228,16 @@ function getMonth(date: Date) {
 
 export function getYear(datetime: any) {
   return +datetime.toString().slice(0, 4);
+}
+
+function fixHours_setNoon(changes?: Partial<Money>): Partial<Money> {
+  const createdAt = changes?.createdAt
+    ? new Date(changes?.createdAt)
+    : new Date();
+  createdAt.setHours(12, 0, 0, 0);
+
+  return {
+    ...changes,
+    createdAt,
+  };
 }
