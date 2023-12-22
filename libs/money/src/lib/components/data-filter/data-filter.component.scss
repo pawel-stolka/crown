@@ -2,7 +2,7 @@
 
 :host {
   width: 100%;
-  margin: 0 20px 0;
+  // margin: 0 20px 0;
 
   mat-icon {
     cursor: pointer;
@@ -17,7 +17,8 @@
   }
 
   .active-field {
-    width: 100%;
+    width: auto;
+    // width: 100%;
     font-size: larger;
     background: $white;
   }

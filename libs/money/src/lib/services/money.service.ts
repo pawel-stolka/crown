@@ -108,7 +108,6 @@ export class MoneyService {
   }
 
   changeYear(year: number) {
-    console.log('[changeYear | service]', year);
     this._selectedYearSubj.next(year);
   }
 
@@ -161,7 +160,6 @@ export class MoneyService {
           console.log(message, err);
           return throwError(err);
         }),
-        tap((x) => console.log('EDIT result', x)),
         shareReplay()
       );
   }

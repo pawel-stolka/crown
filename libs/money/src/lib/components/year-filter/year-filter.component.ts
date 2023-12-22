@@ -18,7 +18,7 @@ import { MaterialModule } from '@crown/material';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class YearFilterComponent {
-  private _availableYears!: number[] |  null;
+  private _availableYears!: number[] | null;
   @Input() set availableYears(years: number[] | null) {
     this._availableYears = years;
     this.year = getCurrentYear(this.availableYears);
@@ -26,7 +26,7 @@ export class YearFilterComponent {
   }
   @Output() currentYear = new EventEmitter();
 
-  get availableYears(): number[]  |  null {
+  get availableYears(): number[] | null {
     return this._availableYears;
   }
 
