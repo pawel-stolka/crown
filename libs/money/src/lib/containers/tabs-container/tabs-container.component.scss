@@ -18,31 +18,30 @@
 //   }
 // }
 .actions {
-  border: 5px dotted red;
+  // border: 5px dotted red;
   display: flex;
   // flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   margin: 15px 0;
   width: 100%;
 
   .filters {
-    border: 3px dotted dodgerblue;
+    // border: 3px dotted dodgerblue;
     display: flex;
     width: 100%;
-    // height: 56px;
-    justify-content: space-between;
+    // justify-content: space-between;
     // gap: 10px;
     align-content: center;
     // margin: 10px;
     font-size: 14px;
 
     &-left {
-      border: 7px dotted green;
+      // border: 7px dotted green;
     }
 
     &-right {
-      border: 7px dotted pink;
+      // border: 7px dotted pink;
     }
   }
 }
