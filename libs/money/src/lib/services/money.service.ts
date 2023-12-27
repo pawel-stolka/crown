@@ -42,18 +42,13 @@ export class MoneyService {
 
   yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
     map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year))
-    // tap((data) => {
-    //   this.dataSource = new MatTableDataSource(data);
-    //   this.dataSource.sort = this.sort;
-    //   this.dataSource.paginator = this.paginator;
-    // })
   );
 
   moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
 
-  headers!: { Authorization: string };
+  // headers: { Authorization: string };
   tokenEmail: TokenEmail | null = null;
 
   get money() {
@@ -61,34 +56,41 @@ export class MoneyService {
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    this.data$().subscribe();
+    // this.data$().subscribe();
+    this.fetchAll$().subscribe();
   }
 
-  data$() {
-    return this.authService.tokenEmail$.pipe(
-      catchError((err) => {
-        const message = 'Could not get token';
-        // this.messages.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      }),
-      filter((x) => !!x),
-      tap((tokenEmail) => (this.tokenEmail = tokenEmail)),
-      switchMap((tokenEmail) => {
-        if (tokenEmail?.token) {
-          return this.fetchAll$(tokenEmail.token);
-        } else {
-          return of(null);
-        }
-      })
-    );
+  // data$() {
+  //   return this.authService.tokenEmail$.pipe(
+  //     catchError((err) => {
+  //       const message = 'Could not get token';
+  //       // this.messages.showErrors(message);
+  //       console.log(message, err);
+  //       return throwError(err);
+  //     }),
+  //     filter((x) => !!x),
+  //     tap((tokenEmail) => (this.tokenEmail = tokenEmail)),
+  //     switchMap((tokenEmail) => {
+  //       if (tokenEmail?.token) {
+  //         return this.fetchAll$(tokenEmail.token);
+  //       } else {
+  //         return of(null);
+  //       }
+  //     })
+  //   );
+  // }
+
+  private getHeaders() {
+    const token = this.authService.getToken()?.token;
+    console.log('[getHeaders]', token);
+
+    return { Authorization: `Bearer ${token}` };
   }
 
-  fetchAll$(token: string | null) {
-    // TODO: CLEAN IT
-    this.headers = { Authorization: `Bearer ${token}` };
+  fetchAll$() {
+    const headers = this.getHeaders();
 
-    return this.http.get<Money[]>(this.URL, { headers: this.headers }).pipe(
+    return this.http.get<Money[]>(this.URL, { headers }).pipe(
       catchError((err) => {
         const message = '[fetchAll] Something wrong...';
         // this.messages.showErrors(message);
@@ -107,15 +109,27 @@ export class MoneyService {
     );
   }
 
-  changeYear(year: number) {
-    this._selectedYearSubj.next(year);
+  create(changes: Partial<Money>) {
+    const headers = this.getHeaders();
+    changes = setNoonAsDate(changes);
+    console.log('[create | MoneyService]', changes);
+
+
+    return this.http.post<Money>(this.URL, changes, { headers }).pipe(
+      tap((money) => {
+        const update: Money[] = [...this._moneySubj.value, money];
+        this._moneySubj.next(update);
+      })
+    );
   }
 
-  // TODO: check if needed
+  // TODO: remove extra endpoint !!!
   getCategories$() {
+    const headers = this.getHeaders();
     const URL = `${API_URL}/api/unique-types-grouped`;
+
     return this.http
-      .get<{ type: string; count: number }[]>(URL, { headers: this.headers })
+      .get<{ type: string; count: number }[]>(URL, { headers })
       .pipe(
         catchError((err) => {
           const message = '[getCategories] Something wrong...';
@@ -128,58 +142,151 @@ export class MoneyService {
       );
   }
 
-  create(changes?: Partial<Money>) {
-    let fix: Partial<Money> = fixHours_setNoon(changes);
-
-    return this.http.post<Money>(this.URL, fix, { headers: this.headers }).pipe(
-      tap((money) => {
-        const update: Money[] = [...this._moneySubj.value, money];
-        this._moneySubj.next(update);
-      })
-    );
-  }
-
   edit(id: string, changes: Partial<Money>) {
+    const headers = this.getHeaders();
+    changes = setNoonAsDate(changes);
+
     const index = this.money.findIndex((money) => money.id === id);
     const newMoney: Money = {
       ...this.money[index],
       ...changes,
     };
+    console.log('%c index', Colors.BLACK, index);
 
     // copy of moneys
     const newMoneys: Money[] = this.money.slice(0);
     newMoneys[index] = newMoney;
-    this._moneySubj.next(newMoneys);
+    let OLD = this.money;
+    let NEW = newMoneys;
+    console.log('%c OLD', Colors.YELLOW, OLD);
+    console.log('%c NEW', Colors.MAG, NEW);
 
-    return this.http
-      .put<Money>(`${this.URL}/${id}`, changes, { headers: this.headers })
-      .pipe(
-        catchError((err) => {
-          const message = 'Could not edit money';
-          // this.messages.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-        }),
-        shareReplay()
-      );
+    // this._moneySubj.next(newMoneys);
+
+    return this.http.put<Money>(`${this.URL}/${id}`, changes, { headers }).pipe(
+      catchError((err) => {
+        const message = 'Could not edit money';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap(x => this._moneySubj.next(newMoneys)),
+      shareReplay()
+    );
   }
 
   delete(id: string) {
-    return this.http
-      .delete<Money>(`${this.URL}/${id}`, { headers: this.headers })
-      .pipe(
-        catchError((err) => {
-          const message = '[delete] Something wrong...';
-          // this.messages.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-        }),
-        tap((money: Money) => {
-          const newMoneyList = this.money.filter((x) => x.id !== money.id);
-          this._moneySubj.next(newMoneyList);
-        })
-      );
+    const headers = this.getHeaders();
+    return this.http.delete<Money>(`${this.URL}/${id}`, { headers }).pipe(
+      catchError((err) => {
+        const message = '[delete] Something wrong...';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap((money: Money) => {
+        const newMoneyList = this.money.filter((x) => x.id !== money.id);
+        this._moneySubj.next(newMoneyList);
+      })
+    );
   }
+
+  // _fetchAll$(token: string | null) {
+  //   // TODO: CLEAN IT
+  //   this.headers = { Authorization: `Bearer ${token}` };
+
+  //   return this.http.get<Money[]>(this.URL, { headers: this.headers }).pipe(
+  //     catchError((err) => {
+  //       const message = '[fetchAll] Something wrong...';
+  //       // this.messages.showErrors(message);
+  //       console.log(message, err);
+  //       return throwError(err);
+  //     }),
+  //     // map((money: Money[]) => money.filter((x) => !x.isDeleted)),
+  //     map((money: Money[]) => money.sort(compareBy('period', false))),
+  //     map((money) => {
+  //       return money.map((m) => ({
+  //         ...m,
+  //         type: m.type?.toLowerCase(),
+  //       }));
+  //     }),
+  //     tap((money: Money[]) => this._moneySubj.next(money))
+  //   );
+  // }
+
+  changeYear(year: number) {
+    this._selectedYearSubj.next(year);
+  }
+
+  // TODO: check if needed
+  // _getCategories$() {
+  //   const URL = `${API_URL}/api/unique-types-grouped`;
+  //   return this.http
+  //     .get<{ type: string; count: number }[]>(URL, { headers: this.headers })
+  //     .pipe(
+  //       catchError((err) => {
+  //         const message = '[getCategories] Something wrong...';
+  //         // this.messages.showErrors(message);
+  //         console.log(message, err);
+  //         return throwError(err);
+  //       }),
+  //       map((countedCats) => countedCats.map((c) => c.type.trim())),
+  //       map((c) => [...new Set(c)])
+  //     );
+  // }
+
+  // _create(changes?: Partial<Money>) {
+  //   let fix: Partial<Money> = setNoonAsDate(changes);
+
+  //   return this.http.post<Money>(this.URL, fix, { headers: this.headers }).pipe(
+  //     tap((money) => {
+  //       const update: Money[] = [...this._moneySubj.value, money];
+  //       this._moneySubj.next(update);
+  //     })
+  //   );
+  // }
+
+  // _edit(id: string, changes: Partial<Money>) {
+  //   const index = this.money.findIndex((money) => money.id === id);
+  //   const newMoney: Money = {
+  //     ...this.money[index],
+  //     ...changes,
+  //   };
+
+  //   // copy of moneys
+  //   const newMoneys: Money[] = this.money.slice(0);
+  //   newMoneys[index] = newMoney;
+  //   this._moneySubj.next(newMoneys);
+
+  //   return this.http
+  //     .put<Money>(`${this.URL}/${id}`, changes, { headers: this.headers })
+  //     .pipe(
+  //       catchError((err) => {
+  //         const message = 'Could not edit money';
+  //         // this.messages.showErrors(message);
+  //         console.log(message, err);
+  //         return throwError(err);
+  //       }),
+  //       shareReplay()
+  //     );
+  // }
+
+  // _delete(id: string) {
+  //   return this.http
+  //     .delete<Money>(`${this.URL}/${id}`, { headers: this.headers })
+  //     .pipe(
+  //       catchError((err) => {
+  //         const message = '[delete] Something wrong...';
+  //         // this.messages.showErrors(message);
+  //         console.log(message, err);
+  //         return throwError(err);
+  //       }),
+  //       tap((money: Money) => {
+  //         const newMoneyList = this.money.filter((x) => x.id !== money.id);
+  //         this._moneySubj.next(newMoneyList);
+  //       })
+  //     );
+  // }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
     const selection = this.setGrouping(by, data);
@@ -228,14 +335,18 @@ export function getYear(datetime: any) {
   return +datetime.toString().slice(0, 4);
 }
 
-function fixHours_setNoon(changes?: Partial<Money>): Partial<Money> {
+function setNoonAsDate(changes?: Partial<Money>): Partial<Money> {
   const createdAt = changes?.createdAt
     ? new Date(changes?.createdAt)
     : new Date();
   createdAt.setHours(12, 0, 0, 0);
 
-  return {
+  let res = {
     ...changes,
     createdAt,
   };
+  console.log('[setNoonAsDate #0]', changes);
+  console.log('[setNoonAsDate #2]', res);
+
+  return res;
 }

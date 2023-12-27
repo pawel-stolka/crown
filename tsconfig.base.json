@@ -18,7 +18,7 @@
       "@colors": ["apps/crown/src/styles/_colors.scss"],
       "@crown/admin": ["libs/admin/src/index.ts"],
       "@crown/auth": ["libs/auth/src/index.ts"],
-      "@crown/auth/service": ["libs/auth/src/lib/services/auth.service"],
+      "@crown/auth/service": ["libs/auth/src/lib/services/auth/auth.service"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],

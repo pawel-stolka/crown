@@ -6,7 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthService } from '@crown/auth/service';
+import { AuthService } from 'libs/auth/src/lib/services/auth/auth.service';
 import { Observable, map, of, take, tap } from 'rxjs';
 
 @Injectable({
