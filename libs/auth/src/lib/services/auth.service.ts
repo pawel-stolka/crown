@@ -47,6 +47,13 @@ export class AuthService {
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));
     }
+
+    console.log('AUTH SERVICE CTOR', token);
+
+  }
+
+  getToken() {
+    return this._tokenEmailSubj.value;
   }
 
   login(email: string, password: string): Observable<any> {
