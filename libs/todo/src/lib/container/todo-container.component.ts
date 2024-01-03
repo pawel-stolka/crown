@@ -51,7 +51,7 @@ export class TodoContainerComponent implements OnInit {
     this.todoService.updateStatus(event);
   }
 
-  editTodo(todo: Todo) {
+  edit(todo: Todo) {
     dialogConfig.data = todo;
     const dialogRef = this.dialog.open(EditTodoComponent, dialogConfig);
 

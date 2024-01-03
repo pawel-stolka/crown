@@ -15,7 +15,7 @@
     <crown-todo-list
       *ngIf="todos$ | async as todos"
       [todos]="todos"
-      (edit)="editTodo($event)"
+      (edit)="edit($event)"
       (update)="updateTodo($event)"
       (priority)="updatePriority($event)"
     ></crown-todo-list>
@@ -25,7 +25,7 @@
     <crown-todo-list
       *ngIf="inProgress$ | async as inProgress"
       [todos]="inProgress"
-      (edit)="editTodo($event)"
+      (edit)="edit($event)"
       (update)="updateTodo($event)"
       (priority)="updatePriority($event)"
     ></crown-todo-list>
@@ -35,7 +35,7 @@
     <crown-todo-list
       *ngIf="done$ | async as done"
       [todos]="done"
-      (edit)="editTodo($event)"
+      (edit)="edit($event)"
       (update)="updateTodo($event)"
       (priority)="updatePriority($event)"
     ></crown-todo-list>
@@ -70,11 +70,6 @@
 <div class="bottom">
   <ng-container *ngIf="closed$ | async as closed">
     <div class="divider">zamknięte</div>
-    <!-- <crown-todo-list
-      [closed]="true"
-      [todos]="closed"
-      (update)="updateTodo($event)"
-    ></crown-todo-list> -->
     <crown-todo-list [closed]="true" [todos]="closed"></crown-todo-list>
   </ng-container>
 </div>

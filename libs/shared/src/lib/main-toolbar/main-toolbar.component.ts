@@ -33,7 +33,6 @@ export class MainToolbarComponent {
 
   openRoutes() {
     this.toggleMenu.emit();
-    console.log('openRoutes()');
 
   }
 }

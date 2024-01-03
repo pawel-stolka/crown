@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -8,12 +8,10 @@ import {
 } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@crown/material';
-import {
-  MainToolbarComponent,
-  NavigationComponent,
-  ToastService,
-} from '@crown/ui';
-import { TodoContainerComponent } from 'libs/todo/src/lib/container/todo-container.component';
+import { TodoContainerComponent } from '@crown/todo';
+import { MainToolbarComponent, NavigationComponent } from '@crown/ui';
+
+// TODO: inspect injection token
 import { TodoService } from 'libs/todo/src/lib/services/todo.service';
 
 @Component({
@@ -47,18 +45,12 @@ export class AppComponent {
     private todoService: TodoService
   ) {}
 
-  ngAfterViewInit() {
-    // this.toastService.setToastContainer(this.toastContainerRef);
-  }
-
   toggleTodos() {
-    console.log('toggleTodos');
     this.todoSidenav.toggle();
     this.todoService.fetchAll$(null).subscribe();
   }
 
   toggleMenu() {
-    console.log('this.toggleMenu');
     this.menuSidenav.toggle();
   }
 }

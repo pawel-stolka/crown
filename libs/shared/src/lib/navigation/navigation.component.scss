@@ -12,16 +12,16 @@
   justify-content: space-around;
 }
 
+.active-link {
+  border: 3px solid $blue;
+}
+
 .routes {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 90%;
   margin: 10px 0;
-
-  .active-link {
-    text-underline-position: under;
-    background: rgba(255, 255, 255, 0.2);
-  }
+  gap: 10px;
 }
 
 .info {
