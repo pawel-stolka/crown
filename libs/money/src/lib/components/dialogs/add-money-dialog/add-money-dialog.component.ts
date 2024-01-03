@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -20,7 +19,7 @@ import {
   Money,
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
-import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 import { ToastService } from '@crown/ui';
 import { MoneyService } from '@crown/money';
 
@@ -95,7 +94,6 @@ export class AddDialogComponent {
       isDeleted: [false],
       fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
       createdAt: [null, [Validators.required]],
-      // createdAt: [new Date(), [Validators.required]],
     });
 
     this.filteredCategories$ = combineLatest([
@@ -105,8 +103,8 @@ export class AddDialogComponent {
         : EMPTY_STRING,
     ]).pipe(
       map(([categories, input]) =>
-        categories.filter((c) =>
-          c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
+        categories.filter((category) =>
+          category.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
         )
       )
     );

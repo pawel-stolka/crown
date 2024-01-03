@@ -91,7 +91,7 @@ export class EditMoneyDialog {
       this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
     ]).pipe(
       map(([categories, input]) =>
-        categories.filter((c) =>
+        categories.filter((c: string) =>
           c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
         )
       )

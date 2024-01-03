@@ -22,19 +22,16 @@ import {
 })
 export class AuthService {
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
-  private _isAdminSubj = new BehaviorSubject<boolean>(false);
+  private _isAdminSubj = new BehaviorSubject<boolean>(true);
 
   tokenEmail$: Observable<TokenEmail | null> =
     this._tokenEmailSubj.asObservable();
-
-  isLoggedIn$: Observable<boolean>;
-  isLoggedOut$: Observable<boolean>;
   isAdmin$: Observable<boolean> = this._isAdminSubj.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
-    this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
+  isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
+  isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
 
+  constructor(private http: HttpClient) {
     const token = localStorage.getItem(AUTH_TOKEN_EMAIL);
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));

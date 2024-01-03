@@ -19,7 +19,6 @@ import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.com
   styleUrl: './todo-container.component.scss',
 })
 export class TodoContainerComponent implements OnInit {
-  // accessRole$ = this.todoService.accessRole$;
   isAdmin$ = this.todoService.isAdmin$;
   all$ = this.todoService.todos$;
 
@@ -29,15 +28,18 @@ export class TodoContainerComponent implements OnInit {
   );
 
   inProgress$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.IN_PROGRESS))
+    map((all) => all.filter((todo) => todo.status === Status.IN_PROGRESS)),
+    map((todos) => todos.sort(compareBy('priority')))
   );
 
   done$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.DONE))
+    map((all) => all.filter((todo) => todo.status === Status.DONE)),
+    map((todos) => todos.sort(compareBy('priority')))
   );
 
   closed$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.CLOSED))
+    map((all) => all.filter((todo) => todo.status === Status.CLOSED)),
+    map((todos) => todos.sort(compareBy('priority')))
   );
 
   constructor(private dialog: MatDialog, private todoService: TodoService) {}
@@ -60,16 +62,6 @@ export class TodoContainerComponent implements OnInit {
     const dialogRef = this.dialog.open(EditTodoComponent, dialogConfig);
 
     this.handleDialog(dialogRef);
-    // dialogRef
-    //   .afterClosed()
-    //   .pipe(
-    //     tap((x) => console.log('[this.edit]', x)),
-    //     // tap((_) => this.showInfo()),
-    //     filter((val) => !!val)
-    //   )
-    //   .subscribe((_) => {
-    //     console.log('[this.edit sub]', _);
-    //   });
   }
 
   updatePriority(todo: Todo) {
@@ -85,7 +77,6 @@ export class TodoContainerComponent implements OnInit {
         tap((x) => console.log('[this.handleDialog]', x))
       )
       .subscribe((_) => {
-        console.log('[this.handleDialog]', _);
         // this.toast();
       });
   }

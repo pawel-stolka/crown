@@ -60,30 +60,8 @@ export class MoneyService {
     this.fetchAll$().subscribe();
   }
 
-  // data$() {
-  //   return this.authService.tokenEmail$.pipe(
-  //     catchError((err) => {
-  //       const message = 'Could not get token';
-  //       // this.messages.showErrors(message);
-  //       console.log(message, err);
-  //       return throwError(err);
-  //     }),
-  //     filter((x) => !!x),
-  //     tap((tokenEmail) => (this.tokenEmail = tokenEmail)),
-  //     switchMap((tokenEmail) => {
-  //       if (tokenEmail?.token) {
-  //         return this.fetchAll$(tokenEmail.token);
-  //       } else {
-  //         return of(null);
-  //       }
-  //     })
-  //   );
-  // }
-
   private getHeaders() {
     const token = this.authService.getToken()?.token;
-    console.log('[getHeaders]', token);
-
     return { Authorization: `Bearer ${token}` };
   }
 
@@ -114,7 +92,6 @@ export class MoneyService {
     changes = setNoonAsDate(changes);
     console.log('[create | MoneyService]', changes);
 
-
     return this.http.post<Money>(this.URL, changes, { headers }).pipe(
       tap((money) => {
         const update: Money[] = [...this._moneySubj.value, money];
@@ -123,23 +100,15 @@ export class MoneyService {
     );
   }
 
-  // TODO: remove extra endpoint !!!
-  getCategories$() {
-    const headers = this.getHeaders();
-    const URL = `${API_URL}/api/unique-types-grouped`;
-
-    return this.http
-      .get<{ type: string; count: number }[]>(URL, { headers })
-      .pipe(
-        catchError((err) => {
-          const message = '[getCategories] Something wrong...';
-          // this.messages.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-        }),
-        map((countedCats) => countedCats.map((c) => c.type.trim())),
-        map((c) => [...new Set(c)])
-      );
+  getCategories$(): Observable<string[]> {
+    return this.money$.pipe(
+      map((money) =>
+        money
+          .map((m) => m.type)
+          .filter((type): type is string => type !== undefined)
+      ),
+      map((types) => [...new Set(types)] ?? [])
+    );
   }
 
   edit(id: string, changes: Partial<Money>) {
@@ -156,12 +125,6 @@ export class MoneyService {
     // copy of moneys
     const newMoneys: Money[] = this.money.slice(0);
     newMoneys[index] = newMoney;
-    let OLD = this.money;
-    let NEW = newMoneys;
-    console.log('%c OLD', Colors.YELLOW, OLD);
-    console.log('%c NEW', Colors.MAG, NEW);
-
-    // this._moneySubj.next(newMoneys);
 
     return this.http.put<Money>(`${this.URL}/${id}`, changes, { headers }).pipe(
       catchError((err) => {
@@ -170,7 +133,7 @@ export class MoneyService {
         console.log(message, err);
         return throwError(err);
       }),
-      tap(x => this._moneySubj.next(newMoneys)),
+      tap(() => this._moneySubj.next(newMoneys)),
       shareReplay()
     );
   }

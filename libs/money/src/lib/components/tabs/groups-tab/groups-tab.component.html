@@ -1,21 +1,14 @@
-
-<!-- TODO: make it nice -->
-<!-- @if(data) { -->
-<!-- @if(data && data.categories; as categories) { -->
-<!-- @if(data) { -->
-@if(data) {
-<!-- <ng-container *ngIf="data && data.total > 0; else noData"> -->
-@if(filtered) {
+<!-- TODO: make it nicer -->
+@if(data) { @if(filtered) {
 <div class="query-result">
   <crown-search-results [results]="data"></crown-search-results>
-  
 </div>
 } @if (data.total > 0) {
 <table class="table __mat-elevation-z8">
   <tr>
     <th></th>
-    <th *ngFor="let category of data?.categories">
-      <span>{{ category }}</span>
+    <th class="trim-text" *ngFor="let category of data?.categories">
+      <span class="trim-text">{{ category }}</span>
     </th>
     <th class="summary">Ʃ</th>
   </tr>
@@ -33,11 +26,5 @@
   </tr>
 </table>
 } } @if(data.total === 0) {
-<!-- (data.total === 0)*/ { -->
 <div>nic tu nie ma.</div>
-
 }
-<!-- </ng-container> -->
-<!-- <ng-template #noData>
-  <div>nic tu nie ma.</div>
-</ng-template> -->
