@@ -19,6 +19,7 @@ import {
   Observable,
   filter,
   shareReplay,
+  of,
 } from 'rxjs';
 
 @Injectable({
@@ -30,7 +31,8 @@ export class TodoService {
   private _todosSubj = new BehaviorSubject<Todo[]>([]);
 
   todos$: Observable<Todo[]> = this._todosSubj.asObservable();
-  accessRole$: Observable<string | null> = this.authService.accessRole$;
+  accessRole$: Observable<string | null> = of(null); // this.authService.accessRole$;
+  isAdmin$ = this.authService.isAdmin$;
 
   headers!: { Authorization: string };
   tokenEmail: TokenEmail | null = null;

@@ -19,7 +19,8 @@ import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.com
   styleUrl: './todo-container.component.scss',
 })
 export class TodoContainerComponent implements OnInit {
-  accessRole$ = this.todoService.accessRole$;
+  // accessRole$ = this.todoService.accessRole$;
+  isAdmin$ = this.todoService.isAdmin$;
   all$ = this.todoService.todos$;
 
   todos$ = this.all$.pipe(

@@ -14,6 +14,7 @@ import {
   shareReplay,
   catchError,
   throwError,
+  of,
 } from 'rxjs';
 
 @Injectable({
@@ -21,35 +22,23 @@ import {
 })
 export class AuthService {
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
-  private _accessRoleSubj = new BehaviorSubject<string | null>(null);
   private _isAdminSubj = new BehaviorSubject<boolean>(false);
 
-  // TODO: _accesRole below !!!
   tokenEmail$: Observable<TokenEmail | null> =
     this._tokenEmailSubj.asObservable();
 
   isLoggedIn$: Observable<boolean>;
   isLoggedOut$: Observable<boolean>;
-  accessRole$: Observable<string | null>;
-  isAdmin$: Observable<boolean>;
+  isAdmin$: Observable<boolean> = this._isAdminSubj.asObservable();
 
   constructor(private http: HttpClient) {
     this.isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
-    this.accessRole$ = this.tokenEmail$.pipe(
-      map((tokenEmail) => tokenEmail?.role ?? null)
-    );
-    this.isAdmin$ = this.accessRole$.pipe(
-      map(role => role === 'admin')
-    )
 
     const token = localStorage.getItem(AUTH_TOKEN_EMAIL);
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));
     }
-
-    console.log('AUTH SERVICE CTOR', token);
-
   }
 
   getToken() {
