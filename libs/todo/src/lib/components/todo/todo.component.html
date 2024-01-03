@@ -20,7 +20,6 @@
   <div class="todo">
     <div class="center-y" [ngClass]="getClass(todo.priority)">
       <mat-icon>{{ getPriorityIcon(todo.priority) }}</mat-icon>
-      <!-- {{ showPriority(todo.priority) }} -->
     </div>
     <div class="title center" [ngClass]="getClass(todo.priority)">
       {{ todo.title | uppercase }}

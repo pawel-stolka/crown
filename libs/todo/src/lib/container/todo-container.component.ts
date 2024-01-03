@@ -8,8 +8,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
 import { filter, map, take, tap } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
-// TODO: add alias to tsconfig
-// import { compareBy } from '../../../../money/src/lib/services/money.service';
 
 @Component({
   selector: 'crown-todo-container',
@@ -20,26 +18,24 @@ import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.com
 })
 export class TodoContainerComponent implements OnInit {
   isAdmin$ = this.todoService.isAdmin$;
-  all$ = this.todoService.todos$;
+  all$ = this.todoService.todos$.pipe(
+    map((todos) => todos.sort(compareBy('priority')))
+  );
 
   todos$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.TO_DO)),
-    map((todos) => todos.sort(compareBy('priority')))
+    map((all) => all.filter((todo) => todo.status === Status.TO_DO))
   );
 
   inProgress$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.IN_PROGRESS)),
-    map((todos) => todos.sort(compareBy('priority')))
+    map((all) => all.filter((todo) => todo.status === Status.IN_PROGRESS))
   );
 
   done$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.DONE)),
-    map((todos) => todos.sort(compareBy('priority')))
+    map((all) => all.filter((todo) => todo.status === Status.DONE))
   );
 
   closed$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.CLOSED)),
-    map((todos) => todos.sort(compareBy('priority')))
+    map((all) => all.filter((todo) => todo.status === Status.CLOSED))
   );
 
   constructor(private dialog: MatDialog, private todoService: TodoService) {}
@@ -56,8 +52,6 @@ export class TodoContainerComponent implements OnInit {
   }
 
   editTodo(todo: Todo) {
-    console.log('[editTodo]', event);
-    // this.todoService.updateStatus(event);
     dialogConfig.data = todo;
     const dialogRef = this.dialog.open(EditTodoComponent, dialogConfig);
 
@@ -72,10 +66,7 @@ export class TodoContainerComponent implements OnInit {
   private handleDialog(dialogRef: MatDialogRef<any>) {
     dialogRef
       .afterClosed()
-      .pipe(
-        filter((val) => !!val),
-        tap((x) => console.log('[this.handleDialog]', x))
-      )
+      .pipe(filter((val) => !!val))
       .subscribe((_) => {
         // this.toast();
       });

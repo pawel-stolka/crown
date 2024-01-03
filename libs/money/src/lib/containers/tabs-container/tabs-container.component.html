@@ -1,18 +1,14 @@
 <div class="actions">
   <div class="filters">
-    <div class="filters-left">
-      <crown-year-filter
-        [availableYears]="availableYears$ | async"
-        (currentYear)="changeYear($event)"
-      ></crown-year-filter>
-      <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
-    </div>
+    <crown-year-filter
+      [availableYears]="availableYears$ | async"
+      (currentYear)="changeYear($event)"
+    ></crown-year-filter>
+    <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
   </div>
-    <div class="filters-right">
-      <button mat-fab color="primary" (click)="add()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+  <button mat-fab color="primary" (click)="add()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
 
 <ng-container *ngIf="yearMonthsData$ | async as money; else NO_DATA">

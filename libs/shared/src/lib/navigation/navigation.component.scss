@@ -3,22 +3,16 @@
 :host {
   display: flex;
   flex-direction: column;
-  // border: 5px dotted magenta;
   height: 100vh;
-  // background-color: $demo-primary-background;
   align-content: space-between;
-  // align-items: center;
 }
 
 .title {
-  // border: 5px dotted;
   display: flex;
-  justify-content:space-around;
-  // align-items: center;
+  justify-content: space-around;
 }
 
 .routes {
-  // border: 3px dotted dodgerblue;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -31,7 +25,6 @@
 }
 
 .info {
-  // border: 3px dotted dodgerblue;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,6 +34,6 @@
 
 .admin {
   button {
-  color: $demo-danger;
+    color: $demo-danger;
   }
 }

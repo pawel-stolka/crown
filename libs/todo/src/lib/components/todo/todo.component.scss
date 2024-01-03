@@ -61,14 +61,13 @@ mat-card {
   display: flex;
   align-items: center;
   padding: 5px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid $grey;
 
   .icon {
     width: 7%;
   }
 
   .mat-mdc-card-title {
-    // border: 5px dotted dodgerblue;
     display: flex;
     flex-direction: row;
     // justify-content: space-between;
@@ -82,7 +81,7 @@ mat-card {
 
 .priority {
   &-high {
-    color: $warn;// red;
+    color: $warn; // red;
     color: red;
     font-weight: bolder;
   }
@@ -141,7 +140,7 @@ mat-card-content {
 .done {
   color: $success;
   &-layer {
-    background-color: $success;
+    background-color: $demo-accent1;
   }
 }
 
