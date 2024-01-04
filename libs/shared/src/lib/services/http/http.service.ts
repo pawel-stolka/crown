@@ -48,14 +48,19 @@ export class HttpService {
   // }
 
   get<T>(url: string, body?: any, headers?: HttpHeaders) {
-    console.log('GET', url);
     return this.makeRequest<T>(Method.GET, url, body, headers);
   }
 
   post<T>(url: string, body?: any, headers?: HttpHeaders) {
-    console.log('POST', url);
-
     return this.makeRequest<T>(Method.POST, url, body, headers);
+  }
+
+  put<T>(url: string, body?: any, headers?: HttpHeaders) {
+    return this.makeRequest<T>(Method.PUT, url, body, headers);
+  }
+
+  delete<T>(url: string, body?: any) {
+    return this.makeRequest<T>(Method.DELETE, url, body);
   }
 
   private makeRequest<T>(
@@ -64,8 +69,9 @@ export class HttpService {
     body?: any,
     headers?: HttpHeaders
   ): Observable<T> {
+    console.log('makeRequest', method, url);
     // using AuthService
-    /*const tokenEmail$ = this.getAuthService().tokenEmail$;
+    const tokenEmail$ = this.getAuthService().tokenEmail$;
     return tokenEmail$.pipe(
       switchMap((tokenEmail) => {
         const headers = new HttpHeaders({
@@ -73,11 +79,15 @@ export class HttpService {
             ? `Bearer ${tokenEmail.token}`
             : EMPTY_STRING,
         });
-        return this.http.request<T>(method, url, {body, headers, observe: 'body'})
+        return this.http.request<T>(method, url, {
+          body,
+          headers,
+          observe: 'body',
+        });
       })
-    );*/
+    );
 
-    /* manual */
+    /* manual
     const token = this.retrieveAuthToken();
     const customHeaders = token
       ? headers ||
@@ -94,11 +104,11 @@ export class HttpService {
       // observe: 'response',
       observe: 'body',
     });
-    /**/
+    */
   }
 
-  private retrieveAuthToken(): string | null {
-    let tokenEmail = localStorage.getItem(AUTH_TOKEN_EMAIL);
-    return !!tokenEmail ? JSON.parse(tokenEmail).token : EMPTY_STRING;
-  }
+  // private retrieveAuthToken(): string | null {
+  //   let tokenEmail = localStorage.getItem(AUTH_TOKEN_EMAIL);
+  //   return !!tokenEmail ? JSON.parse(tokenEmail).token : EMPTY_STRING;
+  // }
 }

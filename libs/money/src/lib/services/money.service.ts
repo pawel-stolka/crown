@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   BehaviorSubject,
   Observable,
@@ -24,6 +24,7 @@ import {
   Colors,
 } from '@crown/data';
 import { AuthService } from '@crown/auth/service';
+import { HttpService } from '@crown/http';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +56,11 @@ export class MoneyService {
     return this._moneySubj.value;
   }
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  private http = inject(HttpService)
+
+  constructor(
+    // private http: HttpClient,
+    private authService: AuthService) {
     this.fetchAll$().subscribe();
   }
 
@@ -92,7 +97,7 @@ export class MoneyService {
     changes = setNoonAsDate(changes);
     console.log('[create | MoneyService]', changes);
 
-    return this.http.post<Money>(this.URL, changes, { headers }).pipe(
+    return this.http.post<Money>(this.URL, changes).pipe(
       tap((money) => {
         const update: Money[] = [...this._moneySubj.value, money];
         this._moneySubj.next(update);
@@ -125,7 +130,7 @@ export class MoneyService {
     const newMoneys: Money[] = this.money.slice(0);
     newMoneys[index] = newMoney;
 
-    return this.http.put<Money>(`${this.URL}/${id}`, changes, { headers }).pipe(
+    return this.http.put<Money>(`${this.URL}/${id}`, changes).pipe(
       catchError((err) => {
         const message = 'Could not edit money';
         // this.messages.showErrors(message);
@@ -139,7 +144,7 @@ export class MoneyService {
 
   delete(id: string) {
     const headers = this.headers;
-    return this.http.delete<Money>(`${this.URL}/${id}`, { headers }).pipe(
+    return this.http.delete<Money>(`${this.URL}/${id}`).pipe(
       catchError((err) => {
         const message = '[delete] Something wrong...';
         // this.messages.showErrors(message);

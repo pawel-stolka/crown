@@ -48,7 +48,6 @@ export class TodoService {
 
   constructor() {
     // console.log('todo service CTOR');
-    this.testHttp();
     this.data$().subscribe();
   }
 
@@ -59,10 +58,10 @@ export class TodoService {
         return throwError(err);
       }),
       filter((x) => !!x),
-      tap(
-        (tokenEmail) =>
-          (this.headers = { Authorization: `Bearer ${tokenEmail?.token}` })
-      )
+      // tap(
+      //   (tokenEmail) =>
+      //     (this.headers = { Authorization: `Bearer ${tokenEmail?.token}` })
+      // )
       // TODO: finish after first call
 
       // switchMap((tokenEmail) => {
@@ -85,36 +84,16 @@ export class TodoService {
   fetchAll$(token: string | null) {
     if (!this.dataLoaded) {
       return this.http.get<Todo[]>(this.URL).pipe(
-        catchError((err) => {
-          const message = '[fetchAll | TODO] Something wrong...';
-          // this.messages.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-        }),
         tap(() => (this.dataLoaded = true)),
-        // tap((all) => console.log('[fetchAll$]', all)),
         tap((todos: Todo[]) => this._todosSubj.next(todos)),
         shareReplay(1)
-        // map((money: Money[]) => money.sort(compareBy('period', false))),
       );
     }
     return this.todos$;
-    // }
-    // return this.todos$;
-    // return this.http.get<Money[]>(this.URL, { headers: this.headers }).pipe(
-    //   catchError((err) => {
-    //     const message = '[fetchAll] Something wrong...';
-    //     // this.messages.showErrors(message);
-    //     console.log(message, err);
-    //     return throwError(err);
-    //   }),
-    //   // map((money: Money[]) => money.sort(compareBy('period', false))),
-    //   tap((money: Money[]) => this._moneySubj.next(money))
-    // );
   }
 
   create(changes?: Partial<Todo>) {
-    return this._http.post<Todo>(this.URL, changes).pipe(
+    return this.http.post<Todo>(this.URL, changes).pipe(
       tap((todo) => {
         const todos: Todo[] = [...this._todosSubj.value, todo];
         this._todosSubj.next(todos);
@@ -134,8 +113,8 @@ export class TodoService {
     newTodos[index] = newTodo;
     this._todosSubj.next(newTodos);
 
-    return this._http
-      .put<Todo>(`${this.URL}/${id}`, changes, { headers: this.headers })
+    return this.http
+      .put<Todo>(`${this.URL}/${id}`, changes)
       .pipe(
         catchError((err) => {
           const message = `Could not edit Todo: ${changes.id}`;

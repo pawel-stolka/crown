@@ -1,4 +1,3 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,9 +13,6 @@ import { MainToolbarComponent, NavigationComponent } from '@crown/ui';
 
 // TODO: inspect injection token
 import { TodoService } from 'libs/todo/src/lib/services/todo.service';
-import { auth2Interceptor } from './interceptors/auth2.interceptor';
-
-
 
 @Component({
   standalone: true,
@@ -58,7 +54,3 @@ export class AppComponent {
     this.menuSidenav.toggle();
   }
 }
-
-// bootstrapApplication(AppComponent, {
-//   providers: [HttpClientModule]
-// });

@@ -41,6 +41,7 @@ export class AuthService {
     }
   }
 
+  // TODO: DELETE
   getToken() {
     return this._tokenEmailSubj.value;
   }
