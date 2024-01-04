@@ -1,15 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import {
   BehaviorSubject,
   Observable,
   catchError,
   combineLatest,
-  filter,
   map,
-  of,
   shareReplay,
-  switchMap,
   tap,
   throwError,
 } from 'rxjs';
@@ -21,15 +17,17 @@ import {
   groupBy,
   fixNumber,
   compareBy,
-  Colors,
 } from '@crown/data';
 import { AuthService } from '@crown/auth/service';
-import { HttpService } from '@crown/http';
+import { ApiService } from '@crown/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MoneyService {
+  private api = inject(ApiService);
+  // private authService = inject(AuthService);
+
   private URL = `${API_URL}/api/money`;
   private _moneySubj = new BehaviorSubject<Money[]>([]);
   private _selectedYearSubj = new BehaviorSubject<number>(0);
@@ -49,30 +47,18 @@ export class MoneyService {
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
 
-  headers = this.getHeaders();
   tokenEmail: TokenEmail | null = null;
 
   get money() {
     return this._moneySubj.value;
   }
 
-  private http = inject(HttpService)
-
-  constructor(
-    // private http: HttpClient,
-    private authService: AuthService) {
+  constructor() {
     this.fetchAll$().subscribe();
   }
 
-  private getHeaders() {
-    const token = this.authService.getToken()?.token;
-    return { Authorization: `Bearer ${token}` };
-  }
-
   fetchAll$() {
-    const headers = this.headers;
-
-    return this.http.get<Money[]>(this.URL, { headers }).pipe(
+    return this.api.get<Money[]>(this.URL).pipe(
       catchError((err) => {
         const message = '[fetchAll] Something wrong...';
         // this.messages.showErrors(message);
@@ -93,11 +79,10 @@ export class MoneyService {
   }
 
   create(changes: Partial<Money>) {
-    const headers = this.headers;
     changes = setNoonAsDate(changes);
     console.log('[create | MoneyService]', changes);
 
-    return this.http.post<Money>(this.URL, changes).pipe(
+    return this.api.post<Money>(this.URL, changes).pipe(
       tap((money) => {
         const update: Money[] = [...this._moneySubj.value, money];
         this._moneySubj.next(update);
@@ -117,7 +102,6 @@ export class MoneyService {
   }
 
   edit(id: string, changes: Partial<Money>) {
-    const headers = this.headers;
     changes = setNoonAsDate(changes);
 
     const index = this.money.findIndex((money) => money.id === id);
@@ -130,7 +114,7 @@ export class MoneyService {
     const newMoneys: Money[] = this.money.slice(0);
     newMoneys[index] = newMoney;
 
-    return this.http.put<Money>(`${this.URL}/${id}`, changes).pipe(
+    return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
       catchError((err) => {
         const message = 'Could not edit money';
         // this.messages.showErrors(message);
@@ -143,8 +127,7 @@ export class MoneyService {
   }
 
   delete(id: string) {
-    const headers = this.headers;
-    return this.http.delete<Money>(`${this.URL}/${id}`).pipe(
+    return this.api.delete<Money>(`${this.URL}/${id}`).pipe(
       catchError((err) => {
         const message = '[delete] Something wrong...';
         // this.messages.showErrors(message);

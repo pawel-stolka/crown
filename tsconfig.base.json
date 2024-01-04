@@ -25,7 +25,7 @@
       "@crown/money": ["libs/money/src/index.ts"],
       "@crown/todo": ["libs/todo/src/index.ts"],
       "@crown/ui": ["libs/shared/src/index.ts"],
-      "@crown/http": ["libs/shared/src/lib/services/http/http.service"],
+      "@crown/api": ["libs/shared/src/lib/services/api/api.service"]
     }
   },
   "exclude": ["node_modules", "tmp"]

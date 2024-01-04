@@ -6,6 +6,7 @@ export * from './lib/interfaces/TokenEmail';
 export * from './lib/interfaces/Todo';
 export * from './lib/interfaces/TodoEvent';
 export * from './lib/interfaces/MonthsCategories';
+export * from './lib/interfaces/Method';
 
 export * from './lib/configs/constants';
 export * from './lib/configs/Colors';
