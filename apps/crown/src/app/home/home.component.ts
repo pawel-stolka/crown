@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'home',
+  selector: 'crown-home',
   template: `
     <div class="title">Witaj w Crownie 👋</div>
 

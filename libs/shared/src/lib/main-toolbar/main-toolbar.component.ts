@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '@crown/auth/service';
-import { AppInfoComponent } from '../app-info/app-info.component';
 
 @Component({
   selector: 'crown-main-toolbar',

@@ -19,6 +19,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'todo',
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('@crown/todo').then((m) => m.TodoContainerComponent),
   },

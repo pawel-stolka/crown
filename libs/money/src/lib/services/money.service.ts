@@ -120,7 +120,6 @@ export class MoneyService {
       ...this.money[index],
       ...changes,
     };
-    console.log('%c index', Colors.BLACK, index);
 
     // copy of moneys
     const newMoneys: Money[] = this.money.slice(0);

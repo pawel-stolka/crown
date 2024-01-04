@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   API_URL,
   Colors,
@@ -21,11 +21,16 @@ import {
   shareReplay,
   of,
 } from 'rxjs';
+import { HttpService } from '@crown/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
+  private http = inject(HttpService);
+  private _http = inject(HttpClient);
+  private authService = inject(AuthService);
+
   private URL = `${API_URL}/todo`;
   private dataLoaded = false;
   private _todosSubj = new BehaviorSubject<Todo[]>([]);
@@ -41,8 +46,9 @@ export class TodoService {
     return this._todosSubj.value;
   }
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor() {
     // console.log('todo service CTOR');
+    this.testHttp();
     this.data$().subscribe();
   }
 
@@ -69,9 +75,16 @@ export class TodoService {
     );
   }
 
+  testHttp() {
+    this.http
+      .get(this.URL)
+      .pipe(tap((x) => console.log('testHttp', x)))
+      .subscribe();
+  }
+
   fetchAll$(token: string | null) {
     if (!this.dataLoaded) {
-      return this.http.get<Todo[]>(this.URL, { headers: this.headers }).pipe(
+      return this.http.get<Todo[]>(this.URL).pipe(
         catchError((err) => {
           const message = '[fetchAll | TODO] Something wrong...';
           // this.messages.showErrors(message);
@@ -101,7 +114,7 @@ export class TodoService {
   }
 
   create(changes?: Partial<Todo>) {
-    return this.http.post<Todo>(this.URL, changes).pipe(
+    return this._http.post<Todo>(this.URL, changes).pipe(
       tap((todo) => {
         const todos: Todo[] = [...this._todosSubj.value, todo];
         this._todosSubj.next(todos);
@@ -116,13 +129,12 @@ export class TodoService {
       ...changes,
     };
 
-
     // copy of todos
     const newTodos: Todo[] = this.todos.slice(0);
     newTodos[index] = newTodo;
     this._todosSubj.next(newTodos);
 
-    return this.http
+    return this._http
       .put<Todo>(`${this.URL}/${id}`, changes, { headers: this.headers })
       .pipe(
         catchError((err) => {

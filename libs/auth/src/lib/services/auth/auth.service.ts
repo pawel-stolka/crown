@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
+import { HttpService } from '@crown/http';
+import { Injectable, inject } from '@angular/core';
 import {
   ACCESS_ROLE,
   API_URL,
@@ -21,6 +22,8 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
+  private http = inject(HttpService);
+
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
   private _isAdminSubj = new BehaviorSubject<boolean>(true);
 
@@ -31,7 +34,7 @@ export class AuthService {
   isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
   isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
 
-  constructor(private http: HttpClient) {
+  constructor() {
     const token = localStorage.getItem(AUTH_TOKEN_EMAIL);
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));
@@ -45,10 +48,6 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     const URL = `${API_URL}/signin`;
     return this.http.post<any>(URL, { email, password }).pipe(
-      catchError((err) => {
-        console.log('error', err);
-        return throwError(err);
-      }),
       tap((res) => {
         this._tokenEmailSubj.next(res);
         localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
