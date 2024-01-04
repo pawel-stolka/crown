@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TodoService } from '../../../services/todo.service';
+import { TodoService } from '../../../../../../shared/src/lib/services/todo/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
   AUTH_TOKEN_EMAIL,

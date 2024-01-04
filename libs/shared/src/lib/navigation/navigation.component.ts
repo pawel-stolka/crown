@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '@crown/auth/service';
+import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '@crown/material';
 import { AppInfoComponent } from '@crown/ui';
@@ -21,7 +21,6 @@ export class NavigationComponent {
   isLoggedOut$ = !this.authService.isLoggedIn$;
 
   constructor(private authService: AuthService, private router: Router) {}
-
 
   openRoutes() {
     this.toggleMenu.emit('left');

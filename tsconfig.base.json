@@ -16,16 +16,18 @@
     "baseUrl": ".",
     "paths": {
       "@colors": ["apps/crown/src/styles/_colors.scss"],
+      // defer
       "@crown/admin": ["libs/admin/src/index.ts"],
       "@crown/auth": ["libs/auth/src/index.ts"],
-      "@crown/auth/service": ["libs/auth/src/lib/services/auth/auth.service"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],
+      // defer
       "@crown/money": ["libs/money/src/index.ts"],
+      // defer
       "@crown/todo": ["libs/todo/src/index.ts"],
       "@crown/ui": ["libs/shared/src/index.ts"],
-      "@crown/api": ["libs/shared/src/lib/services/api/api.service"]
+      "@crown/api/service": ["libs/shared/src/lib/services/api/api.service"]
     }
   },
   "exclude": ["node_modules", "tmp"]

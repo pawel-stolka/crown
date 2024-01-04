@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector, inject } from '@angular/core';
-import { AuthService } from '@crown/auth/service';
+import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import { EMPTY_STRING, Method } from '@crown/data';
 import { Observable, switchMap } from 'rxjs';
 

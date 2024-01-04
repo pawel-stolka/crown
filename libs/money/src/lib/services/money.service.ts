@@ -18,8 +18,7 @@ import {
   fixNumber,
   compareBy,
 } from '@crown/data';
-import { AuthService } from '@crown/auth/service';
-import { ApiService } from '@crown/api';
+import { ApiService } from '@crown/api/service';
 
 @Injectable({
   providedIn: 'root',

@@ -7,7 +7,7 @@ import {
   TodoEvent,
   TokenEmail,
 } from '@crown/data';
-import { AuthService } from '@crown/auth/service';
+// import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import {
   catchError,
   throwError,
@@ -18,7 +18,8 @@ import {
   shareReplay,
   of,
 } from 'rxjs';
-import { ApiService } from '@crown/api';
+import { ApiService } from '@crown/api/service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',

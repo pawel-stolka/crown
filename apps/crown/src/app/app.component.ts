@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -10,9 +10,10 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@crown/material';
 import { TodoContainerComponent } from '@crown/todo';
 import { MainToolbarComponent, NavigationComponent } from '@crown/ui';
+import { TodoService } from 'libs/shared/src/lib/services/todo/todo.service';
 
 // TODO: inspect injection token
-import { TodoService } from 'libs/todo/src/lib/services/todo.service';
+// import { TodoService } from 'libs/shared/src/lib/services/todo/todo.service';
 
 @Component({
   standalone: true,
@@ -40,10 +41,7 @@ export class AppComponent {
   menuMode = new FormControl('over' as MatDrawerMode);
   todoMode = new FormControl('over' as MatDrawerMode);
 
-  constructor(
-    // private toastService: ToastService,
-    private todoService: TodoService
-  ) {}
+  private todoService = inject(TodoService);
 
   toggleTodos() {
     this.todoSidenav.toggle();

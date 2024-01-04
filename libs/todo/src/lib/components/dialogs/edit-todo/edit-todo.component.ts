@@ -18,7 +18,7 @@ import {
   Todo,
 } from '@crown/data';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TodoService } from '../../../services/todo.service';
+import { TodoService } from '../../../../../../shared/src/lib/services/todo/todo.service';
 import { MaterialModule } from '@crown/material';
 
 @Component({
