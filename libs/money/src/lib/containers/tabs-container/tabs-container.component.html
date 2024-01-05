@@ -5,29 +5,33 @@
       (currentYear)="changeYear($event)"
     ></crown-year-filter>
     <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
+    <crown-data-filter (filter)="betterFilter({ type: $event })"></crown-data-filter>
   </div>
   <button mat-fab color="primary" (click)="add()">
     <mat-icon>add</mat-icon>
   </button>
 </div>
-<button (click)="fType(100)">RESET</button>
-<button (click)="fType(1)">chemia</button>
-<button (click)="fType(2)">test</button>
-<button (click)="fType(4)">start1</button>
-<button (click)="fType(5)">start1</button>
-<button (click)="fType(2023)">2023</button>
-<button (click)="fType(2024)">2024</button>
 
-<ng-container *ngIf="filteredMoney$ | async as list">
+<button (click)="better({})">RESET</button>
+<button (click)="better({ type: 'chemia' })">chemia</button>
+<button (click)="better({ type: 'test' })">test</button>
+<button (click)="better({ type: 'pierdyliard' })">pierdyliard</button>
+<button (click)="better({ year: 2023 })">2023</button>
+<button (click)="better({ year: 2024 })">2024</button>
+
+<!-- <ng-container *ngIf="filteredMoney$ | async as list">
   {{ list?.length | json }}
   <hr />
   <div *ngFor="let item of list">
     {{ item | json }}
   </div>
-</ng-container>
+</ng-container> -->
 
-<ng-container *ngIf="yearMonthsData$ | async as money; else NO_DATA">
+<!-- <ng-container *ngIf="yearMonthsData$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.total > 0; then DATA; else EMPTY"> </ng-container>
+</ng-container> -->
+<ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
+  <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
 </ng-container>
 
 <ng-template #DATA>
@@ -46,6 +50,22 @@
     </mat-tab>
   </mat-tab-group>
 </ng-template>
+<!-- <ng-template #DATA>
+  <mat-tab-group (selectedIndexChange)="tabChange($event)">
+    <mat-tab label="{{ GROUPS_LABEL }}">
+      <crown-groups-tab
+        [data]="yearMonthsData$ | async"
+        [filtered]="!!(filterPhrase$ | async)"
+      ></crown-groups-tab>
+    </mat-tab>
+    <mat-tab label="{{ DETAILS_LABEL }}">
+      <crown-details-tab
+        [money]="(yearMoney$ | async) || undefined"
+        [filter]="this.dataSource.filter"
+      ></crown-details-tab>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template> -->
 
 <ng-template #EMPTY>
   <div class="empty">

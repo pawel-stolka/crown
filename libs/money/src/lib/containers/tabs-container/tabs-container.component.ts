@@ -2,7 +2,7 @@ import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MoneyService, getYear } from '../../services/money.service';
+import { MoneyFilter, MoneyService, getYear } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Money,
@@ -76,9 +76,13 @@ export class TabsContainerComponent {
   }>;
 
   filteredMoney$ = this.moneyService.filteredMoney$;
-  fType(o: number) {
-    this.moneyService.fType(o);
+  better(filter: Partial<MoneyFilter>) {
+    this.moneyService.better(filter);
   }
+  betterFilter(filter: Partial<MoneyFilter>) {
+    this.moneyService.betterFilter(filter);
+  }
+
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,

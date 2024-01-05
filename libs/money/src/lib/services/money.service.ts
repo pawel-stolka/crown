@@ -26,7 +26,7 @@ import {
 import { AuthService } from '@crown/auth/service';
 import { HttpService } from '@crown/http';
 
-interface MoneyFilter {
+export interface MoneyFilter {
   // dateRange?: { start: Date; end: Date };
   startDate?: Date;
   endDate?: Date;
@@ -80,62 +80,24 @@ export class MoneyService {
       const beforeEndDate =
         !filter.endDate ||
         item.createdAt <= new Date(filter.endDate.setHours(23, 59, 59, 999));
-      const typeMatch = !filter.type || item.type === filter.type;
+      // const typeMatch = !filter.type || item.type === filter.type;
+      const typeMatch = !filter.type || item.type?.includes(filter.type);
       const yearMatch =
         !filter.year || new Date(item.createdAt).getFullYear() === filter.year;
-
-      // console.log(
-      //   `Item Date: ${item.createdAt}`,
-      //   `Start Date: ${filter.startDate}`,
-      //   `End Date: ${filter.endDate}`
-      // );
-      // console.log(
-      //   `Start Date: ${afterStartDate}`,
-      //   `End Date: ${beforeEndDate}`,
-      //   `Type: ${typeMatch}`
-      // );
 
       return afterStartDate && beforeEndDate && typeMatch && yearMatch;
     });
   }
 
-  fType(opt: number) {
-    switch (opt) {
-      case 1:
-        this.updateFilter({ type: 'chemia' });
-        break;
-      case 2:
-        this.updateFilter({ type: 'test' });
-        break;
-      case 4:
-        this.updateFilter({ startDate: new Date('2023-12-13') });
-        break;
-      case 5:
-        this.updateFilter({
-          // startDate: new Date('2023-12-13')
-          endDate: new Date('2023-12-10'),
-        });
-        break;
-      case 2023:
-        this.updateFilter({
-          year: 2023,
-        });
-        break;
-      case 2024:
-        this.updateFilter({
-          year: 2024,
-        });
-        break;
-
-      default:
-        this.updateFilter({});
-        break;
-    }
+  better(filter: Partial<MoneyFilter>) {
+    this.updateFilter(filter);
+  }
+  betterFilter(filter: Partial<MoneyFilter>) {
+    this.updateFilter(filter);
   }
 
   updateFilter(newFilter: MoneyFilter) {
-    console.log('newFilter', newFilter);
-
+    // console.log('newFilter', newFilter);
     this._filterSubj.next(newFilter);
   }
 
@@ -147,11 +109,15 @@ export class MoneyService {
   );
   selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
 
-  yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
-    map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year))
-    // map(([money, year]) => money)
-  );
+  yearMoney$ = this.filteredMoney$;
+  // yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
+  //   map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year))
+  //   // map(([money, year]) => money)
+  // );
 
+  // moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
+  //   map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
+  // );
   moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
