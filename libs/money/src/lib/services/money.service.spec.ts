@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { MoneyService } from './money.service';
 import { ApiService } from '@crown/api/service';
 import { Money } from '@crown/data';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 describe('MoneyService', () => {
   let service: MoneyService;
@@ -59,6 +59,21 @@ describe('MoneyService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('Errors', () => {
+    it('should handle API error', async () => {
+      const error = new Error('Error fetching data');
+      mockApiService.get.mockReturnValue(throwError(error));
+
+      try {
+        await service.fetchAll$().toPromise();
+        // Fail the test if no error is thrown
+        fail('fetchAll$ should have thrown an error');
+      } catch (err) {
+        expect(err).toBe(error);
+      }
+    });
+
+  });
   describe('CRUD methods', () => {
     it('should fetch all money data', async () => {
       const result = await service.fetchAll$().toPromise();
