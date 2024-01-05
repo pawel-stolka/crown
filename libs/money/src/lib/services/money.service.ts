@@ -35,7 +35,6 @@ export class MoneyService {
   availableYears$ = this.money$.pipe(map(extractYears));
   yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
     map(([money, year]) => filterByYear(money, year))
-    // map(([money, year]) => money)
   );
   moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
@@ -155,8 +154,6 @@ export class MoneyService {
   // }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
-    console.log('[groupMoney]', data);
-
     const selection = this.setGrouping(by);
     const groups: any[] = groupBy(data, selection);
     return this.summarize(groups);
@@ -173,7 +170,6 @@ export class MoneyService {
         .sort(compareBy('price'));
       const sum = fixNumber(typePrices.reduce((a, c) => a + +c.price, 0));
       return {
-        // userId: 'not-yet',
         period,
         typePrices,
         sum,
@@ -181,7 +177,6 @@ export class MoneyService {
     });
   }
 
-  // private setGrouping(by: string, data: Money[]) {
   private setGrouping(by: string) {
     switch (by) {
       case 'byMonth':
@@ -191,22 +186,13 @@ export class MoneyService {
     }
   }
 
-  _groupAndSortMoney(data: Money[]): MoneyGroup[] {
-    return this.groupMoney(data).sort(compareBy('period'));
-  }
   groupAndSortMoney(data: Money[]): MoneyGroup[] {
-    console.log('[groupAndSortMoney]', data);
-
-    // if(this.groupMoney(data)) {
-    //   return this.groupMoney(data)//?.sort(compareBy('period'));
-    // }
     if (data !== undefined && data.length) {
-      return this.groupMoney(data); //?.sort(compareBy('period'));
+      return this.groupMoney(data).sort(compareBy('period'));
     } else {
       return [];
     }
   }
-  // map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
 }
 
 function extractYears(money: Money[]): number[] {
@@ -214,10 +200,7 @@ function extractYears(money: Money[]): number[] {
 }
 
 function filterByYear(money: Money[], year: number): Money[] {
-  let res = money.filter(({ createdAt }) => getYear(createdAt) === year);
-  console.log('1. filterByYear', money, year);
-  console.log('filterByYear', res);
-  return res;
+  return money.filter(({ createdAt }) => getYear(createdAt) === year);
 }
 
 function getMonth(date: Date) {
@@ -235,10 +218,9 @@ export function getYear(dateString: string | Date): number {
     throw new Error('Invalid date format');
   }
 
-  if (isNaN(date.getTime())) {
-    // throw new Error('Invalid date');
-    console.log('Invalid date');
-  }
+  // if (isNaN(date.getTime())) {
+  //   console.log('Invalid date', dateString);
+  // }
 
   return date.getFullYear();
 }
