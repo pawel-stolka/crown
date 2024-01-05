@@ -13,7 +13,6 @@ import {
   Money,
   API_URL,
   MoneyGroup,
-  TokenEmail,
   groupBy,
   fixNumber,
   compareBy,
@@ -25,28 +24,22 @@ import { ApiService } from '@crown/api/service';
 })
 export class MoneyService {
   private api = inject(ApiService);
-  // private authService = inject(AuthService);
 
   private URL = `${API_URL}/api/money`;
+
   private _moneySubj = new BehaviorSubject<Money[]>([]);
   private _selectedYearSubj = new BehaviorSubject<number>(0);
-
-  money$ = this._moneySubj.asObservable();
-  availableYears$: Observable<number[] | null> = this.money$.pipe(
-    map((money) => [...new Set(money.map((d) => getYear(d.createdAt)))]),
-    map((m) => m.sort())
-  );
   selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
 
+  money$ = this._moneySubj.asObservable();
+  availableYears$ = this.money$.pipe(map(extractYears));
   yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
-    map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year))
+    map(([money, year]) => filterByYear(money, year))
+    // map(([money, year]) => money)
   );
-
   moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
-
-  tokenEmail: TokenEmail | null = null;
 
   get money() {
     return this._moneySubj.value;
@@ -86,17 +79,6 @@ export class MoneyService {
         const update: Money[] = [...this._moneySubj.value, money];
         this._moneySubj.next(update);
       })
-    );
-  }
-
-  getCategories$(): Observable<string[]> {
-    return this.money$.pipe(
-      map((money) =>
-        money
-          .map((m) => m.type)
-          .filter((type): type is string => type !== undefined)
-      ),
-      map((types) => [...new Set(types)] ?? [])
     );
   }
 
@@ -144,6 +126,17 @@ export class MoneyService {
     this._selectedYearSubj.next(year);
   }
 
+  getCategories$(): Observable<string[]> {
+    return this.money$.pipe(
+      map((money) =>
+        money
+          .map((m) => m.type)
+          .filter((type): type is string => type !== undefined)
+      ),
+      map((types) => [...new Set(types)] ?? [])
+    );
+  }
+
   // TODO: check options in API
   // _getCategories$() {
   //   const URL = `${API_URL}/api/unique-types-grouped`;
@@ -162,7 +155,9 @@ export class MoneyService {
   // }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
-    const selection = this.setGrouping(by, data);
+    console.log('[groupMoney]', data);
+
+    const selection = this.setGrouping(by);
     const groups: any[] = groupBy(data, selection);
     return this.summarize(groups);
   }
@@ -178,7 +173,7 @@ export class MoneyService {
         .sort(compareBy('price'));
       const sum = fixNumber(typePrices.reduce((a, c) => a + +c.price, 0));
       return {
-        userId: 'not-yet',
+        // userId: 'not-yet',
         period,
         typePrices,
         sum,
@@ -186,7 +181,8 @@ export class MoneyService {
     });
   }
 
-  private setGrouping(by: string, data: Money[]) {
+  // private setGrouping(by: string, data: Money[]) {
+  private setGrouping(by: string) {
     switch (by) {
       case 'byMonth':
         return (x: Money) => getMonth(x.createdAt);
@@ -194,14 +190,57 @@ export class MoneyService {
         throw Error(`Invalid ${by} period`);
     }
   }
+
+  _groupAndSortMoney(data: Money[]): MoneyGroup[] {
+    return this.groupMoney(data).sort(compareBy('period'));
+  }
+  groupAndSortMoney(data: Money[]): MoneyGroup[] {
+    console.log('[groupAndSortMoney]', data);
+
+    // if(this.groupMoney(data)) {
+    //   return this.groupMoney(data)//?.sort(compareBy('period'));
+    // }
+    if (data !== undefined && data.length) {
+      return this.groupMoney(data); //?.sort(compareBy('period'));
+    } else {
+      return [];
+    }
+  }
+  // map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
+}
+
+function extractYears(money: Money[]): number[] {
+  return [...new Set(money.map((m) => getYear(m.createdAt)))].sort();
+}
+
+function filterByYear(money: Money[], year: number): Money[] {
+  let res = money.filter(({ createdAt }) => getYear(createdAt) === year);
+  console.log('1. filterByYear', money, year);
+  console.log('filterByYear', res);
+  return res;
 }
 
 function getMonth(date: Date) {
   return date.toString().substring(0, 7);
 }
 
-export function getYear(datetime: any) {
-  return +datetime.toString().slice(0, 4);
+export function getYear(dateString: string | Date): number {
+  let date: Date;
+
+  if (typeof dateString === 'string') {
+    date = new Date(dateString);
+  } else if (dateString instanceof Date) {
+    date = dateString;
+  } else {
+    throw new Error('Invalid date format');
+  }
+
+  if (isNaN(date.getTime())) {
+    // throw new Error('Invalid date');
+    console.log('Invalid date');
+  }
+
+  return date.getFullYear();
 }
 
 function setNoonAsDate(changes?: Partial<Money>): Partial<Money> {

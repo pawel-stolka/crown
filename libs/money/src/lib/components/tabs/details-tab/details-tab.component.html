@@ -33,8 +33,8 @@
     <ng-container matColumnDef="createdAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>data zakupu</th>
       <td mat-cell *matCellDef="let el">
-        <!-- {{ el.createdAt | date : 'dd.MM.yyyy' }} -->
-        {{ el.createdAt | noYear }}
+        {{ el.createdAt | date : 'dd.MM.yyyy' }}
+        <!-- {{ el.createdAt | noYear }} -->
       </td>
     </ng-container>
     <ng-container matColumnDef="isVat">
@@ -47,8 +47,8 @@
     <ng-container matColumnDef="updatedAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>data wpisu</th>
       <td mat-cell *matCellDef="let el">
-        <!-- {{ el.updatedAt | date : 'dd.MM.yyyy HH:mm' }} -->
-        {{ el.updatedAt | noYear }}
+        {{ el.updatedAt | date : 'dd.MM.yyyy HH:mm' }}
+        <!-- {{ el.updatedAt | noYear }} -->
       </td>
     </ng-container>
 
