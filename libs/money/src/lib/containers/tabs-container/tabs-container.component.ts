@@ -75,6 +75,10 @@ export class TabsContainerComponent {
     total: number;
   }>;
 
+  filteredMoney$ = this.moneyService.filteredMoney$;
+  fType(o: number) {
+    this.moneyService.fType(o);
+  }
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,

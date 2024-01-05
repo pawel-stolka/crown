@@ -10,6 +10,21 @@
     <mat-icon>add</mat-icon>
   </button>
 </div>
+<button (click)="fType(100)">RESET</button>
+<button (click)="fType(1)">chemia</button>
+<button (click)="fType(2)">test</button>
+<button (click)="fType(4)">start1</button>
+<button (click)="fType(5)">start1</button>
+<button (click)="fType(2023)">2023</button>
+<button (click)="fType(2024)">2024</button>
+
+<ng-container *ngIf="filteredMoney$ | async as list">
+  {{ list?.length | json }}
+  <hr />
+  <div *ngFor="let item of list">
+    {{ item | json }}
+  </div>
+</ng-container>
 
 <ng-container *ngIf="yearMonthsData$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.total > 0; then DATA; else EMPTY"> </ng-container>

@@ -26,6 +26,15 @@ import {
 import { AuthService } from '@crown/auth/service';
 import { HttpService } from '@crown/http';
 
+interface MoneyFilter {
+  // dateRange?: { start: Date; end: Date };
+  startDate?: Date;
+  endDate?: Date;
+  type?: string;
+  year?: number;
+  // Add more filter properties as needed
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -35,6 +44,103 @@ export class MoneyService {
   private _selectedYearSubj = new BehaviorSubject<number>(0);
 
   money$ = this._moneySubj.asObservable();
+  private _filterSubj: BehaviorSubject<MoneyFilter> =
+    new BehaviorSubject<MoneyFilter>({});
+  filteredMoney$: Observable<Money[]> = combineLatest([
+    this.money$,
+    this._filterSubj,
+  ]).pipe(map(([data, filter]) => this.filterMoney(data, filter)));
+
+  _filterMoney(data: Money[], filter: MoneyFilter): Money[] {
+    // Apply filtering based on the filter object
+    // For example, filter by date range and type
+    /*
+    return data.filter(
+      (item) =>
+        (!filter.dateRange ||
+          (item.createdAt >= filter.dateRange.start &&
+            item.createdAt <= filter.dateRange.end)) &&
+        (!filter.type || item.type === filter.type)
+    );*/
+    return data.filter((item) => {
+      const afterStartDate =
+        !filter.startDate || item.createdAt >= filter.startDate;
+      const beforeEndDate = !filter.endDate || item.createdAt <= filter.endDate;
+      const typeMatch = !filter.type || item.type === filter.type;
+
+      return afterStartDate && beforeEndDate && typeMatch;
+    });
+  }
+
+  filterMoney(data: Money[], filter: MoneyFilter): Money[] {
+    return data.filter((item) => {
+      const afterStartDate =
+        !filter.startDate || item.createdAt >= filter.startDate;
+      // const beforeEndDate = !filter.endDate || item.createdAt <= filter.endDate;
+      const beforeEndDate =
+        !filter.endDate ||
+        item.createdAt <= new Date(filter.endDate.setHours(23, 59, 59, 999));
+      const typeMatch = !filter.type || item.type === filter.type;
+      const yearMatch =
+        !filter.year || new Date(item.createdAt).getFullYear() === filter.year;
+
+      // console.log(
+      //   `Item Date: ${item.createdAt}`,
+      //   `Start Date: ${filter.startDate}`,
+      //   `End Date: ${filter.endDate}`
+      // );
+      // console.log(
+      //   `Start Date: ${afterStartDate}`,
+      //   `End Date: ${beforeEndDate}`,
+      //   `Type: ${typeMatch}`
+      // );
+
+      return afterStartDate && beforeEndDate && typeMatch && yearMatch;
+    });
+  }
+
+  fType(opt: number) {
+    switch (opt) {
+      case 1:
+        this.updateFilter({ type: 'chemia' });
+        break;
+      case 2:
+        this.updateFilter({ type: 'test' });
+        break;
+      case 4:
+        this.updateFilter({ startDate: new Date('2023-12-13') });
+        break;
+      case 5:
+        this.updateFilter({
+          // startDate: new Date('2023-12-13')
+          endDate: new Date('2023-12-10'),
+        });
+        break;
+      case 2023:
+        this.updateFilter({
+          year: 2023,
+        });
+        break;
+      case 2024:
+        this.updateFilter({
+          year: 2024,
+        });
+        break;
+
+      default:
+        this.updateFilter({});
+        break;
+    }
+  }
+
+  updateFilter(newFilter: MoneyFilter) {
+    console.log('newFilter', newFilter);
+
+    this._filterSubj.next(newFilter);
+  }
+
+  // -----------------------
+
   availableYears$: Observable<number[] | null> = this.money$.pipe(
     map((money) => [...new Set(money.map((d) => getYear(d.createdAt)))]),
     map((m) => m.sort())
@@ -43,6 +149,7 @@ export class MoneyService {
 
   yearMoney$ = combineLatest([this.money$, this.selectedYear$]).pipe(
     map(([money, year]) => money.filter((m) => getYear(m.createdAt) === year))
+    // map(([money, year]) => money)
   );
 
   moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
@@ -56,11 +163,13 @@ export class MoneyService {
     return this._moneySubj.value;
   }
 
-  private http = inject(HttpService)
+  private http = inject(HttpService);
+  // private authService = inject(AuthService)
 
   constructor(
     // private http: HttpClient,
-    private authService: AuthService) {
+    private authService: AuthService
+  ) {
     this.fetchAll$().subscribe();
   }
 
@@ -93,7 +202,6 @@ export class MoneyService {
   }
 
   create(changes: Partial<Money>) {
-    const headers = this.headers;
     changes = setNoonAsDate(changes);
     console.log('[create | MoneyService]', changes);
 
