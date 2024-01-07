@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  Colors,
   EMPTY_STRING,
   MAX_PRICE,
   MAX_TEXT_LENGTH,
@@ -56,6 +57,8 @@ export class EditMoneyDialog {
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;
+    console.log('%c[EditMoneyDialog]', Colors.RED, money);
+
 
     const { userId, type, price, fromWho, createdAt, isVat, isDeleted } = money;
 

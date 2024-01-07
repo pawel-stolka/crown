@@ -87,9 +87,6 @@ export class MoneyService {
     });
   }
 
-  better(filter: Partial<MoneyFilter>) {
-    this.updateFilter(filter);
-  }
   betterFilter(filter: Partial<MoneyFilter>) {
     this.updateFilter(filter);
   }
@@ -101,10 +98,10 @@ export class MoneyService {
 
   // -----------------------
 
-  availableYears$: Observable<number[] | null> = this.money$.pipe(
-    map((money) => [...new Set(money.map((d) => getYear(d.createdAt)))]),
-    map((m) => m.sort())
-  );
+  // availableYears$: Observable<number[] | null> = this.money$.pipe(
+  //   map((money) => [...new Set(money.map((d) => getYear(d.createdAt)))]),
+  //   map((m) => m.sort())
+  // );
   selectedYear$: Observable<number> = this._selectedYearSubj.asObservable();
 
   yearMoney$ = this.filteredMoney$;
@@ -116,7 +113,7 @@ export class MoneyService {
   // moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
   //   map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   // );
-  moneyGroups$: Observable<MoneyGroup[]> = this.yearMoney$.pipe(
+  moneyGroups$: Observable<MoneyGroup[]> = this.filteredMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
 

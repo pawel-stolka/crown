@@ -2,7 +2,11 @@ import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MoneyFilter, MoneyService, getYear } from '../../services/money.service';
+import {
+  MoneyFilter,
+  MoneyService,
+  getYear,
+} from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Money,
@@ -33,7 +37,9 @@ import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
+import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
 
+const NEW_GROUPS_LABEL = 'NOWE GRUPY';
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WSZYSTKO';
 @Component({
@@ -43,6 +49,7 @@ const DETAILS_LABEL = 'WSZYSTKO';
     CommonModule,
     MaterialModule,
     GroupsTabComponent,
+    NewGroupsComponent,
     DetailsTabComponent,
     YearFilterComponent,
     DataFilterComponent,
@@ -52,13 +59,14 @@ const DETAILS_LABEL = 'WSZYSTKO';
 })
 export class TabsContainerComponent {
   dataSource!: MatTableDataSource<Money>;
+  NEW_GROUPS_LABEL = NEW_GROUPS_LABEL;
   GROUPS_LABEL = GROUPS_LABEL;
   DETAILS_LABEL = DETAILS_LABEL;
 
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[0];
 
-  availableYears$ = this.moneyService.availableYears$;
+  // availableYears$ = this.moneyService.availableYears$;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
@@ -70,6 +78,11 @@ export class TabsContainerComponent {
 
   yearMoney$: Observable<Money[]>;
   monthsData$: Observable<{ months: MoneyGroup[]; categories: string[] }>;
+  monthsData2$: Observable<{
+    months: MoneyGroup[];
+    categories: string[];
+    total: number;
+  }>;
   yearMonthsData$: Observable<{
     months: (Partial<MoneyGroup> | null)[];
     categories: string[];
@@ -77,9 +90,6 @@ export class TabsContainerComponent {
   }>;
 
   filteredMoney$ = this.moneyService.filteredMoney$;
-  better(filter: Partial<MoneyFilter>) {
-    this.moneyService.better(filter);
-  }
   betterFilter(filter: Partial<MoneyFilter>) {
     this.moneyService.betterFilter(filter);
   }
@@ -91,7 +101,6 @@ export class TabsContainerComponent {
     private moneyService: MoneyService // TODO: private toastService: ToastService
   ) {
     this.yearMoney$ = this.moneyService.yearMoney$.pipe(
-
       tap((data) => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -102,6 +111,8 @@ export class TabsContainerComponent {
     this.monthsData$ = this.moneyService.moneyGroups$.pipe(
       map((groups) => groups.sort(compareBy('period', true))),
       map((moneyGroups) => {
+        console.log('1.moneyGroups', moneyGroups);
+
         const typePrices = groupTypePrices(moneyGroups);
 
         const summary: MoneyGroup = {
@@ -120,12 +131,21 @@ export class TabsContainerComponent {
       })
     );
 
+    this.monthsData2$ = this.monthsData$.pipe(
+      map((monthsData) => {
+        let total = monthsData.categories.length
+        return {
+          ...monthsData,
+          total,
+        };
+      })
+    );
+
     this.yearMonthsData$ = combineLatest([
       this.monthsData$.pipe(map(({ months }) => months)),
       this.selectedYear$,
       this.filterPhrase$,
     ]).pipe(
-
       map(([months, year, filterPhrase]) => {
         const monthsByYear = months.filter(
           ({ period }) => getYear(period) === year

@@ -1,9 +1,9 @@
 <div class="actions">
   <div class="filters">
-    <crown-year-filter
+    <!-- <crown-year-filter
       [availableYears]="availableYears$ | async"
       (currentYear)="changeYear($event)"
-    ></crown-year-filter>
+    ></crown-year-filter> -->
     <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
     <crown-data-filter (filter)="betterFilter({ type: $event })"></crown-data-filter>
   </div>
@@ -12,12 +12,13 @@
   </button>
 </div>
 
-<button (click)="better({})">RESET</button>
-<button (click)="better({ type: 'chemia' })">chemia</button>
-<button (click)="better({ type: 'test' })">test</button>
-<button (click)="better({ type: 'pierdyliard' })">pierdyliard</button>
-<button (click)="better({ year: 2023 })">2023</button>
-<button (click)="better({ year: 2024 })">2024</button>
+<button (click)="betterFilter({})">RESET</button>
+<button (click)="betterFilter({ type: 'chemia' })">chemia</button>
+<button (click)="betterFilter({ type: 'test' })">test</button>
+<button (click)="betterFilter({ type: 'pierdyliard' })">pierdyliard</button>
+<button (click)="betterFilter({ year: 2023 })">2023</button>
+<button (click)="betterFilter({ year: 2024 })">2024</button>
+<button (click)="betterFilter({ year: 2025 })">2025</button>
 
 <!-- <ng-container *ngIf="filteredMoney$ | async as list">
   {{ list?.length | json }}
@@ -36,6 +37,11 @@
 
 <ng-template #DATA>
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
+    <mat-tab label="{{ NEW_GROUPS_LABEL }}">
+      <crown-new-groups
+        [data]="monthsData2$ | async"
+      ></crown-new-groups>
+    </mat-tab>
     <mat-tab label="{{ GROUPS_LABEL }}">
       <crown-groups-tab
         [data]="yearMonthsData$ | async"
@@ -49,9 +55,9 @@
       ></crown-details-tab>
     </mat-tab>
   </mat-tab-group>
-  <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
+  <!-- <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
     <mat-spinner [strokeWidth]="2"></mat-spinner>
-  </div>
+  </div> -->
 </ng-template>
 <!-- <ng-template #DATA>
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
