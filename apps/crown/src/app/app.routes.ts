@@ -8,6 +8,11 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     component: HomeComponent,
   },
+  // {
+  //   path: 'auth',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: () => import('@crown/auth').then((m) => m.AuthModule),
+  // },
   {
     path: 'auth/login',
     loadComponent: () => import('@crown/auth').then((m) => m.LoginComponent),

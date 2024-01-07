@@ -27,6 +27,7 @@
     <mat-form-field appearance="outline">
       <mat-label>cena</mat-label>
       <input matInput formControlName="price" dotNumber />
+
       @if (price?.hasError('required')) {
       <mat-error> Podaj cenę! </mat-error>
       } @if (price?.hasError('min')) {

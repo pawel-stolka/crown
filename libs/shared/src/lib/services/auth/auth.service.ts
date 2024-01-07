@@ -1,28 +1,13 @@
-// import { HttpClient } from '@angular/common/http';
-import { HttpService } from '@crown/http';
+import { ApiService } from 'libs/shared/src/lib/services/api/api.service';
 import { Injectable, inject } from '@angular/core';
-import {
-  ACCESS_ROLE,
-  API_URL,
-  AUTH_TOKEN_EMAIL,
-  TokenEmail,
-} from '@crown/data';
-import {
-  BehaviorSubject,
-  Observable,
-  map,
-  tap,
-  shareReplay,
-  catchError,
-  throwError,
-  of,
-} from 'rxjs';
+import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
+import { BehaviorSubject, Observable, map, tap, shareReplay, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpService);
+  private http = inject(ApiService);
 
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
   private _isAdminSubj = new BehaviorSubject<boolean>(true);
@@ -49,6 +34,7 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     const URL = `${API_URL}/signin`;
     return this.http.post<any>(URL, { email, password }).pipe(
+      take(1),
       tap((res) => {
         this._tokenEmailSubj.next(res);
         localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));

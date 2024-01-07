@@ -2,12 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '@crown/auth/service';
+import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 
 @Component({
   selector: 'crown-main-toolbar',
   standalone: true,
-  imports: [CommonModule, MaterialModule, RouterModule, ],
+  imports: [CommonModule, MaterialModule, RouterModule],
   templateUrl: './main-toolbar.component.html',
   styleUrl: './main-toolbar.component.scss',
 })
@@ -32,6 +32,5 @@ export class MainToolbarComponent {
 
   openRoutes() {
     this.toggleMenu.emit();
-
   }
 }

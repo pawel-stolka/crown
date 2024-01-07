@@ -49,6 +49,9 @@
       ></crown-details-tab>
     </mat-tab>
   </mat-tab-group>
+  <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
+    <mat-spinner [strokeWidth]="2"></mat-spinner>
+  </div>
 </ng-template>
 <!-- <ng-template #DATA>
   <mat-tab-group (selectedIndexChange)="tabChange($event)">

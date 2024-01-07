@@ -1,15 +1,13 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import {
   BehaviorSubject,
   Observable,
   catchError,
   combineLatest,
-  filter,
+  delay,
+  finalize,
   map,
-  of,
   shareReplay,
-  switchMap,
   tap,
   throwError,
 } from 'rxjs';
@@ -17,14 +15,11 @@ import {
   Money,
   API_URL,
   MoneyGroup,
-  TokenEmail,
   groupBy,
   fixNumber,
   compareBy,
-  Colors,
 } from '@crown/data';
-import { AuthService } from '@crown/auth/service';
-import { HttpService } from '@crown/http';
+import { ApiService } from '@crown/api/service';
 
 export interface MoneyFilter {
   // dateRange?: { start: Date; end: Date };
@@ -39,7 +34,10 @@ export interface MoneyFilter {
   providedIn: 'root',
 })
 export class MoneyService {
+  private api = inject(ApiService);
+
   private URL = `${API_URL}/api/money`;
+
   private _moneySubj = new BehaviorSubject<Money[]>([]);
   private _selectedYearSubj = new BehaviorSubject<number>(0);
 
@@ -122,32 +120,25 @@ export class MoneyService {
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
 
-  headers = this.getHeaders();
-  tokenEmail: TokenEmail | null = null;
-
   get money() {
     return this._moneySubj.value;
   }
 
-  private http = inject(HttpService);
+  // private http = inject(HttpService);
   // private authService = inject(AuthService)
 
-  constructor(
-    // private http: HttpClient,
-    private authService: AuthService
-  ) {
-    this.fetchAll$().subscribe();
-  }
+  pendingFetch$: Observable<boolean>;
+  private _pendingFetchSubj = new BehaviorSubject<boolean>(false);
 
-  private getHeaders() {
-    const token = this.authService.getToken()?.token;
-    return { Authorization: `Bearer ${token}` };
+  constructor() {
+    this.fetchAll$().subscribe();
+    this.pendingFetch$ = this._pendingFetchSubj.asObservable();
   }
 
   fetchAll$() {
-    const headers = this.headers;
-
-    return this.http.get<Money[]>(this.URL, { headers }).pipe(
+    this._pendingFetchSubj.next(true);
+    return this.api.get<Money[]>(this.URL).pipe(
+      finalize(() => this._pendingFetchSubj.next(false)),
       catchError((err) => {
         const message = '[fetchAll] Something wrong...';
         // this.messages.showErrors(message);
@@ -163,6 +154,7 @@ export class MoneyService {
           type: m.type?.toLowerCase(),
         }));
       }),
+      tap(() => this._pendingFetchSubj.next(false)),
       tap((money: Money[]) => this._moneySubj.next(money))
     );
   }
@@ -171,7 +163,7 @@ export class MoneyService {
     changes = setNoonAsDate(changes);
     console.log('[create | MoneyService]', changes);
 
-    return this.http.post<Money>(this.URL, changes).pipe(
+    return this.api.post<Money>(this.URL, changes).pipe(
       tap((money) => {
         const update: Money[] = [...this._moneySubj.value, money];
         this._moneySubj.next(update);
@@ -179,19 +171,7 @@ export class MoneyService {
     );
   }
 
-  getCategories$(): Observable<string[]> {
-    return this.money$.pipe(
-      map((money) =>
-        money
-          .map((m) => m.type)
-          .filter((type): type is string => type !== undefined)
-      ),
-      map((types) => [...new Set(types)] ?? [])
-    );
-  }
-
   edit(id: string, changes: Partial<Money>) {
-    const headers = this.headers;
     changes = setNoonAsDate(changes);
 
     const index = this.money.findIndex((money) => money.id === id);
@@ -204,7 +184,7 @@ export class MoneyService {
     const newMoneys: Money[] = this.money.slice(0);
     newMoneys[index] = newMoney;
 
-    return this.http.put<Money>(`${this.URL}/${id}`, changes).pipe(
+    return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
       catchError((err) => {
         const message = 'Could not edit money';
         // this.messages.showErrors(message);
@@ -217,8 +197,7 @@ export class MoneyService {
   }
 
   delete(id: string) {
-    const headers = this.headers;
-    return this.http.delete<Money>(`${this.URL}/${id}`).pipe(
+    return this.api.delete<Money>(`${this.URL}/${id}`).pipe(
       catchError((err) => {
         const message = '[delete] Something wrong...';
         // this.messages.showErrors(message);
@@ -234,6 +213,17 @@ export class MoneyService {
 
   changeYear(year: number) {
     this._selectedYearSubj.next(year);
+  }
+
+  getCategories$(): Observable<string[]> {
+    return this.money$.pipe(
+      map((money) =>
+        money
+          .map((m) => m.type)
+          .filter((type): type is string => type !== undefined)
+      ),
+      map((types) => [...new Set(types)] ?? [])
+    );
   }
 
   // TODO: check options in API
@@ -254,7 +244,7 @@ export class MoneyService {
   // }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
-    const selection = this.setGrouping(by, data);
+    const selection = this.setGrouping(by);
     const groups: any[] = groupBy(data, selection);
     return this.summarize(groups);
   }
@@ -270,7 +260,6 @@ export class MoneyService {
         .sort(compareBy('price'));
       const sum = fixNumber(typePrices.reduce((a, c) => a + +c.price, 0));
       return {
-        userId: 'not-yet',
         period,
         typePrices,
         sum,
@@ -278,7 +267,7 @@ export class MoneyService {
     });
   }
 
-  private setGrouping(by: string, data: Money[]) {
+  private setGrouping(by: string) {
     switch (by) {
       case 'byMonth':
         return (x: Money) => getMonth(x.createdAt);
@@ -286,14 +275,44 @@ export class MoneyService {
         throw Error(`Invalid ${by} period`);
     }
   }
+
+  groupAndSortMoney(data: Money[]): MoneyGroup[] {
+    if (data !== undefined && data.length) {
+      return this.groupMoney(data).sort(compareBy('period'));
+    } else {
+      return [];
+    }
+  }
+}
+
+function extractYears(money: Money[]): number[] {
+  return [...new Set(money.map((m) => getYear(m.createdAt)))].sort();
+}
+
+function filterByYear(money: Money[], year: number): Money[] {
+  return money.filter(({ createdAt }) => getYear(createdAt) === year);
 }
 
 function getMonth(date: Date) {
   return date.toString().substring(0, 7);
 }
 
-export function getYear(datetime: any) {
-  return +datetime.toString().slice(0, 4);
+export function getYear(dateString: string | Date): number {
+  let date: Date;
+
+  if (typeof dateString === 'string') {
+    date = new Date(dateString);
+  } else if (dateString instanceof Date) {
+    date = dateString;
+  } else {
+    throw new Error('Invalid date format');
+  }
+
+  // if (isNaN(date.getTime())) {
+  //   console.log('Invalid date', dateString);
+  // }
+
+  return date.getFullYear();
 }
 
 function setNoonAsDate(changes?: Partial<Money>): Partial<Money> {

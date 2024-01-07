@@ -1,19 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import {
   API_URL,
-  Colors,
   Status,
   Todo,
   StatusChange,
   TodoEvent,
   TokenEmail,
 } from '@crown/data';
-import { AuthService } from '@crown/auth/service';
+// import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import {
   catchError,
   throwError,
-  map,
   tap,
   BehaviorSubject,
   Observable,
@@ -21,14 +18,14 @@ import {
   shareReplay,
   of,
 } from 'rxjs';
-import { HttpService } from '@crown/http';
+import { ApiService } from '@crown/api/service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
-  private http = inject(HttpService);
-  private _http = inject(HttpClient);
+  private http = inject(ApiService);
   private authService = inject(AuthService);
 
   private URL = `${API_URL}/todo`;
@@ -47,7 +44,7 @@ export class TodoService {
   }
 
   constructor() {
-    // console.log('todo service CTOR');
+    console.log('//TODO: service CTOR');
     this.data$().subscribe();
   }
 
@@ -57,7 +54,7 @@ export class TodoService {
         console.log('Could not get token', err);
         return throwError(err);
       }),
-      filter((x) => !!x),
+      filter((x) => !!x)
       // tap(
       //   (tokenEmail) =>
       //     (this.headers = { Authorization: `Bearer ${tokenEmail?.token}` })
@@ -74,12 +71,12 @@ export class TodoService {
     );
   }
 
-  testHttp() {
-    this.http
-      .get(this.URL)
-      .pipe(tap((x) => console.log('testHttp', x)))
-      .subscribe();
-  }
+  // testHttp() {
+  //   this.http
+  //     .get(this.URL)
+  //     .pipe(tap((x) => console.log('testHttp', x)))
+  //     .subscribe();
+  // }
 
   fetchAll$(token: string | null) {
     if (!this.dataLoaded) {
@@ -113,18 +110,16 @@ export class TodoService {
     newTodos[index] = newTodo;
     this._todosSubj.next(newTodos);
 
-    return this.http
-      .put<Todo>(`${this.URL}/${id}`, changes)
-      .pipe(
-        catchError((err) => {
-          const message = `Could not edit Todo: ${changes.id}`;
-          // this.messages.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-        }),
-        // tap((x) => console.log('EDIT result', x)),
-        shareReplay()
-      );
+    return this.http.put<Todo>(`${this.URL}/${id}`, changes).pipe(
+      catchError((err) => {
+        const message = `Could not edit Todo: ${changes.id}`;
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      // tap((x) => console.log('EDIT result', x)),
+      shareReplay()
+    );
   }
 
   updateStatus(event: TodoEvent): void {
