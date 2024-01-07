@@ -4,6 +4,8 @@ import {
   Observable,
   catchError,
   combineLatest,
+  delay,
+  finalize,
   map,
   shareReplay,
   tap,
@@ -44,12 +46,18 @@ export class MoneyService {
     return this._moneySubj.value;
   }
 
+  pendingFetch$: Observable<boolean>;
+  private _pendingFetchSubj = new BehaviorSubject<boolean>(false);
+
   constructor() {
     this.fetchAll$().subscribe();
+    this.pendingFetch$ = this._pendingFetchSubj.asObservable();
   }
 
   fetchAll$() {
+    this._pendingFetchSubj.next(true);
     return this.api.get<Money[]>(this.URL).pipe(
+      finalize(() => this._pendingFetchSubj.next(false)),
       catchError((err) => {
         const message = '[fetchAll] Something wrong...';
         // this.messages.showErrors(message);
@@ -65,6 +73,7 @@ export class MoneyService {
           type: m.type?.toLowerCase(),
         }));
       }),
+      tap(() => this._pendingFetchSubj.next(false)),
       tap((money: Money[]) => this._moneySubj.next(money))
     );
   }

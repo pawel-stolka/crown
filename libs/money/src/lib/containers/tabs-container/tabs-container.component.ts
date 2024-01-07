@@ -19,6 +19,7 @@ import {
   BehaviorSubject,
   Observable,
   combineLatest,
+  delay,
   filter,
   map,
   tap,
@@ -75,12 +76,15 @@ export class TabsContainerComponent {
     total: number;
   }>;
 
+  pendingFetch$ = this.moneyService.pendingFetch$;
+
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,
     private moneyService: MoneyService // TODO: private toastService: ToastService
   ) {
     this.yearMoney$ = this.moneyService.yearMoney$.pipe(
+
       tap((data) => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.sort = this.sort;
@@ -114,6 +118,7 @@ export class TabsContainerComponent {
       this.selectedYear$,
       this.filterPhrase$,
     ]).pipe(
+
       map(([months, year, filterPhrase]) => {
         const monthsByYear = months.filter(
           ({ period }) => getYear(period) === year
