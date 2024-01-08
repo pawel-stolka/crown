@@ -19,21 +19,22 @@ export class AdminGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.authService.isAdmin$.pipe(
-      take(1), // TODO: CRUCIAL !!
-      map((x) => !!x),
-      map((isAdmin) => {
-        console.log('[isAdmin]', isAdmin);
+    return of(false);
+    // return this.authService.isAdmin$.pipe(
+    //   take(1), // TODO: CRUCIAL !!
+    //   map((x) => !!x),
+    //   map((isAdmin) => {
+    //     console.log('[isAdmin]', isAdmin);
 
-        if (!isAdmin) {
-          // this.router.navigate(['/not-authorized']);
-          alert('show not-authorized message at top');
-          this.router.navigate(['/']);
-          return false;
-        }
-        return true;
-      })
-    );
+    //     if (!isAdmin) {
+    //       // this.router.navigate(['/not-authorized']);
+    //       alert('show not-authorized message at top');
+    //       this.router.navigate(['/']);
+    //       return false;
+    //     }
+    //     return true;
+    //   })
+    // );
   }
 
   canActivateChild(

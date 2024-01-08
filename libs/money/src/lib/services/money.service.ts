@@ -19,6 +19,8 @@ import {
   fixNumber,
   compareBy,
   Colors,
+  getYear,
+  setNoonAsDate,
 } from '@crown/data';
 import { ApiService } from '@crown/api/service';
 
@@ -190,7 +192,7 @@ export class MoneyService {
         return throwError(err);
       }),
       tap(() => this._moneySubj.next(newMoneys)),
-      shareReplay()
+      // shareReplay()
     );
   }
 
@@ -295,32 +297,4 @@ function getMonth(date: Date) {
   return date.toString().substring(0, 7);
 }
 
-export function getYear(dateString: string | Date): number {
-  let date: Date;
 
-  if (typeof dateString === 'string') {
-    date = new Date(dateString);
-  } else if (dateString instanceof Date) {
-    date = dateString;
-  } else {
-    throw new Error('Invalid date format');
-  }
-
-  // if (isNaN(date.getTime())) {
-  //   console.log('Invalid date', dateString);
-  // }
-
-  return date.getFullYear();
-}
-
-function setNoonAsDate(changes?: Partial<Money>): Partial<Money> {
-  const createdAt = changes?.createdAt
-    ? new Date(changes?.createdAt)
-    : new Date();
-  createdAt.setHours(12, 0, 0, 0);
-
-  return {
-    ...changes,
-    createdAt,
-  };
-}

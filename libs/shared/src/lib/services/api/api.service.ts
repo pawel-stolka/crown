@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector, inject } from '@angular/core';
 import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
-import { EMPTY_STRING, Method } from '@crown/data';
-import { Observable, switchMap } from 'rxjs';
+import { Colors, EMPTY_STRING, Method } from '@crown/data';
+import { Observable, shareReplay, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,8 @@ export class ApiService {
   private http = inject(HttpClient);
   private injector = inject(Injector);
   private authService!: AuthService;
+
+  tokenEmail$ = this.getAuthService()
 
   get<T>(url: string, body?: any, headers?: HttpHeaders) {
     return this.makeRequest<T>(Method.GET, url, body, headers);
@@ -35,8 +37,9 @@ export class ApiService {
     headers?: HttpHeaders
   ): Observable<T> {
     console.log(method, url);
-    const tokenEmail$ = this.getAuthService().tokenEmail$;
-    return tokenEmail$.pipe(
+    // const tokenEmail$ = this.getAuthService()//.tokenEmail$;
+
+    return this.tokenEmail$.pipe(
       switchMap((tokenEmail) => {
         const headers = new HttpHeaders({
           Authorization: tokenEmail
@@ -48,7 +51,7 @@ export class ApiService {
           headers,
           observe: 'body',
         });
-      })
+      }),
     );
   }
 
@@ -56,6 +59,8 @@ export class ApiService {
     if (!this.authService) {
       this.authService = this.injector.get(AuthService);
     }
-    return this.authService;
+    return this.authService.tokenEmail$.pipe(
+      tap((tokenEmail) => console.log('%c[tokenEmail]', Colors.RED, tokenEmail))
+    );
   }
 }

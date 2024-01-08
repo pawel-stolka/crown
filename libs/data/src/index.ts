@@ -25,6 +25,10 @@ export * from './lib/lists/PRIORITIES';
 export * from './lib/lists/STATUSES';
 
 export * from './lib/tools';
+
 export * from './lib/pipes/noYear/noYear.pipe';
 export * from './lib/pipes/priceByType/priceByType.pipe';
 export * from './lib/pipes/sumByMonth/sumByMonth.pipe';
+
+export * from './lib/functions/getYear';
+export * from './lib/functions/setNoonAsDate';

@@ -19,7 +19,8 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MoneyService } from '../../../services/money.service';
 import { MaterialModule } from '@crown/material';
-import { Observable, combineLatest, startWith, map } from 'rxjs';
+import { Observable, combineLatest, startWith, map, of } from 'rxjs';
+import { NewMoneyService } from '../../../services/new-money.service';
 
 @Component({
   selector: 'crown-edit-money-dialog',
@@ -33,7 +34,7 @@ export class EditMoneyDialog {
   form: FormGroup;
   money: Money;
 
-  private getCategories$ = this.moneyService.getCategories$();
+  private getCategories$ = of([])// this.moneyService.getCategories$();
   categoriesFiltered$!: Observable<string[]>;
 
   typeControl = new FormControl<string>(EMPTY_STRING);
@@ -53,7 +54,8 @@ export class EditMoneyDialog {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditMoneyDialog>,
-    private moneyService: MoneyService,
+    // private moneyService: MoneyService,
+    private moneyService: NewMoneyService,
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;
@@ -103,6 +105,7 @@ export class EditMoneyDialog {
   save() {
     const changes: Partial<Money> = this.form.value;
 
+    // this.moneyService.edit(this.money.id, changes).subscribe((res) => {
     this.moneyService.edit(this.money.id, changes).subscribe((res) => {
       this.dialogRef.close(res);
     });

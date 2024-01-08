@@ -4,7 +4,7 @@
       [availableYears]="availableYears$ | async"
       (currentYear)="changeYear($event)"
     ></crown-year-filter> -->
-    <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
+    <!-- <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter> -->
     <crown-data-filter (filter)="betterFilter({ type: $event })"></crown-data-filter>
   </div>
   <button mat-fab color="primary" (click)="add()">
@@ -12,13 +12,14 @@
   </button>
 </div>
 
-<button (click)="betterFilter({})">RESET</button>
+
+<!-- <button (click)="betterFilter({})">RESET</button>
 <button (click)="betterFilter({ type: 'chemia' })">chemia</button>
 <button (click)="betterFilter({ type: 'test' })">test</button>
 <button (click)="betterFilter({ type: 'pierdyliard' })">pierdyliard</button>
 <button (click)="betterFilter({ year: 2023 })">2023</button>
 <button (click)="betterFilter({ year: 2024 })">2024</button>
-<button (click)="betterFilter({ year: 2025 })">2025</button>
+<button (click)="betterFilter({ year: 2025 })">2025</button> -->
 
 <!-- <ng-container *ngIf="filteredMoney$ | async as list">
   {{ list?.length | json }}

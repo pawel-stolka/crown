@@ -9,6 +9,7 @@ import {
   compareBy,
   fixNumber,
   groupBy,
+  setNoonAsDate,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -16,6 +17,9 @@ import {
   catchError,
   combineLatest,
   map,
+  of,
+  shareReplay,
+  switchMap,
   tap,
   throwError,
 } from 'rxjs';
@@ -33,6 +37,10 @@ export class NewMoneyService {
   private _filterSubj: BehaviorSubject<MoneyFilter> =
     new BehaviorSubject<MoneyFilter>({});
   filters$ = this._filterSubj.asObservable();
+
+  get money() {
+    return this._moneySubj.value;
+  }
 
   get filters() {
     return this._filterSubj.value;
@@ -73,7 +81,7 @@ export class NewMoneyService {
     this.updateFilters(update);
   }
 
-  private updateFilters(filters: MoneyFilter) {
+  updateFilters(filters: MoneyFilter) {
     this._filterSubj.next(filters);
   }
 
@@ -83,7 +91,31 @@ export class NewMoneyService {
   ]).pipe(map(([data, filters]) => this.filterMoney(data, filters)));
 
   constructor() {
-    this.fetchAll$().subscribe();
+    // this.fetchAll$().subscribe();
+    this.initializeDataFetch().subscribe()
+  }
+
+  // private initializeDataFetch() {
+  //   this.api.tokenEmail$.subscribe(tokenEmail => {
+  //     if (tokenEmail) {
+  //       return this.fetchAll$(); // Call your data fetching method
+  //     } else {
+  //       return of([])
+  //       // Optionally handle the case when the user logs out
+  //     }
+  //   });
+  // }
+  private initializeDataFetch() {
+    return this.api.tokenEmail$.pipe(
+      switchMap(tokenEmail => {
+      if (tokenEmail) {
+        return this.fetchAll$(); // Call your data fetching method
+      } else {
+        return of([])
+        // Optionally handle the case when the user logs out
+      }}),
+      shareReplay()
+    );
   }
 
   fetchAll$() {
@@ -106,7 +138,9 @@ export class NewMoneyService {
         }));
       }),
       // tap(() => this._pendingFetchSubj.next(false)),
-      tap((money: Money[]) => this._moneySubj.next(money))
+      tap((money: Money[]) => this._moneySubj.next(money)),
+      tap((fetchAll) => console.log('%c[fetchAll]', Colors.BLACK, fetchAll)
+      ),
     );
   }
 
@@ -131,6 +165,63 @@ export class NewMoneyService {
 
   betterFilter(filter: Partial<MoneyFilter>) {
     this.updateFilter(filter);
+  }
+
+  create(changes: Partial<Money>) {
+    changes = setNoonAsDate(changes);
+    console.log('[create | MoneyService]', changes);
+
+    return this.api.post<Money>(this.URL, changes).pipe(
+      tap((money) => {
+        const update: Money[] = [...this._moneySubj.value, money];
+        this._moneySubj.next(update);
+      })
+    );
+  }
+
+  edit(id: string, changes: Partial<Money>) {
+    changes = setNoonAsDate(changes);
+
+    const index = this.money.findIndex((money) => money.id === id);
+    const newMoney: Money = {
+      ...this.money[index],
+      ...changes,
+    };
+
+    // copy of moneys
+    const newMoneys: Money[] = this.money.slice(0);
+    newMoneys[index] = newMoney;
+
+    return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
+      tap((x) => {
+        this._moneySubj.next(newMoneys)
+        console.log('[EDIT]', newMoneys);
+        console.log('[EDIT #2]', x);
+
+      }),
+      catchError((err) => {
+        const message = 'Could not edit money';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      shareReplay()
+    )
+  }
+
+  delete(id: string) {
+    return this.api.delete<Money>(`${this.URL}/${id}`).pipe(
+      catchError((err) => {
+        const message = '[delete] Something wrong...';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap((money: Money) => {
+        const newMoneyList = this.money.filter((x) => x.id !== money.id);
+        this._moneySubj.next(newMoneyList);
+      })
+    );
   }
 
   private updateFilter(newFilter: MoneyFilter) {

@@ -1,13 +1,14 @@
 import { ApiService } from 'libs/shared/src/lib/services/api/api.service';
-import { Injectable, inject } from '@angular/core';
-import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
+import { Injectable, Injector, inject } from '@angular/core';
+import { API_URL, AUTH_TOKEN_EMAIL, Colors, TokenEmail } from '@crown/data';
 import { BehaviorSubject, Observable, map, tap, shareReplay, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(ApiService);
+  private apiService!: ApiService;
+  // private http = inject(ApiService);
 
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
   private _isAdminSubj = new BehaviorSubject<boolean>(true);
@@ -19,7 +20,7 @@ export class AuthService {
   isLoggedIn$ = this.tokenEmail$.pipe(map((val) => !!val?.token));
   isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
 
-  constructor() {
+  constructor(private injector: Injector) {
     const token = localStorage.getItem(AUTH_TOKEN_EMAIL);
     if (!!token) {
       this._tokenEmailSubj.next(JSON.parse(token));
@@ -33,18 +34,29 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     const URL = `${API_URL}/signin`;
-    return this.http.post<any>(URL, { email, password }).pipe(
+    return this.getApiService().post
+    // return this.http.post<any>
+    (URL, { email, password }).pipe(
       take(1),
       tap((res) => {
         this._tokenEmailSubj.next(res);
         localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
       }),
-      shareReplay()
+      // shareReplay()
     );
   }
 
   logout() {
     this._tokenEmailSubj.next(null);
     localStorage.removeItem(AUTH_TOKEN_EMAIL);
+  }
+
+  private getApiService() {
+    if (!this.apiService) {
+      this.apiService = this.injector.get(ApiService);
+    }
+    return this.apiService /*.tokenEmail$.pipe(
+      tap((tokenEmail) => console.log('%c[tokenEmail]', Colors.RED, tokenEmail))
+    );*/
   }
 }

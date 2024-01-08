@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   MoneyFilter,
   MoneyService,
-  getYear,
+  // getYear,
 } from '../../services/money.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -18,6 +18,7 @@ import {
   TypePrice,
   formatValue,
   fixNumber,
+  getYear,
 } from '@crown/data';
 import {
   BehaviorSubject,
@@ -38,6 +39,7 @@ import { DetailsTabComponent } from '../../components/tabs/details-tab/details-t
 import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
+import { NewMoneyService } from '../../services/new-money.service';
 
 const NEW_GROUPS_LABEL = 'NOWE GRUPY';
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
@@ -89,7 +91,7 @@ export class TabsContainerComponent {
     total: number;
   }>;
 
-  filteredMoney$ = this.moneyService.filteredMoney$;
+  filteredMoney$ = this.newMoneyService.filteredMoney$;
   betterFilter(filter: Partial<MoneyFilter>) {
     this.moneyService.betterFilter(filter);
   }
@@ -98,6 +100,7 @@ export class TabsContainerComponent {
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,
+    private newMoneyService: NewMoneyService,
     private moneyService: MoneyService // TODO: private toastService: ToastService
   ) {
     this.yearMoney$ = this.moneyService.yearMoney$.pipe(

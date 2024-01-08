@@ -1,8 +1,18 @@
-<p>tabs-2 works!</p>
-
-<crown-data-filter
-  (filter)="betterFilter({ type: $event })"
-></crown-data-filter>
+<div class="actions">
+  <div class="filters">
+    <!-- <crown-year-filter
+      [availableYears]="availableYears$ | async"
+      (currentYear)="changeYear($event)"
+    ></crown-year-filter> -->
+    <!-- <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter> -->
+    <crown-data-filter
+      (filter)="typeFilter({ type: $event })"
+    ></crown-data-filter>
+  </div>
+  <button mat-fab color="accent" (click)="add()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
 
 <button (click)="resetFilters()">resetFilters</button>
 <button (click)="addYearFilter(2023)">add 2023</button>
@@ -12,14 +22,35 @@
 
 <ng-container *ngIf="filters$ | async as filters">
   <div class="help">
-    <div>filters$: {{ filters | json }}</div>
+    <!-- <div>filters$: {{ filters | json }}</div> -->
     <div>startDate: {{ filters.startDate | json }}</div>
     <div>endDate: {{ filters.endDate | json }}</div>
     <div>type: {{ filters.type | json }}</div>
     <div>year: {{ filters.year | json }}</div>
   </div>
 </ng-container>
-<hr />
+
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field appearance="outline">
+    <mat-label>od</mat-label>
+    <input
+      matInput
+      [matDatepicker]="datepicker"
+      #searchInput
+      formControlName="startDate"
+    />
+    <!-- @if (date?.hasError('required')) {
+    <mat-error> Podaj datę! </mat-error>
+    } -->
+
+    <mat-datepicker-toggle matSuffix [for]="datepicker">
+    </mat-datepicker-toggle>
+
+    <mat-datepicker #datepicker></mat-datepicker>
+  </mat-form-field>
+</mat-dialog-content>
+
+<div>dateRange$ {{ range$ | async | json }}</div>
 
 <ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
@@ -34,16 +65,19 @@
     </mat-tab>
     <!-- <mat-tab label="{{ GROUPS_LABEL }}">
       <crown-groups-tab
-        [data]="yearMonthsData$ | async"
+        [data]="monthsData2$ | async"
         [filtered]="!!(filterPhrase$ | async)"
       ></crown-groups-tab>
-    </mat-tab>
-    <mat-tab label="{{ DETAILS_LABEL }}">
-      <crown-details-tab
-        [money]="(yearMoney$ | async) || undefined"
-        [filter]="this.dataSource.filter"
-      ></crown-details-tab>
     </mat-tab> -->
+    <mat-tab label="{{ DETAILS_LABEL }}">
+      <!-- <crown-details-tab
+        [money]="(monthsData2$ | async) || undefined"
+        [filter]="this.dataSource.filter"
+      ></crown-details-tab> -->
+      <crown-new-details-tab
+        [money]="(filteredMoney$ | async) || undefined"
+      ></crown-new-details-tab>
+    </mat-tab>
   </mat-tab-group>
   <!-- <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
     <mat-spinner [strokeWidth]="2"></mat-spinner>

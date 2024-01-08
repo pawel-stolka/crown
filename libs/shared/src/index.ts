@@ -7,4 +7,5 @@ export * from './lib/app-info/app-info.component';
 
 
 
+export * from './lib/services/auth/auth.service';
 export * from './lib/toaster/service/toast.service';
