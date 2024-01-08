@@ -1,31 +1,28 @@
-<div>
-  <div>{{ data | json }}</div>
-</div>
-<hr>
-@if (data.total > 0) {
-  <table class="table __mat-elevation-z8">
-    <tr>
-      <th></th>
-      <th class="trim-text" *ngFor="let category of data?.categories">
-        <span class="trim-text">{{ category }}</span>
-      </th>
-      <th class="summary">Ʃ</th>
-    </tr>
+@if (data?.total > 0) {
+<table class="table __mat-elevation-z8">
+  <tr>
+    <th></th>
+    <th class="trim-text" *ngFor="let category of data?.categories">
+      <span class="trim-text">{{ category }}</span>
+    </th>
+    <th class="summary">Ʃ</th>
+  </tr>
 
-    <tr *ngFor="let item of data?.months; let last = last">
-      <!-- <td class="period" *ngIf="true">{{ item.period | noYear }}</td> -->
-      <td class="period" *ngIf="true">{{ item.period }}</td>
+  <tr *ngFor="let item of data?.months; let last = last">
+    <!-- <td class="period" *ngIf="true">{{ item.period | noYear }}</td> -->
+    <td>{{ item.period }}</td>
 
-      <td *ngFor="let category of data?.categories">
-        <span [ngClass]="{ last: last }">
-          {{ item.typePrices | priceByType : category }}
-          <!-- {{ item.typePrices | json}} -->
-        </span>
-      </td>
-      <!-- summary column -->
-      <td>{{ item.typePrices | sumByMonth }}</td>
-      <!-- <td>{{ item.typePrices | json }}</td> -->
-    </tr>
-
-  </table>
+    <td *ngFor="let category of data?.categories">
+      <span [ngClass]="{ last: last }">
+        {{ item.typePrices | priceByType : category }}
+        <!-- {{ item.typePrices | json}} -->
+      </span>
+    </td>
+    <!-- summary column -->
+    <td>{{ item.typePrices | sumByMonth }}</td>
+    <!-- <td>{{ item.typePrices | json }}</td> -->
+  </tr>
+</table>
+} @else {
+<div>no data</div>
 }

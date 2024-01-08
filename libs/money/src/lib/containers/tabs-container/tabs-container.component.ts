@@ -111,8 +111,6 @@ export class TabsContainerComponent {
     this.monthsData$ = this.moneyService.moneyGroups$.pipe(
       map((groups) => groups.sort(compareBy('period', true))),
       map((moneyGroups) => {
-        console.log('1.moneyGroups', moneyGroups);
-
         const typePrices = groupTypePrices(moneyGroups);
 
         const summary: MoneyGroup = {
@@ -133,7 +131,7 @@ export class TabsContainerComponent {
 
     this.monthsData2$ = this.monthsData$.pipe(
       map((monthsData) => {
-        let total = monthsData.categories.length
+        let total = monthsData.categories.length;
         return {
           ...monthsData,
           total,
