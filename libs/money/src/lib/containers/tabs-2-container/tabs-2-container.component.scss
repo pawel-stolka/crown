@@ -6,4 +6,59 @@
   border: 3px dotted dodgerblue;
   display: flex;
   justify-content: space-around;
+  align-items:baseline;
+  gap: 5px;
+  // flex-wrap: wrap;
+  // align-items:center;
+  // align-content:center;
+}
+
+mat-form-field {
+  width: 150px;
+}
+
+._actions {
+  border: 5px dotted;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items:center;
+  // align-items: flex-start;
+  margin: 15px 0;
+
+  ._filters {
+    border: 10px dotted dodgerblue;
+    width: 100%;
+    // width: 80%;
+    display: flex;
+    // align-items: center;
+    // align-content: center;
+    // justify-content: space-between;
+    .range-type {
+      border: 3px dotted goldenrod;
+      display: flex;
+      justify-content: space-between;
+
+      gap: 10px;
+    }
+  }
+  .add {
+    border: 5px dotted magenta;
+    // width: 10%;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 15px 0;
+  width: 100%;
+
+  .filters {
+    display: flex;
+    width: 100%;
+    align-content: center;
+    font-size: 14px;
+  }
 }

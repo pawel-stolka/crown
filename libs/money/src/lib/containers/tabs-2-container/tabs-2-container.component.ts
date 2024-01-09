@@ -26,6 +26,7 @@ import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/ad
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
 
 const NEW_GROUPS_LABEL = 'NOWE GRUPY';
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
@@ -34,6 +35,11 @@ const DETAILS_LABEL = 'WSZYSTKO';
 interface DateAccumulator {
   earliest: Date;
   latest: Date;
+}
+
+interface DateRange {
+  from: Date;
+  to: Date;
 }
 @Component({
   selector: 'crown-tabs-2',
@@ -46,6 +52,7 @@ interface DateAccumulator {
     NewGroupsComponent,
     NewDetailsTabComponent,
     DetailsTabComponent,
+    YearSelectorComponent,
   ],
   templateUrl: './tabs-2-container.component.html',
   styleUrl: './tabs-2-container.component.scss',
@@ -61,6 +68,11 @@ export class Tabs2ContainerComponent {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
+  allYears$ = this.newMoneyService.money$.pipe(
+    map((money) => [
+      ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
+    ])
+  );
   filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
@@ -69,19 +81,19 @@ export class Tabs2ContainerComponent {
     })
   );
 
-  dateRange$: Observable<{ from: Date; to: Date }> = this.filteredMoney$.pipe(
+  dateRange$: Observable<DateRange> = this.filteredMoney$.pipe(
     map((fm) => fm.map((f) => f.createdAt)),
-    map((fm) => {
-      let earliest = fm[0];
-      let latest = fm[0];
+    map((money) => {
+      let [from] = money;
+      let to = from;
 
-      fm.forEach((date) => {
-        if (date < earliest) earliest = date;
-        if (date > latest) latest = date;
+      money.forEach((date) => {
+        if (date < from) from = date;
+        if (date > to) to = date;
       });
       return {
-        from: earliest,
-        to: latest,
+        from,
+        to,
       };
     })
   );
@@ -90,15 +102,6 @@ export class Tabs2ContainerComponent {
 
   addYearFilter(year: number) {
     this.newMoneyService.addYearFilter(year);
-  }
-
-  startDateFilter(year: number) {
-    let startDate = new Date('2023-12-01');
-    this.newMoneyService.addStart(startDate);
-  }
-  endDateFilter(year: number) {
-    let endDate = new Date('2023-12-01');
-    this.newMoneyService.addEnd(endDate);
   }
 
   resetFilters() {
@@ -162,13 +165,15 @@ export class Tabs2ContainerComponent {
         tap((filters) => {
           console.log('%c[filters]', Colors.INFO, filters);
           let mf: MoneyFilter = {
-            startDate: filters.startDate ? new Date(filters.startDate) : undefined,
+            startDate: filters.startDate
+              ? new Date(filters.startDate)
+              : undefined,
             endDate: filters.endDate ? new Date(filters.endDate) : undefined,
-          //   ...filters,
+            //   ...filters,
             // startDate: filters.startDate,
-          //   endDate: filters.endDate,
-          }
-          this.newMoneyService.updateFilters(mf)
+            //   endDate: filters.endDate,
+          };
+          this.newMoneyService.updateFilters(mf);
         })
       )
       .subscribe();
