@@ -7,6 +7,7 @@ import { MaterialModule } from '@crown/material';
 import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
 import { MatTableDataSource } from '@angular/material/table';
 import {
+  Colors,
   EMPTY_STRING,
   Money,
   MoneyFilter,
@@ -46,37 +47,31 @@ interface DateAccumulator {
     NewDetailsTabComponent,
     DetailsTabComponent,
   ],
-  templateUrl: './tabs-2.component.html',
-  styleUrl: './tabs-2.component.scss',
+  templateUrl: './tabs-2-container.component.html',
+  styleUrl: './tabs-2-container.component.scss',
 })
-export class Tabs2Component {
+export class Tabs2ContainerComponent {
   dataSource!: MatTableDataSource<Money>;
+
+  filters = this.fb.group({
+    startDate: [null],
+    endDate: [null],
+  });
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
-
 
   filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-
-      let dateRange = data.map((d) => new Date(d.createdAt)); //.sort()
-      let earliest = dateRange[0];
-      let latest = dateRange[0];
-
-      dateRange.forEach((date) => {
-        if (date < earliest) earliest = date;
-        if (date > latest) latest = date;
-      });
-      console.log('Earliest, latest:', earliest, latest); //.toISOString());
     })
-    );
+  );
 
-  range$: Observable<{from: Date, to: Date}> = this.filteredMoney$.pipe(
-    map(fm => fm.map(f => f.createdAt)),
-    map(fm => {
+  dateRange$: Observable<{ from: Date; to: Date }> = this.filteredMoney$.pipe(
+    map((fm) => fm.map((f) => f.createdAt)),
+    map((fm) => {
       let earliest = fm[0];
       let latest = fm[0];
 
@@ -86,58 +81,8 @@ export class Tabs2Component {
       });
       return {
         from: earliest,
-        to: latest
-      }
-    })
-  )
-
-  dateRange$ = this.filteredMoney$.pipe(
-    map((money) => money.map((m) => new Date(m.createdAt))),
-    // map(money => money.map(m => (m.createdAt))),
-    tap((dateRange) => {
-      console.log('[dateRange]', dateRange);
-    }),
-    // map(createdAt => new Date(createdAt)),
-    // reduce<Date[], DateAccumulator>((acc, current) => {
-    // reduce((acc, current) => {
-    //   if (!acc.earliest || current < acc.earliest) {
-    //     acc.earliest = current;
-    //   }
-    //   if (!acc.latest || current > acc.latest) {
-    //     acc.latest = current;
-    //   }
-    //   return acc;
-    // }, { earliest: new Date(8640000000000000), latest: new Date(-8640000000000000) }) // Max and Min Date values
-
-    // }, { earliest: null, latest: null })
-    // reduce((acc, dateStr) => {
-    //   const date = new Date(dateStr);
-    //   if (!acc.earliest || date < acc.earliest) {
-    //     acc.earliest = date;
-    //   }
-    //   if (!acc.latest || date > acc.latest) {
-    //     acc.latest = date;
-    //   }
-    //   return acc;
-    // }, { earliest: null, latest: null })
-    reduce(
-      (acc, createdAt: any) => {
-        if (!acc.earliest || createdAt < acc.earliest) {
-          acc.earliest = createdAt;
-        }
-        if (!acc.latest || createdAt > acc.latest) {
-          acc.latest = createdAt;
-        }
-        return acc;
-        // }, { earliest: null, latest: null })
-      },
-      {
-        earliest: new Date(8640000000000000),
-        latest: new Date(-8640000000000000),
-      }
-    ), // Max and Min Date values
-    tap((dateRange) => {
-      console.log('[dateRange #2]', dateRange);
+        to: latest,
+      };
     })
   );
 
@@ -207,11 +152,27 @@ export class Tabs2Component {
         };
       })
     );
-  }
 
-  form = this.fb.group({
-    startDate: [null],
-  });
+    this.filters.valueChanges
+      .pipe(
+        // filter(filters => !!filters),
+        // map(filters => ({
+        //   startDate: new Date(filters.startDate)
+        // })),
+        tap((filters) => {
+          console.log('%c[filters]', Colors.INFO, filters);
+          let mf: MoneyFilter = {
+            startDate: filters.startDate ? new Date(filters.startDate) : undefined,
+            endDate: filters.endDate ? new Date(filters.endDate) : undefined,
+          //   ...filters,
+            // startDate: filters.startDate,
+          //   endDate: filters.endDate,
+          }
+          this.newMoneyService.updateFilters(mf)
+        })
+      )
+      .subscribe();
+  }
 
   typeFilter(filter: Partial<MoneyFilter>) {
     this.newMoneyService.betterFilter(filter);

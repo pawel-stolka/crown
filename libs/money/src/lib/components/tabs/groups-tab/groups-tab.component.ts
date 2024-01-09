@@ -1,12 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  Colors,
   MonthsCategories,
   NoYearPipe,
   PriceByTypePipe,
@@ -28,11 +22,7 @@ import { SearchResultsComponent } from '../../search-results/search-results.comp
     PriceByTypePipe,
   ],
 })
-export class GroupsTabComponent implements OnInit {
+export class GroupsTabComponent {
   @Input() data!: MonthsCategories | null | any; // TODO: no any
   @Input() filtered = false;
-
-  ngOnInit(): void {
-    console.log('%c[GroupsTabComponent INIT]', Colors.BLACK, this.data);
-  }
 }

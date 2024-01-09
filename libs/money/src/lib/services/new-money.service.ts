@@ -95,16 +95,6 @@ export class NewMoneyService {
     this.initializeDataFetch().subscribe()
   }
 
-  // private initializeDataFetch() {
-  //   this.api.tokenEmail$.subscribe(tokenEmail => {
-  //     if (tokenEmail) {
-  //       return this.fetchAll$(); // Call your data fetching method
-  //     } else {
-  //       return of([])
-  //       // Optionally handle the case when the user logs out
-  //     }
-  //   });
-  // }
   private initializeDataFetch() {
     return this.api.tokenEmail$.pipe(
       switchMap(tokenEmail => {

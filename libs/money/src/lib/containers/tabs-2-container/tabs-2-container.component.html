@@ -30,27 +30,52 @@
   </div>
 </ng-container>
 
-<mat-dialog-content [formGroup]="form">
-  <mat-form-field appearance="outline">
-    <mat-label>od</mat-label>
-    <input
-      matInput
-      [matDatepicker]="datepicker"
-      #searchInput
-      formControlName="startDate"
-    />
-    <!-- @if (date?.hasError('required')) {
+<ng-container *ngIf="dateRange$ | async as dateRange">
+  <div>dateRange$ {{ dateRange | json }}</div>
+
+  <div class="inline">
+    <mat-dialog-content [formGroup]="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Od</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fromDatepicker"
+          [value]="dateRange.from"
+          #searchInput
+          formControlName="startDate"
+        />
+        <!-- @if (date?.hasError('required')) {
     <mat-error> Podaj datę! </mat-error>
     } -->
 
-    <mat-datepicker-toggle matSuffix [for]="datepicker">
-    </mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
+        </mat-datepicker-toggle>
 
-    <mat-datepicker #datepicker></mat-datepicker>
-  </mat-form-field>
-</mat-dialog-content>
+        <mat-datepicker #fromDatepicker></mat-datepicker>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-content [formGroup]="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Do</mat-label>
+        <input
+          matInput
+          [matDatepicker]="toDatepicker"
+          [value]="dateRange.to"
+          #searchInput
+          formControlName="endDate"
+        />
+        <!-- @if (date?.hasError('required')) {
+    <mat-error> Podaj datę! </mat-error>
+    } -->
 
-<div>dateRange$ {{ range$ | async | json }}</div>
+        <mat-datepicker-toggle matSuffix [for]="toDatepicker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #toDatepicker></mat-datepicker>
+      </mat-form-field>
+    </mat-dialog-content>
+  </div>
+</ng-container>
 
 <ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
