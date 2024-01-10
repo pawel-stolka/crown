@@ -25,7 +25,7 @@ import { NewDetailsTabComponent } from '../../components/tabs/new-details-tab/ne
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
 
 const NEW_GROUPS_LABEL = 'NOWE GRUPY';
@@ -47,6 +47,7 @@ interface DateRange {
   imports: [
     CommonModule,
     MaterialModule,
+    FormsModule,
     ReactiveFormsModule,
     DataFilterComponent,
     NewGroupsComponent,
@@ -64,6 +65,8 @@ export class Tabs2ContainerComponent {
     startDate: [null],
     endDate: [null],
   });
+
+  dateRanged = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();

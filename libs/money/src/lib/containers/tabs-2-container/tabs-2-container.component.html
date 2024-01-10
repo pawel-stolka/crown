@@ -1,13 +1,20 @@
 <div class="actions">
   <div class="filters">
-    <div class="_year">
+
+
+    <div class="_year" *ngIf="!dateRanged">
       <crown-year-selector
         *ngIf="allYears$ | async as allYears"
         [allYears]="allYears"
         (currentYear)="addYearFilter($event)"
       ></crown-year-selector>
     </div>
-    <div class="range-type">
+
+    <mat-slide-toggle color="accent" [(ngModel)]="dateRanged"
+    >zakres dat</mat-slide-toggle
+  >
+
+    <div class="range-type" *ngIf="dateRanged">
       <ng-container *ngIf="dateRange$ | async as dateRange">
         <div class="dateRange">
           <div class="inline">
@@ -57,10 +64,10 @@
           </div>
 
           <div class="inline dateRange-message">
-            <div>{{ dateRange.from | date: 'dd.MM.yyyy' }}</div>
-            <div> - </div>
-            <div>{{ dateRange.to | date: 'dd.MM.yyyy' }}</div>
-            </div>
+            <div>{{ dateRange.from | date : 'dd.MM.yyyy' }}</div>
+            <div>-</div>
+            <div>{{ dateRange.to | date : 'dd.MM.yyyy' }}</div>
+          </div>
         </div>
         <crown-data-filter
           (filter)="typeFilter({ type: $event })"
@@ -140,7 +147,6 @@
     <mat-icon>add</mat-icon>
   </button>
 </div> -->
-
 
 <ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
