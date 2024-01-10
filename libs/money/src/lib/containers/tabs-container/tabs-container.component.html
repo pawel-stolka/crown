@@ -12,9 +12,9 @@
     }}</mat-slide-toggle> -->
 
       <ng-template #year>
-        <div class="dateRange2">
+        <div class="dateRange2" *ngIf="allYears$ | async as allYears">
           <crown-year-selector
-            *ngIf="allYears$ | async as allYears"
+            *ngIf="allYears.length"
             [year]="currentYear$ | async"
             [allYears]="allYears"
             (currentYear)="filterByYear($event)"
@@ -88,7 +88,7 @@
       </button>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="(allYears$ | async)?.length">
     <crown-data-filter (filter)="filterByType($event)"></crown-data-filter>
   </div>
 </div>
@@ -97,9 +97,9 @@
   filter-message...
   {{ message }}
 </div>
-
-<ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
-  <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
+<ng-container *ngIf="filteredMoney$ | async as money; else EMPTY">
+  <ng-container *ngIf="money.length > 0; then DATA; else NO_DATA">
+  </ng-container>
 </ng-container>
 
 <ng-template #DATA>

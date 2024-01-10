@@ -84,6 +84,7 @@ export class TabsContainerComponent {
   // );
   currentYear$ = this.newMoneyService.currentYear$;
 
+  moneyGroups$ = this.newMoneyService.moneyGroups$;
   filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);

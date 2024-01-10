@@ -49,15 +49,10 @@ export class NewMoneyService {
     ]),
     tap((allYears) => {
       const currentYear = chooseCurrentYear(allYears);
-      this.updateFilters({year: currentYear})
-      this._currentYearSubj.next(currentYear)
+      this.updateFilters({ year: currentYear });
+      this._currentYearSubj.next(currentYear);
     })
   );
-
-  // currentYear$ = this.allYears$.pipe(
-  //   map((allYears) => chooseCurrentYear(allYears)),
-  //   tap((y) => console.log('[y]', y))
-  // );
 
   get money() {
     return this._moneySubj.value;
@@ -71,12 +66,6 @@ export class NewMoneyService {
     this.money$,
     this.filters$,
   ]).pipe(map(([data, filters]) => this.filterMoney(data, filters)));
-
-  // allYears$ = this.filteredMoney$.pipe(
-  //   map((money) => [
-  //     ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
-  //   ])
-  // );
 
   moneyGroups$: Observable<MoneyGroup[]> = this.filteredMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
@@ -92,9 +81,7 @@ export class NewMoneyService {
         if (tokenEmail) {
           return this.fetchAll$(); // Call your data fetching method
         } else {
-          // Optionally handle the case when the user logs out
           console.log('[initializeDataFetch]', 'EMPTY');
-
           return of([]);
         }
       }),
@@ -109,7 +96,7 @@ export class NewMoneyService {
       catchError((err) => {
         const message = '[fetchAll] Something wrong...';
         // this.messages.showErrors(message);
-        console.log(message, err);
+        console.log(`%c${message}`, Colors.RED, err);
         return throwError(err);
       }),
       // TODO: isDeleted toggle for admin?

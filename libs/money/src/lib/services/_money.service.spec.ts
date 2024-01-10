@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OldMoneyService } from './money.service';
+import { OldMoneyService } from './_money.service';
 import { ApiService } from '@crown/api/service';
 import { Money } from '@crown/data';
 import { of, throwError } from 'rxjs';
