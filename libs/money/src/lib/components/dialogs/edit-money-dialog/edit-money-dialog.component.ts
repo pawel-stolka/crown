@@ -9,7 +9,9 @@ import {
 } from '@angular/forms';
 import {
   Colors,
+  DotNumberDirective,
   EMPTY_STRING,
+  LowercaseDirective,
   MAX_PRICE,
   MAX_TEXT_LENGTH,
   MIN_PRICE,
@@ -24,7 +26,13 @@ import { NewMoneyService } from '../../../services/new-money.service';
 @Component({
   selector: 'crown-edit-money-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    DotNumberDirective,
+    LowercaseDirective,
+  ],
   templateUrl: './edit-money-dialog.component.html',
   styleUrl: './edit-money-dialog.component.scss',
 })
