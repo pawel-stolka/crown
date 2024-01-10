@@ -1,249 +1,102 @@
 <div class="__help"></div>
 
 <div class="temp-actions">
-  <div class="temp-filters">
-    <div class="dateRange">
-      <ng-container *ngIf="!dateRanged; then year; else range"> </ng-container>
-    </div>
-    <!-- <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
+  <div class="row">
+    <div class="temp-filters">
+      <div class="dateRange">
+        <ng-container *ngIf="!dateRanged; then year; else range">
+        </ng-container>
+      </div>
+      <!-- <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
       chooseDatesLabel
     }}</mat-slide-toggle> -->
 
-    <ng-template #year>
-      <div class="dateRange2">
-        <crown-year-selector
-          *ngIf="allYears$ | async as allYears"
-          [year]="currentYear$ | async"
-          [allYears]="allYears"
-          (currentYear)="filterByYear($event)"
-        ></crown-year-selector>
-      </div>
-    </ng-template>
+      <ng-template #year>
+        <div class="dateRange2">
+          <crown-year-selector
+            *ngIf="allYears$ | async as allYears"
+            [year]="currentYear$ | async"
+            [allYears]="allYears"
+            (currentYear)="filterByYear($event)"
+          ></crown-year-selector>
+        </div>
+      </ng-template>
 
-    <ng-template #range>
-      <div class="dateRange" disabled>
-        <ng-container *ngIf="dateRange$ | async as dateRange">
-          <div class="_dateRange">
-            <div class="inline">
-              <button mat-stroked-button color="warn" (click)="resetFilters()">
-                domyślne
-              </button>
-              <mat-dialog-content [formGroup]="filters">
-                <mat-form-field appearance="outline">
-                  <mat-label>Od</mat-label>
-                  <input
-                    matInput
-                    [matDatepicker]="fromDatepicker"
-                    [value]="dateRange.from"
-                    #searchInput
-                    formControlName="startDate"
-                  />
+      <ng-template #range>
+        <div class="dateRange" disabled>
+          <ng-container *ngIf="dateRange$ | async as dateRange">
+            <div class="_dateRange">
+              <div class="inline">
+                <button
+                  mat-stroked-button
+                  color="warn"
+                  (click)="resetFilters()"
+                >
+                  domyślne
+                </button>
+                <mat-dialog-content [formGroup]="filters">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Od</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="fromDatepicker"
+                      [value]="dateRange.from"
+                      #searchInput
+                      formControlName="startDate"
+                    />
 
-                  <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
-                  </mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
+                    </mat-datepicker-toggle>
 
-                  <mat-datepicker #fromDatepicker></mat-datepicker>
-                </mat-form-field>
-              </mat-dialog-content>
-              <mat-dialog-content [formGroup]="filters">
-                <mat-form-field appearance="outline">
-                  <mat-label>Do</mat-label>
-                  <input
-                    matInput
-                    [matDatepicker]="toDatepicker"
-                    [value]="dateRange.to"
-                    #searchInput
-                    formControlName="endDate"
-                  />
+                    <mat-datepicker #fromDatepicker></mat-datepicker>
+                  </mat-form-field>
+                </mat-dialog-content>
+                <mat-dialog-content [formGroup]="filters">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Do</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="toDatepicker"
+                      [value]="dateRange.to"
+                      #searchInput
+                      formControlName="endDate"
+                    />
 
-                  <mat-datepicker-toggle matSuffix [for]="toDatepicker">
-                  </mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="toDatepicker">
+                    </mat-datepicker-toggle>
 
-                  <mat-datepicker #toDatepicker></mat-datepicker>
-                </mat-form-field>
-              </mat-dialog-content>
+                    <mat-datepicker #toDatepicker></mat-datepicker>
+                  </mat-form-field>
+                </mat-dialog-content>
+              </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
 
-        <mat-slide-toggle
-          color="primary"
-          [checked]="dateRanged"
-          (change)="onToggleChange($event)"
-          >no ngModel</mat-slide-toggle
-        >
-      </div>
-    </ng-template>
+          <mat-slide-toggle
+            color="primary"
+            [checked]="dateRanged"
+            (change)="onToggleChange($event)"
+            >no ngModel</mat-slide-toggle
+          >
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="add">
+      <button mat-fab color="accent" (click)="add()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
   </div>
-
-  <div class="add">
-    <button mat-fab color="accent" (click)="add()">
-      <mat-icon>add</mat-icon>
-    </button>
+  <div class="row">
+    <crown-data-filter (filter)="filterByType($event)"></crown-data-filter>
   </div>
 </div>
-<crown-data-filter (filter)="filterByType($event)"></crown-data-filter>
-
-<!-- <div class="help">
-  filters
-  <pre>{{ filters$ | async | json }}</pre>
-  <hr>
-  <pre>{{ filteredMoney$ | async | json }}</pre>
-</div> -->
-<!-- <crown-data-filter (filter)="typeFilter({ type: $event })"></crown-data-filter> -->
 
 <div *ngIf="message$ | async as message" class="filter-message">
   filter-message...
   {{ message }}
-  <!-- <div class="inline dateRange-message">
-    <div>{{ "dateRange.from | date : 'dd.MM.yyyy'" }}</div>
-    <div>-</div>
-    <div>{{ "dateRange.to' | date : 'dd.MM.yyyy'" }}</div>
-  </div> -->
 </div>
-
-<!-- <div class="actions" style="visibility: hidden">
-  <div class="filters">
-    <div class="_year" *ngIf="!dateRanged">
-      <crown-year-selector
-        *ngIf="allYears$ | async as allYears"
-        [allYears]="allYears"
-        (currentYear)="addYearFilter($event)"
-      ></crown-year-selector>
-    </div>
-
-    <mat-slide-toggle color="accent" [(ngModel)]="dateRanged"
-      >zakres dat</mat-slide-toggle
-    >
-
-    <div class="range-type" *ngIf="dateRanged">
-      <ng-container *ngIf="dateRange$ | async as dateRange">
-        <div class="dateRange">
-          <div class="inline">
-            <mat-dialog-content [formGroup]="filters">
-              <mat-form-field appearance="outline">
-                <mat-label>Od</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="fromDatepicker"
-                  [value]="dateRange.from"
-                  #searchInput
-                  formControlName="startDate"
-                />
-
-                <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
-                </mat-datepicker-toggle>
-
-                <mat-datepicker #fromDatepicker></mat-datepicker>
-              </mat-form-field>
-            </mat-dialog-content>
-            <mat-dialog-content [formGroup]="filters">
-              <mat-form-field appearance="outline">
-                <mat-label>Do</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="toDatepicker"
-                  [value]="dateRange.to"
-                  #searchInput
-                  formControlName="endDate"
-                />
-
-
-                <mat-datepicker-toggle matSuffix [for]="toDatepicker">
-                </mat-datepicker-toggle>
-
-                <mat-datepicker #toDatepicker></mat-datepicker>
-              </mat-form-field>
-            </mat-dialog-content>
-            <button mat-stroked-button color="warn" (click)="resetFilters()">
-              domyślne
-            </button>
-          </div>
-
-          <div class="inline dateRange-message">
-            <div>{{ dateRange.from | date : 'dd.MM.yyyy' }}</div>
-            <div>-</div>
-            <div>{{ dateRange.to | date : 'dd.MM.yyyy' }}</div>
-          </div>
-        </div>
-        <crown-data-filter
-          (filter)="typeFilter({ type: $event })"
-        ></crown-data-filter>
-      </ng-container>
-    </div>
-  </div>
-  <div class="add">
-    <button mat-fab color="accent" (click)="add()">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
-</div>
-
-<hr /> -->
-
-<!-- <div class="actions">
-  <div class="filters">
-    <crown-data-filter
-      (filter)="typeFilter({ type: $event })"
-    ></crown-data-filter>
-
-    <ng-container *ngIf="dateRange$ | async as dateRange">
-      <div class="dateRange">
-        <div class="inline">
-          <mat-dialog-content [formGroup]="filters">
-            <mat-form-field appearance="outline">
-              <mat-label>Od</mat-label>
-              <input
-                matInput
-                [matDatepicker]="fromDatepicker"
-                [value]="dateRange.from"
-                #searchInput
-                formControlName="startDate"
-              />
-              @if (date?.hasError('required')) {
-      <mat-error> Podaj datę! </mat-error>
-      }
-
-              <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
-              </mat-datepicker-toggle>
-
-              <mat-datepicker #fromDatepicker></mat-datepicker>
-            </mat-form-field>
-          </mat-dialog-content>
-          <mat-dialog-content [formGroup]="filters">
-            <mat-form-field appearance="outline">
-              <mat-label>Do</mat-label>
-              <input
-                matInput
-                [matDatepicker]="toDatepicker"
-                [value]="dateRange.to"
-                #searchInput
-                formControlName="endDate"
-              />
-              @if (date?.hasError('required')) {
-      <mat-error> Podaj datę! </mat-error>
-      }
-
-              <mat-datepicker-toggle matSuffix [for]="toDatepicker">
-              </mat-datepicker-toggle>
-
-              <mat-datepicker #toDatepicker></mat-datepicker>
-            </mat-form-field>
-          </mat-dialog-content>
-
-          <button (click)="resetFilters()">resetFilters</button>
-        </div>
-
-        <div>{{ dateRange | json }}</div>
-      </div>
-    </ng-container>
-  </div>
-  <button (click)="addYearFilter(2023)">2023</button>
-  <button (click)="addYearFilter(2024)">2024</button>
-  <button mat-fab color="accent" (click)="add()">
-    <mat-icon>add</mat-icon>
-  </button>
-</div> -->
 
 <ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
@@ -252,30 +105,20 @@
 <ng-template #DATA>
   <ng-container *ngIf="(monthsData$ | async)?.categories as categories">
     <div class="filter-message">
-    <ng-container
-     *ngIf="(filters$ | async)?.type">
-      <div class="filter-result" *ngIf="categories.length">
-        Znaleziono:
-        <span class="categories-amount">{{ categories.length }}</span>
-      </div>
-    </ng-container>
+      <ng-container *ngIf="(filters$ | async)?.type">
+        <div class="filter-result" *ngIf="categories.length">
+          Znaleziono:
+          <span class="categories-amount">{{ categories.length }}</span>
+        </div>
+      </ng-container>
     </div>
   </ng-container>
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
     <mat-tab label="{{ GROUPS_LABEL }}">
       <crown-new-groups [data]="monthsData$ | async"></crown-new-groups>
     </mat-tab>
-    <!-- <mat-tab label="{{ GROUPS_LABEL }}">
-      <crown-groups-tab
-        [data]="monthsData2$ | async"
-        [filtered]="!!(filterPhrase$ | async)"
-      ></crown-groups-tab>
-    </mat-tab> -->
+
     <mat-tab label="{{ DETAILS_LABEL }}">
-      <!-- <crown-details-tab
-        [money]="(monthsData2$ | async) || undefined"
-        [filter]="this.dataSource.filter"
-      ></crown-details-tab> -->
       <crown-new-details-tab
         [money]="(filteredMoney$ | async) || undefined"
       ></crown-new-details-tab>
