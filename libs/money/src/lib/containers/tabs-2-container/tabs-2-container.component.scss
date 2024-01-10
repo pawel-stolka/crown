@@ -6,7 +6,7 @@
   // border: 3px dotted dodgerblue;
   display: flex;
   justify-content: space-around;
-  align-items:baseline;
+  align-items: baseline;
   // gap: 5px;
   // flex-wrap: wrap;
   // align-items:center;
@@ -15,6 +15,45 @@
 
 mat-form-field {
   width: 150px;
+}
+
+.temp-actions {
+  padding: 5px 0;
+  // height: 56;
+  // border: 10px dotted magenta;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .temp-filters {
+    // border: 5px dotted;
+    display: flex;
+    justify-content: space-between;
+
+    .dateRange {
+      gap: 5px;
+      // border: 5px dotted burlywood;
+      display: flex;
+      // align-items: baseline;
+      align-items: center;
+
+      mat-dialog-content {
+        height: 56px;
+        // border: 5px dotted green;
+
+        mat-form-field {
+          padding: 0;
+          height: 56px;
+          // width: 90px;
+          // border: 5px dotted red;
+        }
+      }
+    }
+  }
+}
+
+.filter-message {
+  border: 5px dotted goldenrod;
 }
 
 .actions {
@@ -54,6 +93,17 @@ mat-form-field {
     }
   }
 }
+
+// .fade-animation {
+//   transition: opacity 0.5s;
+//   opacity: 0;
+//   overflow: hidden;
+// }
+
+// .fade-animation-active {
+//   opacity: 1;
+// }
+
 
 .__actions {
   display: flex;

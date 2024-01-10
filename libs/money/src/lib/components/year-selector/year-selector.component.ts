@@ -21,6 +21,7 @@ import { MatSelectChange } from '@angular/material/select';
 export class YearSelectorComponent {
   @Input() allYears: number[] = [];
   @Output() currentYear = new EventEmitter();
+  // @Input() disabled = false;
 
   private _year: number = chooseCurrentYear(this.allYears);
   set year(val: number) {

@@ -67,6 +67,9 @@ export class Tabs2ContainerComponent {
   });
 
   dateRanged = false;
+  yearFilter = this.dateRanged;
+  // chooseDatesLabel = 'wybierz zakres...'
+  chooseDatesLabel = 'zakres...'
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
