@@ -119,7 +119,8 @@ export class AddDialogComponent {
 
     this.newMoneyService.create$(changes).subscribe(() => {
       this.dialogRef.close();
-      // TODO(toast): this.toast('Dodałeś rachunek...');
+      // TODO(toast):
+      this.toast('Dodałeś rachunek...');
     });
   }
 

@@ -22,6 +22,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, startWith, map, of } from 'rxjs';
 import { MoneyService } from '../../../services/money.service';
+import { ToastService } from '@crown/ui';
 
 @Component({
   selector: 'crown-edit-money-dialog',
@@ -62,12 +63,16 @@ export class EditMoneyDialog implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditMoneyDialog>,
     private moneyService: MoneyService,
+
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;
   }
 
+
+
   ngOnInit() {
+
     const { userId, type, price, fromWho, createdAt, isVat, isDeleted } =
       this.money;
 

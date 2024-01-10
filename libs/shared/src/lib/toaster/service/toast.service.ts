@@ -15,10 +15,14 @@ export class ToastService {
   private toastContainerRef!: ViewContainerRef;
   private toasts: ComponentRef<ToastComponent>[] = [];
 
-  constructor(private resolver: ComponentFactoryResolver) {}
+  constructor(private resolver: ComponentFactoryResolver) {
+    this.setToastContainer(this.toastContainerRef)
+  }
 
   setToastContainer(container: ViewContainerRef) {
     this.toastContainerRef = container;
+    console.log('[this.toastContainerRef]', this.toastContainerRef);
+
   }
 
   showSuccess(msg: string) {
