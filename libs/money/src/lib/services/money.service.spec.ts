@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MoneyService } from './money.service';
+import { OldMoneyService } from './money.service';
 import { ApiService } from '@crown/api/service';
 import { Money } from '@crown/data';
 import { of, throwError } from 'rxjs';
 
 describe('MoneyService', () => {
-  let service: MoneyService;
+  let service: OldMoneyService;
   let mockApiService: { get: any; post: any; put: any; delete: any };
 
   const mockedMoneys: Money[] = [
@@ -46,12 +46,12 @@ describe('MoneyService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        MoneyService,
+        OldMoneyService,
         { provide: ApiService, useValue: mockApiService },
       ],
     });
 
-    service = TestBed.inject(MoneyService);
+    service = TestBed.inject(OldMoneyService);
     service.money$ = of(mockedMoneys);
   });
 
@@ -72,7 +72,6 @@ describe('MoneyService', () => {
         expect(err).toBe(error);
       }
     });
-
   });
   describe('CRUD methods', () => {
     it('should fetch all money data', async () => {

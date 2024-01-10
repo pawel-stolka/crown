@@ -21,7 +21,6 @@ import {
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 import { ToastService } from '@crown/ui';
-import { MoneyService } from '@crown/money';
 import { NewMoneyService } from '../../../services/new-money.service';
 
 @Component({
@@ -41,7 +40,7 @@ export class AddDialogComponent {
   title = 'Dodaj rachunek';
   form!: FormGroup;
 
-  private getCategories$ = this.moneyService.getCategories$();
+  private getCategories$ = this.newMoneyService.getCategories$();
   filteredCategories$: Observable<string[]> | undefined;
 
   get date() {
@@ -64,7 +63,6 @@ export class AddDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
     private newMoneyService: NewMoneyService,
-    private moneyService: MoneyService,
     private toastService: ToastService
   ) {}
 
@@ -119,8 +117,7 @@ export class AddDialogComponent {
   save() {
     const changes: Partial<Money> = this.form.value;
 
-    // this.moneyService.create(changes).subscribe(() => {
-    this.newMoneyService.create(changes).subscribe(() => {
+    this.newMoneyService.create$(changes).subscribe(() => {
       this.dialogRef.close();
       // TODO(toast): this.toast('Dodałeś rachunek...');
     });

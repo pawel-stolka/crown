@@ -35,5 +35,5 @@ export function formatValue(value: number | string, locale: string): string {
 }
 
 export function lowIt(value: string) {
-  return value.trim().toLowerCase();
+  return value?.trim().toLowerCase();
 }

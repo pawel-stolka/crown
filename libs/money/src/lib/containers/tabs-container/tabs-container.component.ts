@@ -1,119 +1,148 @@
-import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '@crown/material';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
-  MoneyFilter,
-  MoneyService,
-  // getYear,
-} from '../../services/money.service';
+  NewMoneyService,
+  chooseCurrentYear,
+} from '../../services/new-money.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
+import { MaterialModule } from '@crown/material';
+import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  Money,
-  MoneyGroup,
-  ZERO_DATA,
-  dialogConfig,
-  compareBy,
+  Colors,
   EMPTY_STRING,
+  Money,
+  MoneyFilter,
+  MoneyGroup,
+  MonthsCategories,
   TypePrice,
-  formatValue,
+  compareBy,
+  dialogConfig,
   fixNumber,
-  getYear,
 } from '@crown/data';
-import {
-  BehaviorSubject,
-  Observable,
-  combineLatest,
-  delay,
-  filter,
-  map,
-  tap,
-} from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { Observable, filter, map, reduce, tap } from 'rxjs';
+import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
+import { NewDetailsTabComponent } from '../../components/tabs/new-details-tab/new-details-tab.component';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
-import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
-import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
-import { YearFilterComponent } from '../../components/year-filter/year-filter.component';
-import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
-import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
-import { NewMoneyService } from '../../services/new-money.service';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-const NEW_GROUPS_LABEL = 'NOWE GRUPY';
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WSZYSTKO';
+
+interface DateAccumulator {
+  earliest: Date;
+  latest: Date;
+}
+
+interface DateRange {
+  from: Date;
+  to: Date;
+  type?: string;
+  year?: number;
+}
 @Component({
-  selector: 'crown-tabs-container',
+  selector: 'crown-tabs-2',
   standalone: true,
   imports: [
     CommonModule,
     MaterialModule,
-    GroupsTabComponent,
-    NewGroupsComponent,
-    DetailsTabComponent,
-    YearFilterComponent,
+    FormsModule,
+    ReactiveFormsModule,
     DataFilterComponent,
+    NewGroupsComponent,
+    NewDetailsTabComponent,
+    DetailsTabComponent,
+    YearSelectorComponent,
   ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',
 })
 export class TabsContainerComponent {
   dataSource!: MatTableDataSource<Money>;
-  NEW_GROUPS_LABEL = NEW_GROUPS_LABEL;
+
+  filters = this.fb.group({
+    startDate: [null],
+    endDate: [null],
+  });
+
+  dateRanged = false;
+  yearFilter = this.dateRanged;
+  chooseDatesLabel = 'zakres...';
+
+  allYears$ = this.newMoneyService.allYears$;
+  // defaultYear$ = this.newMoneyService.defaultYear$;
+  // currentYear$ = this.allYears$.pipe(
+  //   map((allYears) => chooseCurrentYear(allYears)),
+  //   tap((y) => console.log('[y]', y))
+  // );
+  currentYear$ = this.newMoneyService.currentYear$;
+
+  filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
+    tap((data) => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    })
+  );
+
+  currentFilters: any;
+  filters$ = this.newMoneyService.filters$.pipe(
+    tap((filters) => {
+      console.log('%c[filters]', Colors.BLACK, filters);
+      this.currentFilters = filters;
+    })
+  );
+
+  message$: Observable<string> = this.newMoneyService.message$;
+
+  // TODO: MoneyFilter
+  dateRange$: Observable<DateRange> = this.filteredMoney$.pipe(
+    map((fm) => fm.map((f) => f.createdAt)),
+    map((money) => {
+      let [from] = money;
+      let to = from;
+
+      money.forEach((date) => {
+        if (date < from) from = date;
+        if (date > to) to = date;
+      });
+      return {
+        from,
+        to,
+      };
+    })
+  );
+
+  monthsData$: Observable<MonthsCategories>;
+
   GROUPS_LABEL = GROUPS_LABEL;
   DETAILS_LABEL = DETAILS_LABEL;
-
-  pageSizeOptions = [5, 10, 25];
-  pageSize = this.pageSizeOptions[0];
-
-  // availableYears$ = this.moneyService.availableYears$;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  selectedYear$: Observable<number> = this.moneyService.selectedYear$;
-
-  private _filterPhraseSubj = new BehaviorSubject<string>(EMPTY_STRING);
-  filterPhrase$ = this._filterPhraseSubj.asObservable();
-
-  yearMoney$: Observable<Money[]>;
-  monthsData$: Observable<{ months: MoneyGroup[]; categories: string[] }>;
-  monthsData2$: Observable<{
-    months: MoneyGroup[];
-    categories: string[];
-    total: number;
-  }>;
-  yearMonthsData$: Observable<{
-    months: (Partial<MoneyGroup> | null)[];
-    categories: string[];
-    total: number;
-  }>;
-
-  filteredMoney$ = this.newMoneyService.filteredMoney$;
-  betterFilter(filter: Partial<MoneyFilter>) {
-    this.moneyService.betterFilter(filter);
+  updateMessage(message: string) {
+    this.newMoneyService.updateMessage(message);
   }
-  pendingFetch$ = this.moneyService.pendingFetch$;
 
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,
-    private newMoneyService: NewMoneyService,
-    private moneyService: MoneyService // TODO: private toastService: ToastService
+    private newMoneyService: NewMoneyService, // TODO: private toastService: ToastService
+    private fb: FormBuilder
   ) {
-    this.yearMoney$ = this.moneyService.yearMoney$.pipe(
-      tap((data) => {
-        this.dataSource = new MatTableDataSource(data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      })
-    );
-
-    this.monthsData$ = this.moneyService.moneyGroups$.pipe(
+    this.monthsData$ = this.newMoneyService.moneyGroups$.pipe(
       map((groups) => groups.sort(compareBy('period', true))),
       map((moneyGroups) => {
+        console.log('1.moneyGroups', moneyGroups);
+
         const typePrices = groupTypePrices(moneyGroups);
 
         const summary: MoneyGroup = {
@@ -124,79 +153,101 @@ export class TabsContainerComponent {
 
         const months = [...moneyGroups, summary];
         const categories = uniqueCategories(moneyGroups);
+        console.log('[categories]', categories);
 
         return {
           months,
           categories,
+          total: categories.length,
         };
       })
     );
 
-    this.monthsData2$ = this.monthsData$.pipe(
-      map((monthsData) => {
-        let total = monthsData.categories.length;
-        return {
-          ...monthsData,
-          total,
-        };
-      })
+    // this.monthsData2$ = monthsData$.pipe(
+    //   map((monthsData) => {
+    //     let total = monthsData.categories.length;
+    //     return {
+    //       ...monthsData,
+    //       total,
+    //     };
+    //   })
+    // );
+
+    this.filters.valueChanges
+      .pipe(
+        // filter(filters => !!filters),
+        // map(filters => ({
+        //   startDate: new Date(filters.startDate)
+        // })),
+        tap((filters) => {
+          console.log('%c[filters]', Colors.INFO, filters);
+          let mf: MoneyFilter = {
+            startDate: filters.startDate
+              ? new Date(filters.startDate)
+              : undefined,
+            endDate: filters.endDate ? new Date(filters.endDate) : undefined,
+            //   ...filters,
+            // startDate: filters.startDate,
+            //   endDate: filters.endDate,
+          };
+          this.newMoneyService.updateFilters(mf);
+        })
+      )
+      .subscribe();
+  }
+
+  // onModelChange(value: boolean) {
+  // onModelChange(value: any) {
+  //   console.log('Model changed:', value);
+  //   this.dateRanged = value;
+  //   // Handle the model change logic here
+  // }
+
+  onToggleChange(event: MatSlideToggleChange) {
+    this.dateRanged = event.checked;
+    console.log(
+      '%c[Toggle changed | filters]',
+      Colors.RED,
+      event.checked,
+      this.currentFilters
     );
+    this.updateFilters(this.currentFilters)
+    // onToggleChange(event: any) {
+    console.log('%c[this.onToggleChange]', Colors.RED, event);
+  }
 
-    this.yearMonthsData$ = combineLatest([
-      this.monthsData$.pipe(map(({ months }) => months)),
-      this.selectedYear$,
-      this.filterPhrase$,
-    ]).pipe(
-      map(([months, year, filterPhrase]) => {
-        const monthsByYear = months.filter(
-          ({ period }) => getYear(period) === year
-        );
+  updateFilters(filters: MoneyFilter) {
+    console.log('[this.updateFilters]', filters);
 
-        const monthsByFilter: (MoneyGroup | null)[] = monthsByYear
-          .map((month) => {
-            // 1.Filter typePrices to include only those that match the filterPhrase
-            const typePricesByPhrase = month.typePrices.filter(({ type }) =>
-              type.includes(filterPhrase)
-            );
-            // 2.If there are any filtered typePrices, return a new object with updated sum
-            if (typePricesByPhrase.length > 0) {
-              return {
-                ...month,
-                typePrices: typePricesByPhrase,
-                sum: typePricesByPhrase.reduce(
-                  (acc, cur) => acc + cur.price,
-                  0
-                ),
-              };
-            }
-            // 3.If no typePrices match, return null (to be filtered out)
-            return null;
-          })
-          .filter((month) => month !== null); // Filter out the nulls
+    this.newMoneyService.updateFilters(filters);
+  }
 
-        const typePrices = groupTypePrices(monthsByFilter);
-        const summary: Partial<MoneyGroup> = {
-          typePrices,
-        };
-        const _months = [...monthsByFilter, summary];
+  filterByYear(year: number) {
+    let currFilters = {
+      ...this.currentFilters,
+      year
+    };
+    console.log('%c[filterByYear]', Colors.MAG, year);
 
-        const _types = months
-          .map(({ typePrices }) => typePrices)
-          .flat()
-          .sort((a, b) => b.price - a.price)
-          .map(({ type }) => type);
+    this.newMoneyService.updateFilters(currFilters);
+  }
 
-        const types = [...new Set(_types)];
-        const categories = types.filter((c: string | any[]) =>
-          c.includes(filterPhrase)
-        );
-        return {
-          months: _months,
-          categories,
-          total: categories?.length,
-        };
-      })
-    );
+  // typeFilter(filter: Partial<MoneyFilter>) {
+  filterByType(type: string) {
+    let currFilters = {
+      ...this.currentFilters,
+      type
+    };
+    console.log('[filterByType]', type, currFilters);
+    // this._messageSubj.next(`wynik`);
+    // this.updateMessage(`wynik`);
+
+    // this.newMoneyService.updateFilters({ type });
+    this.newMoneyService.updateFilters(currFilters);
+  }
+
+  resetFilters() {
+    this.newMoneyService.resetFilters();
   }
 
   tabChange(index: number) {
@@ -206,15 +257,7 @@ export class TabsContainerComponent {
     }
   }
 
-  changeYear(year: number) {
-    this.moneyService.changeYear(year);
-  }
-
-  applyFilter(filter: string) {
-    this.dataSource.filter = filter;
-    this._filterPhraseSubj.next(filter);
-  }
-
+  // CRUD
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
     this.handleDialog(dialogRef);
@@ -232,16 +275,6 @@ export class TabsContainerComponent {
     this.handleDialog(dialogRef);
   }
 
-  getPriceByType(
-    typePrices: any[],
-    type: string,
-    locale: string
-  ): number | string {
-    const found = typePrices.find((tp: { type: any }) => tp.type === type);
-    const result = found ? found.price : ZERO_DATA;
-    return formatValue(result, locale);
-  }
-
   private handleDialog(dialogRef: MatDialogRef<any>) {
     dialogRef
       .afterClosed()
@@ -252,6 +285,7 @@ export class TabsContainerComponent {
   }
 }
 
+// TODO: move to shared
 function groupTypePrices(moneyGroups: (MoneyGroup | null)[]) {
   if (moneyGroups) {
     const flatTypePrices = moneyGroups.map((x: any) => x.typePrices).flat();

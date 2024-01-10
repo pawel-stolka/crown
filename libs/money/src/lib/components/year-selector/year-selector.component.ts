@@ -1,14 +1,17 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { chooseCurrentYear } from '../../services/new-money.service';
 import { MatSelectChange } from '@angular/material/select';
+import { Colors } from '@crown/data';
 
 @Component({
   selector: 'crown-year-selector',
@@ -20,22 +23,13 @@ import { MatSelectChange } from '@angular/material/select';
 })
 export class YearSelectorComponent {
   @Input() allYears: number[] = [];
+  @Input() year!: number | null;
   @Output() currentYear = new EventEmitter();
-  // @Input() disabled = false;
-
-  private _year: number = chooseCurrentYear(this.allYears);
-  set year(val: number) {
-    this._year = val;
-  }
-  get year() {
-    return chooseCurrentYear(this.allYears);
-  }
 
   changeYear(event: MatSelectChange) {
-    const year: number = event.value;
-    console.log('[this.changeYear]', year);
+    this.year = event.value;
+    console.log('[this.changeYear]', this.year);
 
-    this.year = year;
-    this.currentYear.emit(year);
+    this.currentYear.emit(this.year);
   }
 }

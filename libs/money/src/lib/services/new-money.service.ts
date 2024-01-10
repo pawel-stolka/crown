@@ -29,16 +29,35 @@ import {
   providedIn: 'root',
 })
 export class NewMoneyService {
-
   private api = inject(ApiService);
   private URL = `${API_URL}/api/money`;
+
   private _moneySubj = new BehaviorSubject<Money[]>([]);
-
-  money$ = this._moneySubj.asObservable();
-
   private _filterSubj: BehaviorSubject<MoneyFilter> =
     new BehaviorSubject<MoneyFilter>({});
+  private _messageSubj = new BehaviorSubject(EMPTY_STRING);
+  private _currentYearSubj = new BehaviorSubject<number | null>(null);
+
+  money$ = this._moneySubj.asObservable();
   filters$ = this._filterSubj.asObservable();
+  currentYear$ = this._currentYearSubj.asObservable();
+  message$ = this._messageSubj.asObservable();
+
+  allYears$ = this.money$.pipe(
+    map((money) => [
+      ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
+    ]),
+    tap((allYears) => {
+      const currentYear = chooseCurrentYear(allYears);
+      this.updateFilters({year: currentYear})
+      this._currentYearSubj.next(currentYear)
+    })
+  );
+
+  // currentYear$ = this.allYears$.pipe(
+  //   map((allYears) => chooseCurrentYear(allYears)),
+  //   tap((y) => console.log('[y]', y))
+  // );
 
   get money() {
     return this._moneySubj.value;
@@ -48,64 +67,35 @@ export class NewMoneyService {
     return this._filterSubj.value;
   }
 
-  allYears$ = this.money$.pipe(
-    map((money) => [
-      ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
-    ])
-  );
-  defaultYear$ = this.allYears$;
-
-  private _messageSubj = new BehaviorSubject(EMPTY_STRING);
-  message$: Observable<string> = this._messageSubj.asObservable();
-
-  updateMessage(message: string) {
-    this._messageSubj.next(message);
-  }
-
-  addYearFilter(year: number) {
-    const update: MoneyFilter = {
-      ...this.filters,
-      year,
-    };
-    this.updateFilters(update);
-  }
-
-  updateFilters(filter: MoneyFilter) {
-    this._filterSubj.next(filter);
-    // this.updateMessage(`wynik`);
-  }
-
-  resetFilters() {
-    const update: MoneyFilter = {
-      ...this.filters,
-      type: undefined,
-      year: undefined,
-      startDate: undefined,
-      endDate: undefined,
-    };
-    this.updateFilters(update);
-  }
-
-
-
   filteredMoney$: Observable<Money[]> = combineLatest([
     this.money$,
     this.filters$,
   ]).pipe(map(([data, filters]) => this.filterMoney(data, filters)));
 
+  // allYears$ = this.filteredMoney$.pipe(
+  //   map((money) => [
+  //     ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
+  //   ])
+  // );
+
+  moneyGroups$: Observable<MoneyGroup[]> = this.filteredMoney$.pipe(
+    map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
+  );
+
   constructor() {
-    // this.fetchAll$().subscribe();
     this.initializeDataFetch().subscribe();
   }
 
-  private initializeDataFetch() {
+  initializeDataFetch() {
     return this.api.tokenEmail$.pipe(
       switchMap((tokenEmail) => {
         if (tokenEmail) {
           return this.fetchAll$(); // Call your data fetching method
         } else {
-          return of([]);
           // Optionally handle the case when the user logs out
+          console.log('[initializeDataFetch]', 'EMPTY');
+
+          return of([]);
         }
       }),
       shareReplay()
@@ -133,11 +123,103 @@ export class NewMoneyService {
       }),
       // tap(() => this._pendingFetchSubj.next(false)),
       tap((money: Money[]) => this._moneySubj.next(money))
-      // tap((fetchAll) => console.log('%c[fetchAll]', Colors.BLACK, fetchAll)),
     );
   }
 
+  getCategories$(): Observable<string[]> {
+    return this.money$.pipe(
+      map((money) =>
+        money
+          .map((m) => m.type)
+          .filter((type): type is string => type !== undefined)
+      ),
+      map((types) => [...new Set(types)] ?? [])
+    );
+  }
+
+  create$(changes: Partial<Money>) {
+    changes = setNoonAsDate(changes);
+    console.log('[create | MoneyService]', changes);
+
+    return this.api.post<Money>(this.URL, changes).pipe(
+      tap((money) => {
+        const update: Money[] = [...this._moneySubj.value, money];
+        this._moneySubj.next(update);
+      })
+    );
+  }
+
+  edit$(id: string, changes: Partial<Money>) {
+    changes = setNoonAsDate(changes);
+
+    const index = this.money.findIndex((money) => money.id === id);
+    const newMoney: Money = {
+      ...this.money[index],
+      ...changes,
+    };
+
+    // copy of moneys
+    const newMoneys: Money[] = this.money.slice(0);
+    newMoneys[index] = newMoney;
+
+    return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
+      catchError((err) => {
+        const message = 'Could not edit money';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap(() => this._moneySubj.next(newMoneys)),
+      shareReplay()
+    );
+  }
+
+  delete$(id: string) {
+    return this.api.delete<Money>(`${this.URL}/${id}`).pipe(
+      catchError((err) => {
+        const message = '[delete] Something wrong...';
+        // this.messages.showErrors(message);
+        console.log(message, err);
+        return throwError(err);
+      }),
+      tap((money: Money) => {
+        const newMoneyList = this.money.filter((x) => x.id !== money.id);
+        this._moneySubj.next(newMoneyList);
+      })
+    );
+  }
+
+  updateMessage(message: string) {
+    this._messageSubj.next(message);
+  }
+
+  updateFilters(filter: MoneyFilter) {
+    this._filterSubj.next(filter);
+    // this.updateMessage(`wynik`);
+  }
+
+  addYearFilter(year: number) {
+    const update: MoneyFilter = {
+      ...this.filters,
+      year,
+    };
+    this.updateFilters(update);
+  }
+
+  resetFilters() {
+    const update: MoneyFilter = {
+      ...this.filters,
+      type: undefined,
+      year: undefined,
+      startDate: undefined,
+      endDate: undefined,
+    };
+    this.updateFilters(update);
+  }
+
   filterMoney(data: Money[], filter: MoneyFilter): Money[] {
+    console.log('[this.filterMoney]', data);
+
     return data.filter((item) => {
       const afterStartDate =
         !filter.startDate || new Date(item.createdAt) >= filter.startDate;
@@ -156,73 +238,13 @@ export class NewMoneyService {
     });
   }
 
-  betterFilter(filter: Partial<MoneyFilter>) {
-    this.updateFilter(filter);
-  }
+  // betterFilter(filter: Partial<MoneyFilter>) {
+  //   this.updateFilter(filter);
+  // }
 
-  create(changes: Partial<Money>) {
-    changes = setNoonAsDate(changes);
-    console.log('[create | MoneyService]', changes);
-
-    return this.api.post<Money>(this.URL, changes).pipe(
-      tap((money) => {
-        const update: Money[] = [...this._moneySubj.value, money];
-        this._moneySubj.next(update);
-      })
-    );
-  }
-
-  edit(id: string, changes: Partial<Money>) {
-    changes = setNoonAsDate(changes);
-
-    const index = this.money.findIndex((money) => money.id === id);
-    const newMoney: Money = {
-      ...this.money[index],
-      ...changes,
-    };
-
-    // copy of moneys
-    const newMoneys: Money[] = this.money.slice(0);
-    newMoneys[index] = newMoney;
-
-    return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
-      tap((x) => {
-        this._moneySubj.next(newMoneys);
-        console.log('[EDIT]', newMoneys);
-        console.log('[EDIT #2]', x);
-      }),
-      catchError((err) => {
-        const message = 'Could not edit money';
-        // this.messages.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      }),
-      shareReplay()
-    );
-  }
-
-  delete(id: string) {
-    return this.api.delete<Money>(`${this.URL}/${id}`).pipe(
-      catchError((err) => {
-        const message = '[delete] Something wrong...';
-        // this.messages.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      }),
-      tap((money: Money) => {
-        const newMoneyList = this.money.filter((x) => x.id !== money.id);
-        this._moneySubj.next(newMoneyList);
-      })
-    );
-  }
-
-  private updateFilter(newFilter: MoneyFilter) {
-    this._filterSubj.next(newFilter);
-  }
-
-  moneyGroups$: Observable<MoneyGroup[]> = this.filteredMoney$.pipe(
-    map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
-  );
+  // private updateFilter(newFilter: MoneyFilter) {
+  //   this._filterSubj.next(newFilter);
+  // }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
     const selection = this.setGrouping(by);

@@ -21,22 +21,14 @@ import {
   Colors,
   getYear,
   setNoonAsDate,
+  MoneyFilter,
 } from '@crown/data';
 import { ApiService } from '@crown/api/service';
-
-export interface MoneyFilter {
-  // dateRange?: { start: Date; end: Date };
-  startDate?: Date;
-  endDate?: Date;
-  type?: string;
-  year?: number;
-  // Add more filter properties as needed
-}
 
 @Injectable({
   providedIn: 'root',
 })
-export class MoneyService {
+export class OldMoneyService {
   private api = inject(ApiService);
 
   private URL = `${API_URL}/api/money`;
@@ -77,11 +69,11 @@ export class MoneyService {
     return data.filter((item) => {
       const afterStartDate =
         !filter.startDate || item.createdAt >= filter.startDate;
-      // const beforeEndDate = !filter.endDate || item.createdAt <= filter.endDate;
+
       const beforeEndDate =
         !filter.endDate ||
         item.createdAt <= new Date(filter.endDate.setHours(23, 59, 59, 999));
-      // const typeMatch = !filter.type || item.type === filter.type;
+
       const typeMatch = !filter.type || item.type?.includes(filter.type);
       const yearMatch =
         !filter.year || new Date(item.createdAt).getFullYear() === filter.year;
@@ -191,7 +183,7 @@ export class MoneyService {
         console.log(message, err);
         return throwError(err);
       }),
-      tap(() => this._moneySubj.next(newMoneys)),
+      tap(() => this._moneySubj.next(newMoneys))
       // shareReplay()
     );
   }
@@ -298,5 +290,3 @@ function filterByYear(money: Money[], year: number): Money[] {
 function getMonth(date: Date) {
   return date.toString().substring(0, 7);
 }
-
-

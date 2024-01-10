@@ -1,0 +1,91 @@
+<div class="actions">
+  <div class="filters">
+    <!-- <crown-year-filter
+      [availableYears]="availableYears$ | async"
+      (currentYear)="changeYear($event)"
+    ></crown-year-filter> -->
+    <!-- <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter> -->
+    <crown-data-filter (filter)="betterFilter({ type: $event })"></crown-data-filter>
+  </div>
+  <button mat-fab color="primary" (click)="add()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
+<!-- <button (click)="betterFilter({})">RESET</button>
+<button (click)="betterFilter({ type: 'chemia' })">chemia</button>
+<button (click)="betterFilter({ type: 'test' })">test</button>
+<button (click)="betterFilter({ type: 'pierdyliard' })">pierdyliard</button>
+<button (click)="betterFilter({ year: 2023 })">2023</button>
+<button (click)="betterFilter({ year: 2024 })">2024</button>
+<button (click)="betterFilter({ year: 2025 })">2025</button> -->
+
+<!-- <ng-container *ngIf="filteredMoney$ | async as list">
+  {{ list?.length | json }}
+  <hr />
+  <div *ngFor="let item of list">
+    {{ item | json }}
+  </div>
+</ng-container> -->
+
+<!-- <ng-container *ngIf="yearMonthsData$ | async as money; else NO_DATA">
+  <ng-container *ngIf="money.total > 0; then DATA; else EMPTY"> </ng-container>
+</ng-container> -->
+<ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
+  <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
+</ng-container>
+
+<ng-template #DATA>
+  <mat-tab-group (selectedIndexChange)="tabChange($event)">
+    <mat-tab label="{{ NEW_GROUPS_LABEL }}">
+      <crown-new-groups
+        [data]="monthsData2$ | async"
+      ></crown-new-groups>
+    </mat-tab>
+    <mat-tab label="{{ GROUPS_LABEL }}">
+      <crown-groups-tab
+        [data]="yearMonthsData$ | async"
+        [filtered]="!!(filterPhrase$ | async)"
+      ></crown-groups-tab>
+    </mat-tab>
+    <mat-tab label="{{ DETAILS_LABEL }}">
+      <crown-details-tab
+        [money]="(yearMoney$ | async) || undefined"
+        [filter]="this.dataSource.filter"
+      ></crown-details-tab>
+    </mat-tab>
+  </mat-tab-group>
+  <!-- <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
+    <mat-spinner [strokeWidth]="2"></mat-spinner>
+  </div> -->
+</ng-template>
+<!-- <ng-template #DATA>
+  <mat-tab-group (selectedIndexChange)="tabChange($event)">
+    <mat-tab label="{{ GROUPS_LABEL }}">
+      <crown-groups-tab
+        [data]="yearMonthsData$ | async"
+        [filtered]="!!(filterPhrase$ | async)"
+      ></crown-groups-tab>
+    </mat-tab>
+    <mat-tab label="{{ DETAILS_LABEL }}">
+      <crown-details-tab
+        [money]="(yearMoney$ | async) || undefined"
+        [filter]="this.dataSource.filter"
+      ></crown-details-tab>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template> -->
+
+<ng-template #EMPTY>
+  <div class="empty">
+    <span class="title">Nie znaleziono.</span>
+  </div>
+</ng-template>
+
+<ng-template #NO_DATA>
+  <div class="no-data">
+    <span class="title">Nic tu jeszcze nie ma</span>
+    <span class="subtitle">Dodaj coś ☝️ (+)</span>
+  </div>
+</ng-template>
