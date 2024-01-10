@@ -1,13 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NewMoneyService, getMonth } from './new-money.service';
+import {
+  NewMoneyService,
+  chooseCurrentYear,
+  getMonth,
+} from './new-money.service';
 import { Money } from '@crown/data';
 import { of } from 'rxjs';
 import { ApiService } from '@crown/api/service';
 
 describe('NewMoneyService', () => {
   let service: NewMoneyService;
-  let mockApiService: { get: any; post: any; put: any; delete: any };
+  let mockApiService: {
+    get: any;
+    post: any;
+    put: any;
+    delete: any;
+    tokenEmail$: any;
+  };
 
   const mockedMoneys: Money[] = [
     {
@@ -42,6 +52,8 @@ describe('NewMoneyService', () => {
       post: jest.fn(),
       put: jest.fn(),
       delete: jest.fn(),
+      // tokenEmail$: jest.fn().mockReturnValue(of('tokenEmail')),
+      tokenEmail$: of({ token: 'mockToken' }),
     };
 
     TestBed.configureTestingModule({
@@ -56,6 +68,21 @@ describe('NewMoneyService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('chooseCurrentYear', () => {
+    it('when exists in data years - selects current year', () => {
+      const result = chooseCurrentYear([2020, 2024]);
+      expect(result).toEqual(2024);
+    });
+    it('when DOES NOT exist in data years - selects most recent year', () => {
+      const result = chooseCurrentYear([2020, 2021]);
+      expect(result).toEqual(2021);
+    });
+    it('when NO YEARS - selects undefined', () => {
+      const result = chooseCurrentYear([]);
+      expect(result).toEqual(undefined);
+    });
   });
 
   describe('extra', () => {

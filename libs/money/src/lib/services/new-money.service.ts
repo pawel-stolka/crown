@@ -46,6 +46,13 @@ export class NewMoneyService {
     return this._filterSubj.value;
   }
 
+  allYears$ = this.money$.pipe(
+    map((money) => [
+      ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
+    ])
+  );
+  defaultYear$ = this.allYears$;
+
   addYearFilter(year: number) {
     const update: MoneyFilter = {
       ...this.filters,
@@ -92,18 +99,19 @@ export class NewMoneyService {
 
   constructor() {
     // this.fetchAll$().subscribe();
-    this.initializeDataFetch().subscribe()
+    this.initializeDataFetch().subscribe();
   }
 
   private initializeDataFetch() {
     return this.api.tokenEmail$.pipe(
-      switchMap(tokenEmail => {
-      if (tokenEmail) {
-        return this.fetchAll$(); // Call your data fetching method
-      } else {
-        return of([])
-        // Optionally handle the case when the user logs out
-      }}),
+      switchMap((tokenEmail) => {
+        if (tokenEmail) {
+          return this.fetchAll$(); // Call your data fetching method
+        } else {
+          return of([]);
+          // Optionally handle the case when the user logs out
+        }
+      }),
       shareReplay()
     );
   }
@@ -128,9 +136,8 @@ export class NewMoneyService {
         }));
       }),
       // tap(() => this._pendingFetchSubj.next(false)),
-      tap((money: Money[]) => this._moneySubj.next(money)),
-      tap((fetchAll) => console.log('%c[fetchAll]', Colors.BLACK, fetchAll)
-      ),
+      tap((money: Money[]) => this._moneySubj.next(money))
+      // tap((fetchAll) => console.log('%c[fetchAll]', Colors.BLACK, fetchAll)),
     );
   }
 
@@ -184,10 +191,9 @@ export class NewMoneyService {
 
     return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
       tap((x) => {
-        this._moneySubj.next(newMoneys)
+        this._moneySubj.next(newMoneys);
         console.log('[EDIT]', newMoneys);
         console.log('[EDIT #2]', x);
-
       }),
       catchError((err) => {
         const message = 'Could not edit money';
@@ -196,7 +202,7 @@ export class NewMoneyService {
         return throwError(err);
       }),
       shareReplay()
-    )
+    );
   }
 
   delete(id: string) {
@@ -282,4 +288,14 @@ export function getMonth(date: Date) {
   console.log('[getMonth]', date, res);
 
   return res + 1;*/
+}
+
+// export function chooseCurrentYear(years: number[] | null) {
+export function chooseCurrentYear(years: number[]) {
+  const currentYear = new Date().getFullYear();
+  if (years?.includes(currentYear)) {
+    return currentYear;
+  } else {
+    return years?.sort()[years.length - 1];
+  }
 }

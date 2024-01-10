@@ -68,11 +68,13 @@ export class Tabs2ContainerComponent {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  allYears$ = this.newMoneyService.money$.pipe(
-    map((money) => [
-      ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
-    ])
-  );
+  allYears$ = this.newMoneyService.allYears$;
+  defaultYear$ = this.newMoneyService.defaultYear$;
+  // allYears$ = this.newMoneyService.money$.pipe(
+  //   map((money) => [
+  //     ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
+  //   ])
+  // );
   filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
@@ -100,7 +102,9 @@ export class Tabs2ContainerComponent {
 
   filters$ = this.newMoneyService.filters$;
 
-  addYearFilter(year: number) {
+  addYearFilter(year: number | any) {
+    console.log('[addYearFilter]', year);
+
     this.newMoneyService.addYearFilter(year);
   }
 

@@ -1,25 +1,11 @@
-<div>
-{{ allYears$ | async | json }}
-</div>
-
-<div class="_actions">
-  <div class="_filters">
-    <!--  -->
-    <div class="year" >
-      <mat-form-field appearance="outline" *ngIf="allYears$ | async as allYears">
-        <mat-label>Rok</mat-label>
-        <mat-select>
-        <!-- <mat-select [value]="year" (selectionChange)="changeYear(year)"> -->
-          @for (option of allYears; track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      </div>
+<div class="actions">
+  <div class="filters">
     <div class="_year">
-      <crown-year-selector></crown-year-selector>
-      <button mat-stroked-button (click)="addYearFilter(2023)">2023</button>
-      <button mat-stroked-button (click)="addYearFilter(2024)">2024</button>
+      <crown-year-selector
+        *ngIf="allYears$ | async as allYears"
+        [allYears]="allYears"
+        (currentYear)="addYearFilter($event)"
+      ></crown-year-selector>
     </div>
     <div class="range-type">
       <ng-container *ngIf="dateRange$ | async as dateRange">
@@ -70,7 +56,11 @@
             </button>
           </div>
 
-          <!-- <div>{{ dateRange | json }}</div> -->
+          <div class="inline dateRange-message">
+            <div>{{ dateRange.from | date: 'dd.MM.yyyy' }}</div>
+            <div> - </div>
+            <div>{{ dateRange.to | date: 'dd.MM.yyyy' }}</div>
+            </div>
         </div>
         <crown-data-filter
           (filter)="typeFilter({ type: $event })"
@@ -87,7 +77,7 @@
 
 <hr />
 
-<div class="actions" style="opacity: 0">
+<!-- <div class="actions">
   <div class="filters">
     <crown-data-filter
       (filter)="typeFilter({ type: $event })"
@@ -106,9 +96,9 @@
                 #searchInput
                 formControlName="startDate"
               />
-              <!-- @if (date?.hasError('required')) {
+              @if (date?.hasError('required')) {
       <mat-error> Podaj datę! </mat-error>
-      } -->
+      }
 
               <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
               </mat-datepicker-toggle>
@@ -126,9 +116,9 @@
                 #searchInput
                 formControlName="endDate"
               />
-              <!-- @if (date?.hasError('required')) {
+              @if (date?.hasError('required')) {
       <mat-error> Podaj datę! </mat-error>
-      } -->
+      }
 
               <mat-datepicker-toggle matSuffix [for]="toDatepicker">
               </mat-datepicker-toggle>
@@ -149,17 +139,8 @@
   <button mat-fab color="accent" (click)="add()">
     <mat-icon>add</mat-icon>
   </button>
-</div>
+</div> -->
 
-<!-- <ng-container *ngIf="filters$ | async as filters">
-  <div class="help">
-    <div>filters$: {{ filters | json }}</div>
-    <div>startDate: {{ filters.startDate | json }}</div>
-    <div>endDate: {{ filters.endDate | json }}</div>
-    <div>type: {{ filters.type | json }}</div>
-    <div>year: {{ filters.year | json }}</div>
-  </div>
-</ng-container> -->
 
 <ng-container *ngIf="filteredMoney$ | async as money; else NO_DATA">
   <ng-container *ngIf="money.length > 0; then DATA; else EMPTY"> </ng-container>
