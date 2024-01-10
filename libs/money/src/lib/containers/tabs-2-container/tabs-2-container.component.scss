@@ -26,12 +26,14 @@ mat-form-field {
   align-items: center;
 
   .temp-filters {
+
     // border: 5px dotted;
     display: flex;
     justify-content: space-between;
 
     .dateRange {
       gap: 5px;
+      height: 56;
       // border: 5px dotted burlywood;
       display: flex;
       // align-items: baseline;
@@ -48,6 +50,10 @@ mat-form-field {
           // border: 5px dotted red;
         }
       }
+    }
+    .dateRange2 {
+      // border: 5px dotted blue;
+      height: 56px;
     }
   }
 }

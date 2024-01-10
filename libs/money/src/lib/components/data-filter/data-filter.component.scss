@@ -3,18 +3,19 @@
 :host {
   width: 100%;
   // margin: 0 20px 0;
+  margin: 10px 0;
 
   mat-icon {
     cursor: pointer;
   }
 
   mat-form-field {
-    border: 5px dotted;
-    width: 80px; /* Set your minimum width */
+    // border: 5px dotted;
+    width: 90px; /* Set your minimum width */
     // width: 120px; /* Set your minimum width */
-    // height: 56px;
+    height: 56px;
     background: transparent;
-    transition: border 0.53s ease, width 0.53s ease, background 0.53s ease;
+    transition: border 0.53s ease, width 0.53s ease;
     border-radius: 4px;
   }
 

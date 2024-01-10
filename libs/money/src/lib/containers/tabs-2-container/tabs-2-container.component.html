@@ -1,5 +1,4 @@
-<div class="__help">
-</div>
+<div class="__help"></div>
 
 <div class="temp-actions">
   <div class="temp-filters">
@@ -11,74 +10,74 @@
     }}</mat-slide-toggle> -->
 
     <ng-template #year>
-      <div [ngClass]="{'fade-animation': true, 'fade-animation-active': !dateRanged}">
-      <crown-year-selector
-        *ngIf="allYears$ | async as allYears"
-        [allYears]="allYears"
-        (currentYear)="addYearFilter($event)"
-      ></crown-year-selector>
-      <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
-        chooseDatesLabel
-      }}</mat-slide-toggle>
+      <!-- <div [ngClass]="{'fade-animation': true, 'fade-animation-active': !dateRanged}"> -->
+      <div class="dateRange2">
+        <crown-year-selector
+          *ngIf="allYears$ | async as allYears"
+          [allYears]="allYears"
+          (currentYear)="addYearFilter($event)"
+        ></crown-year-selector>
+        <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
+          chooseDatesLabel
+        }}</mat-slide-toggle>
+        <!-- </div> -->
       </div>
     </ng-template>
 
     <ng-template #range>
-      <!-- <div class="dateRange"> -->
-
-      <!-- <div class="__range-type"> -->
-        <div [ngClass]="{'fade-animation': true, 'fade-animation-active': dateRanged}">
-          <ng-container *ngIf="dateRange$ | async as dateRange">
-            <div class="_dateRange">
-              <div class="inline">
-                <button mat-stroked-button color="warn" (click)="resetFilters()">
-                  domyślne
-                </button>
-                <mat-dialog-content [formGroup]="filters">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Od</mat-label>
-                    <input
+      <div class="dateRange">
+        <!-- <div class="__range-type"> -->
+        <!-- <div [ngClass]="{'fade-animation': true, 'fade-animation-active': dateRanged}"> -->
+        <ng-container *ngIf="dateRange$ | async as dateRange">
+          <div class="_dateRange">
+            <div class="inline">
+              <button mat-stroked-button color="warn" (click)="resetFilters()">
+                domyślne
+              </button>
+              <mat-dialog-content [formGroup]="filters">
+                <mat-form-field appearance="outline">
+                  <mat-label>Od</mat-label>
+                  <input
                     matInput
                     [matDatepicker]="fromDatepicker"
                     [value]="dateRange.from"
                     #searchInput
                     formControlName="startDate"
-                    />
+                  />
 
-                    <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
-                    </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
+                  </mat-datepicker-toggle>
 
-                    <mat-datepicker #fromDatepicker></mat-datepicker>
-                  </mat-form-field>
-                </mat-dialog-content>
-                <mat-dialog-content [formGroup]="filters">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Do</mat-label>
-                    <input
+                  <mat-datepicker #fromDatepicker></mat-datepicker>
+                </mat-form-field>
+              </mat-dialog-content>
+              <mat-dialog-content [formGroup]="filters">
+                <mat-form-field appearance="outline">
+                  <mat-label>Do</mat-label>
+                  <input
                     matInput
                     [matDatepicker]="toDatepicker"
                     [value]="dateRange.to"
                     #searchInput
                     formControlName="endDate"
-                    />
+                  />
 
-                    <mat-datepicker-toggle matSuffix [for]="toDatepicker">
-                    </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="toDatepicker">
+                  </mat-datepicker-toggle>
 
-                    <mat-datepicker #toDatepicker></mat-datepicker>
-                  </mat-form-field>
-                </mat-dialog-content>
-
-              </div>
+                  <mat-datepicker #toDatepicker></mat-datepicker>
+                </mat-form-field>
+              </mat-dialog-content>
             </div>
-          </ng-container>
-        </div>
-      <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
-        chooseDatesLabel
-      }}</mat-slide-toggle>
+          </div>
+        </ng-container>
+        <!-- </div> -->
+        <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
+          chooseDatesLabel
+        }}</mat-slide-toggle>
 
-      <!-- </div> -->
-      <!-- </div> -->
+        <!-- </div> -->
+      </div>
     </ng-template>
   </div>
 
@@ -90,8 +89,9 @@
 </div>
 <crown-data-filter (filter)="typeFilter({ type: $event })"></crown-data-filter>
 
-<div class="filter-message">
+<div *ngIf="message" class="filter-message">
   filter-message...
+  {{ message }}
   <div class="inline dateRange-message">
     <div>{{ "dateRange.from | date : 'dd.MM.yyyy'" }}</div>
     <div>-</div>
@@ -99,7 +99,7 @@
   </div>
 </div>
 
-<div class="actions" style="visibility: hidden">
+<!-- <div class="actions" style="visibility: hidden">
   <div class="filters">
     <div class="_year" *ngIf="!dateRanged">
       <crown-year-selector
@@ -127,9 +127,6 @@
                   #searchInput
                   formControlName="startDate"
                 />
-                <!-- @if (date?.hasError('required')) {
-        <mat-error> Podaj datę! </mat-error>
-        } -->
 
                 <mat-datepicker-toggle matSuffix [for]="fromDatepicker">
                 </mat-datepicker-toggle>
@@ -147,9 +144,7 @@
                   #searchInput
                   formControlName="endDate"
                 />
-                <!-- @if (date?.hasError('required')) {
-        <mat-error> Podaj datę! </mat-error>
-        } -->
+               
 
                 <mat-datepicker-toggle matSuffix [for]="toDatepicker">
                 </mat-datepicker-toggle>
@@ -181,7 +176,7 @@
   </div>
 </div>
 
-<hr />
+<hr /> -->
 
 <!-- <div class="actions">
   <div class="filters">

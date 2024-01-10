@@ -26,9 +26,13 @@ export class DataFilterComponent {
     this._filterSubj.next(filterValue);
     this.filter.emit(filterValue);
   }
+
   clearFilter() {
-    this.filterValue = EMPTY_STRING;
+
+    // this.filterValue = EMPTY_STRING;
+    this.filterValue = null;
     this.filter.emit(this.filterValue);
     this._filterSubj.next(this.filterValue);
+    console.log('[this.clearFilter]', this.filterValue);
   }
 }

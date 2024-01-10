@@ -107,6 +107,7 @@ export class Tabs2ContainerComponent {
   );
 
   filters$ = this.newMoneyService.filters$;
+  message: string = EMPTY_STRING;
 
   addYearFilter(year: number | any) {
     console.log('[addYearFilter]', year);
@@ -190,6 +191,7 @@ export class Tabs2ContainerComponent {
   }
 
   typeFilter(filter: Partial<MoneyFilter>) {
+    this.message = `wynik`
     this.newMoneyService.betterFilter(filter);
   }
 
