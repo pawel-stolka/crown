@@ -47,47 +47,28 @@ mat-card {
   }
 }
 
+.t-center {
+  text-align: center;
+}
+
 .highlight {
   border: 5px dotted;
 }
 
-.card-header {
-  .title {
-    width: 93%;
-    font-size: 1.2em;
-    font-weight: bolder;
-  }
-
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  border-bottom: 1px solid $grey;
-
-  .icon {
-    width: 7%;
-  }
-
-  .mat-mdc-card-title {
-    display: flex;
-    flex-direction: row;
-    // justify-content: space-between;
-    width: 100%;
-  }
-}
-
-.center-y {
-  display: flex;
-}
-
 .priority {
-  &-high {
-    color: $warn; // red;
+  display: flex;
+  justify-content: center;
+
+  &-critical {
     color: red;
-    font-weight: bolder;
+    font-weight: bold;
+  }
+  &-high {
+    color: $warn; // dark-red;
+    font-weight: bold;
   }
 
   &-medium {
-    // color: $warn-light;
     color: rgb(255, 136, 0);
   }
 
@@ -103,6 +84,35 @@ mat-card {
   &-very-low {
     color: rgb(175, 175, 175);
   }
+}
+
+.card-header {
+  .title {
+    width: 93%;
+    font-size: 1.2em;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+  }
+
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid $grey;
+
+  .icon {
+    width: 7%;
+  }
+
+  .mat-mdc-card-title {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+}
+
+.center-y {
+  display: flex;
 }
 
 mat-card-content {

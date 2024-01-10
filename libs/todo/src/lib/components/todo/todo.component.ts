@@ -48,7 +48,6 @@ export class TodoComponent {
   }
 
   edit() {
-    // console.log('edit', this.todo);
     this.editting.emit(this.todo);
   }
 
@@ -58,12 +57,10 @@ export class TodoComponent {
     switch (priority) {
       case Priority.URGENT:
         return 'error';
-        return 'priority_high';
       case Priority.HIGH:
         return 'error_outline';
       case Priority.MEDIUM:
         return 'warning';
-        return 'error_outline';
       case Priority.LOW:
         return 'bug_report';
       case Priority.WHO_CARES:
@@ -76,19 +73,20 @@ export class TodoComponent {
   getClass(priority: Priority | undefined) {
     switch (priority) {
       case Priority.URGENT:
+        return 'priority-critical t-center';
       case Priority.HIGH:
-        return 'priority-high';
+        return 'priority-high t-center';
 
       case Priority.MEDIUM:
-        return 'priority-medium';
+        return 'priority-medium t-center';
 
       case Priority.LOW:
-        return 'priority-low';
+        return 'priority-low t-center';
       case Priority.WHO_CARES:
-        return 'priority-very-low';
+        return 'priority-very-low t-center';
 
       default:
-        return 'priority-unknown';
+        return 'priority-unknown t-center';
         return 'priority-minor';
     }
   }
