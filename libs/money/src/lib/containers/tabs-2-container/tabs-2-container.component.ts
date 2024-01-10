@@ -19,7 +19,7 @@ import {
 } from '@crown/data';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Observable, filter, map, reduce, tap } from 'rxjs';
+import { BehaviorSubject, Observable, filter, map, reduce, tap } from 'rxjs';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { NewDetailsTabComponent } from '../../components/tabs/new-details-tab/new-details-tab.component';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
@@ -40,6 +40,8 @@ interface DateAccumulator {
 interface DateRange {
   from: Date;
   to: Date;
+  type?: string;
+  year?: number;
 }
 @Component({
   selector: 'crown-tabs-2',
@@ -76,11 +78,7 @@ export class Tabs2ContainerComponent {
 
   allYears$ = this.newMoneyService.allYears$;
   defaultYear$ = this.newMoneyService.defaultYear$;
-  // allYears$ = this.newMoneyService.money$.pipe(
-  //   map((money) => [
-  //     ...new Set(money.map((m) => new Date(m.createdAt).getFullYear()).sort()),
-  //   ])
-  // );
+
   filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
@@ -88,7 +86,7 @@ export class Tabs2ContainerComponent {
       this.dataSource.paginator = this.paginator;
     })
   );
-
+// TODO: MoneyFilter
   dateRange$: Observable<DateRange> = this.filteredMoney$.pipe(
     map((fm) => fm.map((f) => f.createdAt)),
     map((money) => {
@@ -107,12 +105,27 @@ export class Tabs2ContainerComponent {
   );
 
   filters$ = this.newMoneyService.filters$;
-  message: string = EMPTY_STRING;
+  // message!: string// = EMPTY_STRING;
+
+  message$: Observable<string> = this.newMoneyService.message$;
+
+  updateMessage(message: string) {
+    this.newMoneyService.updateMessage(message);
+  }
 
   addYearFilter(year: number | any) {
     console.log('[addYearFilter]', year);
 
-    this.newMoneyService.addYearFilter(year);
+    this.newMoneyService.updateFilters({year});
+  }
+
+  // typeFilter(filter: Partial<MoneyFilter>) {
+  typeFilter(type: string) {
+    console.log('[typeFilter]', type);
+    // this._messageSubj.next(`wynik`);
+    // this.updateMessage(`wynik`);
+    this.newMoneyService.updateFilters({type});
+    // this.newMoneyService.betterFilter(filter);
   }
 
   resetFilters() {
@@ -149,6 +162,10 @@ export class Tabs2ContainerComponent {
 
         const months = [...moneyGroups, summary];
         const categories = uniqueCategories(moneyGroups);
+        // this.updateMessage(`znaleziono: ${categories.length}`);
+        // this._messageSubj.next(`znaleziono: ${categories.length}`);
+        console.log('[categories]', categories);
+
 
         return {
           months,
@@ -190,10 +207,7 @@ export class Tabs2ContainerComponent {
       .subscribe();
   }
 
-  typeFilter(filter: Partial<MoneyFilter>) {
-    this.message = `wynik`
-    this.newMoneyService.betterFilter(filter);
-  }
+
 
   tabChange(index: number) {
     if (index === 1) {

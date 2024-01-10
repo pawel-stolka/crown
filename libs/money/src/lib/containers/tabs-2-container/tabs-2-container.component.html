@@ -87,9 +87,9 @@
     </button>
   </div>
 </div>
-<crown-data-filter (filter)="typeFilter({ type: $event })"></crown-data-filter>
+<!-- <crown-data-filter (filter)="typeFilter({ type: $event })"></crown-data-filter> -->
 
-<div *ngIf="message" class="filter-message">
+<!-- <div *ngIf="message$ | async as message" class="filter-message">
   filter-message...
   {{ message }}
   <div class="inline dateRange-message">
@@ -97,7 +97,7 @@
     <div>-</div>
     <div>{{ "dateRange.to' | date : 'dd.MM.yyyy'" }}</div>
   </div>
-</div>
+</div> -->
 
 <!-- <div class="actions" style="visibility: hidden">
   <div class="filters">
@@ -144,7 +144,7 @@
                   #searchInput
                   formControlName="endDate"
                 />
-               
+
 
                 <mat-datepicker-toggle matSuffix [for]="toDatepicker">
                 </mat-datepicker-toggle>
@@ -249,6 +249,19 @@
 <!-- <pre>{{ monthsData2$ | async | json }}</pre> -->
 
 <ng-template #DATA>
+  <ng-container *ngIf="(monthsData2$ | async)?.categories as categories">
+    <crown-data-filter (filter)="typeFilter($event)"></crown-data-filter>
+
+    <div class="filter-message" *ngIf="categories.length">
+      <ng-container *ngIf="filters$ | async as filters">
+        {{ filters | json }}
+      </ng-container>
+      <div>
+        Znaleziono
+        <span class="categories-amount">{{ categories.length }}</span>
+      </div>
+    </div>
+  </ng-container>
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
     <mat-tab label="{{ NEW_GROUPS_LABEL }}">
       <crown-new-groups [data]="monthsData2$ | async"></crown-new-groups>

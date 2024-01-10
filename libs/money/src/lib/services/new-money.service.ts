@@ -3,6 +3,7 @@ import { ApiService } from '@crown/api/service';
 import {
   API_URL,
   Colors,
+  EMPTY_STRING,
   Money,
   MoneyFilter,
   MoneyGroup,
@@ -28,6 +29,7 @@ import {
   providedIn: 'root',
 })
 export class NewMoneyService {
+
   private api = inject(ApiService);
   private URL = `${API_URL}/api/money`;
   private _moneySubj = new BehaviorSubject<Money[]>([]);
@@ -53,6 +55,13 @@ export class NewMoneyService {
   );
   defaultYear$ = this.allYears$;
 
+  private _messageSubj = new BehaviorSubject(EMPTY_STRING);
+  message$: Observable<string> = this._messageSubj.asObservable();
+
+  updateMessage(message: string) {
+    this._messageSubj.next(message);
+  }
+
   addYearFilter(year: number) {
     const update: MoneyFilter = {
       ...this.filters,
@@ -61,20 +70,9 @@ export class NewMoneyService {
     this.updateFilters(update);
   }
 
-  addStart(startDate: Date) {
-    const update: MoneyFilter = {
-      ...this.filters,
-      startDate,
-    };
-    this.updateFilters(update);
-  }
-
-  addEnd(endDate: Date) {
-    const update: MoneyFilter = {
-      ...this.filters,
-      endDate,
-    };
-    this.updateFilters(update);
+  updateFilters(filter: MoneyFilter) {
+    this._filterSubj.next(filter);
+    // this.updateMessage(`wynik`);
   }
 
   resetFilters() {
@@ -88,9 +86,7 @@ export class NewMoneyService {
     this.updateFilters(update);
   }
 
-  updateFilters(filters: MoneyFilter) {
-    this._filterSubj.next(filters);
-  }
+
 
   filteredMoney$: Observable<Money[]> = combineLatest([
     this.money$,

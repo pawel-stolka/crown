@@ -206,6 +206,8 @@ export class MoneyService {
       }),
       tap((money: Money) => {
         const newMoneyList = this.money.filter((x) => x.id !== money.id);
+        console.log('delete', money, newMoneyList);
+
         this._moneySubj.next(newMoneyList);
       })
     );
