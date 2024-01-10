@@ -44,7 +44,6 @@ export class TodoService {
   }
 
   constructor() {
-    console.log('//TODO: service CTOR');
     this.data$().subscribe();
   }
 
@@ -55,30 +54,10 @@ export class TodoService {
         return throwError(err);
       }),
       filter((x) => !!x)
-      // tap(
-      //   (tokenEmail) =>
-      //     (this.headers = { Authorization: `Bearer ${tokenEmail?.token}` })
-      // )
-      // TODO: finish after first call
-
-      // switchMap((tokenEmail) => {
-      //   if (tokenEmail?.token) {
-      //     return this.fetchAll$(tokenEmail.token);
-      //   } else {
-      //     return of(null);
-      //   }
-      // })
     );
   }
 
-  // testHttp() {
-  //   this.http
-  //     .get(this.URL)
-  //     .pipe(tap((x) => console.log('testHttp', x)))
-  //     .subscribe();
-  // }
-
-  fetchAll$(token: string | null) {
+  fetchAll$() {
     if (!this.dataLoaded) {
       return this.http.get<Todo[]>(this.URL).pipe(
         tap(() => (this.dataLoaded = true)),
@@ -89,7 +68,7 @@ export class TodoService {
     return this.todos$;
   }
 
-  create(changes?: Partial<Todo>) {
+  create$(changes?: Partial<Todo>) {
     return this.http.post<Todo>(this.URL, changes).pipe(
       tap((todo) => {
         const todos: Todo[] = [...this._todosSubj.value, todo];
@@ -98,7 +77,7 @@ export class TodoService {
     );
   }
 
-  edit(id: string, changes: Partial<Todo>) {
+  edit$(id: string, changes: Partial<Todo>) {
     const index = this.todos.findIndex((todo) => todo.id === id);
     const newTodo: Todo = {
       ...this.todos[index],
@@ -153,8 +132,7 @@ export class TodoService {
       ...currentTodo,
       status,
     };
-    console.log('[updateStatus]', event, todo);
 
-    this.edit(id, todo).subscribe();
+    this.edit$(id, todo).subscribe();
   }
 }

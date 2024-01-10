@@ -45,7 +45,7 @@ export class AppComponent {
 
   toggleTodos() {
     this.todoSidenav.toggle();
-    this.todoService.fetchAll$(null).subscribe();
+    this.todoService.fetchAll$().subscribe();
   }
 
   toggleMenu() {

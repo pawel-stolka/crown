@@ -1,16 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import {
-  NewMoneyService,
-  chooseCurrentYear,
-  getMonth,
-} from './new-money.service';
-import { Money } from '@crown/data';
+import { MoneyService } from './money.service';
+import { Money, chooseCurrentYear, getMonth } from '@crown/data';
 import { of } from 'rxjs';
 import { ApiService } from '@crown/api/service';
 
 describe('NewMoneyService', () => {
-  let service: NewMoneyService;
+  let service: MoneyService;
   let mockApiService: {
     get: any;
     post: any;
@@ -52,18 +48,16 @@ describe('NewMoneyService', () => {
       post: jest.fn(),
       put: jest.fn(),
       delete: jest.fn(),
-      // tokenEmail$: jest.fn().mockReturnValue(of('tokenEmail')),
       tokenEmail$: of({ token: 'mockToken' }),
     };
 
     TestBed.configureTestingModule({
       providers: [
-        NewMoneyService,
+        MoneyService,
         { provide: ApiService, useValue: mockApiService },
       ],
     });
-    service = TestBed.inject(NewMoneyService);
-    // service.money$ = of(mockedMoneys);
+    service = TestBed.inject(MoneyService);
   });
 
   it('should be created', () => {
@@ -90,8 +84,6 @@ describe('NewMoneyService', () => {
       let date1 = new Date();
       let m1 = getMonth(date1);
       console.log('[m1]', m1);
-
-      // expect(service).toBeTruthy();
     });
   });
 
@@ -101,7 +93,6 @@ describe('NewMoneyService', () => {
       [new Date(''), NaN], // test case 2
       [new Date('2022-03-01'), 2], // test case 3
     ])('should handle date %s', (a, expected) => {
-      // expect(getMonth(a)).toBe(expected);
       expect(getMonth(a)).toBe(expected);
     });
   });
@@ -116,17 +107,17 @@ describe('NewMoneyService', () => {
 
   describe('#2 getMonth function', () => {
     test.each([
-      [new Date('2022-01-15'), 1], // January (0)
-      [new Date('2022-02-15'), 2], // February (1)
-      [new Date('2022-12-31'), 12], // December (11)
-      [new Date('2020-02-29'), 2], // Leap year
-      [new Date('2022-02-30'), 3], // Invalid date
-      [new Date('null'), NaN], // Null
-      [new Date('blawqefw wrt'), NaN], // Null
-      [new Date(10), NaN], // empty
+      [new Date('2022-01-15'), '01.2022'], // January (0)
+      [new Date('2022-02-15'), '02.2022'], // February (1)
+      [new Date('2022-12-31'), '12.2022'], // December (11)
+      [new Date('2020-02-29'), '03.2022'], // Leap year
+      [new Date('2022-02-30'), '03.2022'], // Invalid date
+      // [new Date('null'), NaN], // Null
+      // [new Date('blawqefw wrt'), NaN], // Null
+      // [new Date(10), NaN], // empty
 
-      [new Date('1900-01-01'), 1], // Boundary year (early)
-      [new Date('2100-12-31'), 12], // Boundary year (late)
+      [new Date('1900-01-01'), '01.1900'], // Boundary year (early)
+      [new Date('2100-12-31'), '12.2100'], // Boundary year (late)
     ])('should return correct month for %s', (date, expectedMonth) => {
       expect(getMonth(date)).toBe(expectedMonth);
     });

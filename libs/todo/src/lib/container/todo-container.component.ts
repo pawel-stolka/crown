@@ -8,7 +8,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
 import { filter, map, take, tap } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
-import { TodoService } from 'libs/shared/src/lib/services/todo/todo.service';
+import { TodoService } from '../todo/todo.service';
+// import { TodoService } from 'libs/shared/src/lib/services/todo/todo.service';
 
 @Component({
   selector: 'crown-todo-container',
@@ -61,7 +62,7 @@ export class TodoContainerComponent implements OnInit {
 
   updatePriority(todo: Todo) {
     const { id, priority } = todo;
-    this.todoService.edit(todo.id, { id, priority }).pipe(take(1)).subscribe();
+    this.todoService.edit$(todo.id, { id, priority }).pipe(take(1)).subscribe();
   }
 
   private handleDialog(dialogRef: MatDialogRef<any>) {

@@ -1,29 +1,25 @@
 import { Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  NewMoneyService,
-  chooseCurrentYear,
-} from '../../services/new-money.service';
+import { MoneyService } from '../../services/money.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 import { MaterialModule } from '@crown/material';
 import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  Colors,
   EMPTY_STRING,
   Money,
   MoneyFilter,
   MoneyGroup,
   MonthsCategories,
-  TypePrice,
   compareBy,
   dialogConfig,
-  fixNumber,
+  groupTypePrices,
+  uniqueCategories,
 } from '@crown/data';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Observable, filter, map, reduce, tap } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { NewDetailsTabComponent } from '../../components/tabs/new-details-tab/new-details-tab.component';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
@@ -75,17 +71,13 @@ export class TabsContainerComponent {
   dateRanged = false;
   yearFilter = this.dateRanged;
   chooseDatesLabel = 'zakres...';
+  currentFilters: any;
 
-  allYears$ = this.newMoneyService.allYears$;
-  // defaultYear$ = this.newMoneyService.defaultYear$;
-  // currentYear$ = this.allYears$.pipe(
-  //   map((allYears) => chooseCurrentYear(allYears)),
-  //   tap((y) => console.log('[y]', y))
-  // );
-  currentYear$ = this.newMoneyService.currentYear$;
+  allYears$ = this.moneyService.allYears$;
+  currentYear$ = this.moneyService.currentYear$;
 
-  moneyGroups$ = this.newMoneyService.moneyGroups$;
-  filteredMoney$ = this.newMoneyService.filteredMoney$.pipe(
+  moneyGroups$ = this.moneyService.moneyGroups$;
+  filteredMoney$ = this.moneyService.filteredMoney$.pipe(
     tap((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.sort = this.sort;
@@ -93,15 +85,11 @@ export class TabsContainerComponent {
     })
   );
 
-  currentFilters: any;
-  filters$ = this.newMoneyService.filters$.pipe(
-    tap((filters) => {
-      console.log('%c[filters]', Colors.BLACK, filters);
-      this.currentFilters = filters;
-    })
+  filters$ = this.moneyService.filters$.pipe(
+    tap((filters) => (this.currentFilters = filters))
   );
 
-  message$: Observable<string> = this.newMoneyService.message$;
+  message$: Observable<string> = this.moneyService.message$;
 
   // TODO: MoneyFilter
   dateRange$: Observable<DateRange> = this.filteredMoney$.pipe(
@@ -130,20 +118,18 @@ export class TabsContainerComponent {
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
   updateMessage(message: string) {
-    this.newMoneyService.updateMessage(message);
+    this.moneyService.updateMessage(message);
   }
 
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,
-    private newMoneyService: NewMoneyService, // TODO: private toastService: ToastService
+    private moneyService: MoneyService, // TODO: private toastService: ToastService
     private fb: FormBuilder
   ) {
-    this.monthsData$ = this.newMoneyService.moneyGroups$.pipe(
+    this.monthsData$ = this.moneyService.moneyGroups$.pipe(
       map((groups) => groups.sort(compareBy('period', true))),
       map((moneyGroups) => {
-        console.log('1.moneyGroups', moneyGroups);
-
         const typePrices = groupTypePrices(moneyGroups);
 
         const summary: MoneyGroup = {
@@ -154,7 +140,6 @@ export class TabsContainerComponent {
 
         const months = [...moneyGroups, summary];
         const categories = uniqueCategories(moneyGroups);
-        console.log('[categories]', categories);
 
         return {
           months,
@@ -164,91 +149,48 @@ export class TabsContainerComponent {
       })
     );
 
-    // this.monthsData2$ = monthsData$.pipe(
-    //   map((monthsData) => {
-    //     let total = monthsData.categories.length;
-    //     return {
-    //       ...monthsData,
-    //       total,
-    //     };
-    //   })
-    // );
-
     this.filters.valueChanges
       .pipe(
-        // filter(filters => !!filters),
-        // map(filters => ({
-        //   startDate: new Date(filters.startDate)
-        // })),
         tap((filters) => {
-          console.log('%c[filters]', Colors.INFO, filters);
           let mf: MoneyFilter = {
             startDate: filters.startDate
               ? new Date(filters.startDate)
               : undefined,
             endDate: filters.endDate ? new Date(filters.endDate) : undefined,
-            //   ...filters,
-            // startDate: filters.startDate,
-            //   endDate: filters.endDate,
           };
-          this.newMoneyService.updateFilters(mf);
+          this.moneyService.updateFilters(mf);
         })
       )
       .subscribe();
   }
 
-  // onModelChange(value: boolean) {
-  // onModelChange(value: any) {
-  //   console.log('Model changed:', value);
-  //   this.dateRanged = value;
-  //   // Handle the model change logic here
-  // }
-
   onToggleChange(event: MatSlideToggleChange) {
     this.dateRanged = event.checked;
-    console.log(
-      '%c[Toggle changed | filters]',
-      Colors.RED,
-      event.checked,
-      this.currentFilters
-    );
-    this.updateFilters(this.currentFilters)
-    // onToggleChange(event: any) {
-    console.log('%c[this.onToggleChange]', Colors.RED, event);
+    this.updateFilters(this.currentFilters);
   }
 
   updateFilters(filters: MoneyFilter) {
-    console.log('[this.updateFilters]', filters);
-
-    this.newMoneyService.updateFilters(filters);
+    this.moneyService.updateFilters(filters);
   }
 
   filterByYear(year: number) {
     let currFilters = {
       ...this.currentFilters,
-      year
+      year,
     };
-    console.log('%c[filterByYear]', Colors.MAG, year);
-
-    this.newMoneyService.updateFilters(currFilters);
+    this.moneyService.updateFilters(currFilters);
   }
 
-  // typeFilter(filter: Partial<MoneyFilter>) {
   filterByType(type: string) {
     let currFilters = {
       ...this.currentFilters,
-      type
+      type,
     };
-    console.log('[filterByType]', type, currFilters);
-    // this._messageSubj.next(`wynik`);
-    // this.updateMessage(`wynik`);
-
-    // this.newMoneyService.updateFilters({ type });
-    this.newMoneyService.updateFilters(currFilters);
+    this.moneyService.updateFilters(currFilters);
   }
 
   resetFilters() {
-    this.newMoneyService.resetFilters();
+    this.moneyService.resetFilters();
   }
 
   tabChange(index: number) {
@@ -284,43 +226,4 @@ export class TabsContainerComponent {
         // this.toast();
       });
   }
-}
-
-// TODO: move to shared
-function groupTypePrices(moneyGroups: (MoneyGroup | null)[]) {
-  if (moneyGroups) {
-    const flatTypePrices = moneyGroups.map((x: any) => x.typePrices).flat();
-    const groups = flatTypePrices.reduce((acc, item: TypePrice) => {
-      // Initialize the price with 0
-      if (!acc[item.type]) {
-        acc[item.type] = 0;
-      }
-      acc[item.type] += item.price;
-      return acc;
-    }, {} as Record<string, number>);
-
-    // Convert the object into an array of objects
-    const typePrices: TypePrice[] = Object.keys(groups).map((type) => ({
-      type,
-      price: fixNumber(groups[type]),
-    }));
-
-    return typePrices;
-  }
-  return [];
-}
-
-function uniqueCategories(moneyGroups: MoneyGroup[]) {
-  const flatTypePrices = moneyGroups.flatMap((a) => a.typePrices);
-
-  const priceSumByType = flatTypePrices.reduce((sum: any, cur) => {
-    sum[cur.type] = (sum[cur.type] || 0) + cur.price;
-    return sum;
-  }, {});
-
-  const uniqueSortedTypes = Object.keys(priceSumByType).sort(
-    (a, b) => priceSumByType[b] - priceSumByType[a]
-  );
-
-  return uniqueSortedTypes;
 }

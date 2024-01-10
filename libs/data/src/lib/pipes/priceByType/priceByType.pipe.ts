@@ -12,14 +12,6 @@ export class PriceByTypePipe implements PipeTransform {
     const found = typePrices.find((tp) => tp.type === type);
 
     const result = found ? found.price : ZERO_DATA;
-    // console.log('PriceByTypePipe', typePrices, type, result);
     return formatValue(result, this.locale);
   }
-  /*
-getPriceByType(typePrices: TypePrice[], type: string): number | string {
-    const found = typePrices.find((tp) => tp.type === type);
-    const result = found ? found.price : ZERO_DATA;
-    return formatValue(result, this.locale);
-  }
-  */
 }

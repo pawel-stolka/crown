@@ -15,10 +15,6 @@ import { Colors, PriceByTypePipe, SumByMonthPipe } from '@crown/data';
   styleUrl: './new-groups.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewGroupsComponent implements OnInit {
+export class NewGroupsComponent {
   @Input() data!: any; // TODO: no any
-
-  ngOnInit(): void {
-    console.log('%c[NewGroupsComponent INIT]', Colors.MAG, this.data);
-  }
 }

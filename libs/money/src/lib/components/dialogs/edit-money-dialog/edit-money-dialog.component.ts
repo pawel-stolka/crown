@@ -21,7 +21,7 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, startWith, map, of } from 'rxjs';
-import { NewMoneyService } from '../../../services/new-money.service';
+import { MoneyService } from '../../../services/money.service';
 
 @Component({
   selector: 'crown-edit-money-dialog',
@@ -61,7 +61,7 @@ export class EditMoneyDialog implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditMoneyDialog>,
-    private moneyService: NewMoneyService,
+    private moneyService: MoneyService,
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;

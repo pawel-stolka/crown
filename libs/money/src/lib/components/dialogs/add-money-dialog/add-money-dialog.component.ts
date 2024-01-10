@@ -21,7 +21,7 @@ import {
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 import { ToastService } from '@crown/ui';
-import { NewMoneyService } from '../../../services/new-money.service';
+import { MoneyService } from '../../../services/money.service';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -62,7 +62,7 @@ export class AddDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
-    private newMoneyService: NewMoneyService,
+    private newMoneyService: MoneyService,
     private toastService: ToastService
   ) {}
 

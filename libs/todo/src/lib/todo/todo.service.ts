@@ -88,7 +88,7 @@ export class TodoService {
     return this.todos$;
   }
 
-  create(changes?: Partial<Todo>) {
+  create$(changes?: Partial<Todo>) {
     return this.http.post<Todo>(this.URL, changes).pipe(
       tap((todo) => {
         const todos: Todo[] = [...this._todosSubj.value, todo];
@@ -97,7 +97,7 @@ export class TodoService {
     );
   }
 
-  edit(id: string, changes: Partial<Todo>) {
+  edit$(id: string, changes: Partial<Todo>) {
     const index = this.todos.findIndex((todo) => todo.id === id);
     const newTodo: Todo = {
       ...this.todos[index],
@@ -154,6 +154,6 @@ export class TodoService {
     };
     console.log('[updateStatus]', event, todo);
 
-    this.edit(id, todo).subscribe();
+    this.edit$(id, todo).subscribe();
   }
 }

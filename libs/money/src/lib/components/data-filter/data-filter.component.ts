@@ -16,10 +16,9 @@ export class DataFilterComponent {
   filterValue$ = this._filterSubj.asObservable();
 
   @Output() filter = new EventEmitter();
-  filterValue: any;
+  filterValue: string = EMPTY_STRING;
 
   applyFilter({ target }: Event) {
-  // applyFilter(input: Event) {
     const input = target as HTMLInputElement;
     const filterValue = target ? lowIt(input.value) : EMPTY_STRING;
 
@@ -29,11 +28,8 @@ export class DataFilterComponent {
   }
 
   clearFilter() {
-
     this.filterValue = EMPTY_STRING;
-    // this.filterValue = null;
     this.filter.emit(this.filterValue);
     this._filterSubj.next(this.filterValue);
-    console.log('[this.clearFilter]', this.filterValue);
   }
 }

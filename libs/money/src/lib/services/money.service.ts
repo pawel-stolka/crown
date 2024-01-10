@@ -7,8 +7,10 @@ import {
   Money,
   MoneyFilter,
   MoneyGroup,
+  chooseCurrentYear,
   compareBy,
   fixNumber,
+  getMonth,
   groupBy,
   setNoonAsDate,
 } from '@crown/data';
@@ -28,7 +30,7 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-export class NewMoneyService {
+export class MoneyService {
   private api = inject(ApiService);
   private URL = `${API_URL}/api/money`;
 
@@ -54,14 +56,6 @@ export class NewMoneyService {
     })
   );
 
-  get money() {
-    return this._moneySubj.value;
-  }
-
-  get filters() {
-    return this._filterSubj.value;
-  }
-
   filteredMoney$: Observable<Money[]> = combineLatest([
     this.money$,
     this.filters$,
@@ -71,6 +65,14 @@ export class NewMoneyService {
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
   );
 
+  get money() {
+    return this._moneySubj.value;
+  }
+
+  get filters() {
+    return this._filterSubj.value;
+  }
+
   constructor() {
     this.initializeDataFetch().subscribe();
   }
@@ -79,7 +81,7 @@ export class NewMoneyService {
     return this.api.tokenEmail$.pipe(
       switchMap((tokenEmail) => {
         if (tokenEmail) {
-          return this.fetchAll$(); // Call your data fetching method
+          return this.fetchAll$();
         } else {
           console.log('[initializeDataFetch]', 'EMPTY');
           return of([]);
@@ -182,15 +184,6 @@ export class NewMoneyService {
 
   updateFilters(filter: MoneyFilter) {
     this._filterSubj.next(filter);
-    // this.updateMessage(`wynik`);
-  }
-
-  addYearFilter(year: number) {
-    const update: MoneyFilter = {
-      ...this.filters,
-      year,
-    };
-    this.updateFilters(update);
   }
 
   resetFilters() {
@@ -205,8 +198,6 @@ export class NewMoneyService {
   }
 
   filterMoney(data: Money[], filter: MoneyFilter): Money[] {
-    console.log('[this.filterMoney]', data);
-
     return data.filter((item) => {
       const afterStartDate =
         !filter.startDate || new Date(item.createdAt) >= filter.startDate;
@@ -224,14 +215,6 @@ export class NewMoneyService {
       return afterStartDate && beforeEndDate && typeMatch && yearMatch;
     });
   }
-
-  // betterFilter(filter: Partial<MoneyFilter>) {
-  //   this.updateFilter(filter);
-  // }
-
-  // private updateFilter(newFilter: MoneyFilter) {
-  //   this._filterSubj.next(newFilter);
-  // }
 
   private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
     const selection = this.setGrouping(by);
@@ -272,35 +255,5 @@ export class NewMoneyService {
     } else {
       return [];
     }
-  }
-}
-
-export function getMonth(date: Date) {
-  return date.toString().substring(0, 7);
-  /*let res;
-  // console.log('[getMonth]', typeof date, date instanceof Date); // Debugging line
-  if (!(date instanceof Date)) {
-    date = new Date(date);
-  } else {
-    console.log('[getMonth ERROR]', typeof date, date); // Debugging line
-    // return date?.getMonth() + 1 ?? 0;
-  }
-
-  let onlyDate = date.getDate();
-  console.log('%c[onlyDate]', Colors.INFO, onlyDate);
-  // return date.toString().substring(0, 7);
-  res = date?.getMonth();
-  console.log('[getMonth]', date, res);
-
-  return res + 1;*/
-}
-
-// export function chooseCurrentYear(years: number[] | null) {
-export function chooseCurrentYear(years: number[]) {
-  const currentYear = new Date().getFullYear();
-  if (years?.includes(currentYear)) {
-    return currentYear;
-  } else {
-    return years?.sort()[years.length - 1];
   }
 }
