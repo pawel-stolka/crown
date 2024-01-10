@@ -3,7 +3,6 @@
 <div class="temp-actions">
   <div class="temp-filters">
     <div class="dateRange">
-      dateRanged: {{ dateRanged }}
       <ng-container *ngIf="!dateRanged; then year; else range"> </ng-container>
     </div>
     <!-- <mat-slide-toggle color="primary" [(ngModel)]="dateRanged">{{
@@ -18,19 +17,11 @@
           [allYears]="allYears"
           (currentYear)="filterByYear($event)"
         ></crown-year-selector>
-
-        <!-- <mat-slide-toggle
-          color="primary"
-          [checked]="dateRanged"
-          (change)="onToggleChange($event)"
-          >no ngModel</mat-slide-toggle
-        > -->
-
       </div>
     </ng-template>
 
     <ng-template #range>
-      <div class="dateRange">
+      <div class="dateRange" disabled>
         <ng-container *ngIf="dateRange$ | async as dateRange">
           <div class="_dateRange">
             <div class="inline">
@@ -81,7 +72,6 @@
           (change)="onToggleChange($event)"
           >no ngModel</mat-slide-toggle
         >
-
       </div>
     </ng-template>
   </div>
@@ -94,22 +84,22 @@
 </div>
 <crown-data-filter (filter)="filterByType($event)"></crown-data-filter>
 
-<div class="help">
+<!-- <div class="help">
   filters
   <pre>{{ filters$ | async | json }}</pre>
-  <!-- <hr>
-  <pre>{{ filteredMoney$ | async | json }}</pre> -->
-</div>
+  <hr>
+  <pre>{{ filteredMoney$ | async | json }}</pre>
+</div> -->
 <!-- <crown-data-filter (filter)="typeFilter({ type: $event })"></crown-data-filter> -->
 
 <div *ngIf="message$ | async as message" class="filter-message">
   filter-message...
   {{ message }}
-  <div class="inline dateRange-message">
+  <!-- <div class="inline dateRange-message">
     <div>{{ "dateRange.from | date : 'dd.MM.yyyy'" }}</div>
     <div>-</div>
     <div>{{ "dateRange.to' | date : 'dd.MM.yyyy'" }}</div>
-  </div>
+  </div> -->
 </div>
 
 <!-- <div class="actions" style="visibility: hidden">
@@ -261,14 +251,14 @@
 
 <ng-template #DATA>
   <ng-container *ngIf="(monthsData$ | async)?.categories as categories">
-    <div class="filter-message" *ngIf="categories.length">
-      <ng-container *ngIf="filters$ | async as filters">
-        {{ filters | json }}
-      </ng-container>
-      <div>
-        Znaleziono
+    <div class="filter-message">
+    <ng-container
+     *ngIf="(filters$ | async)?.type">
+      <div class="filter-result" *ngIf="categories.length">
+        Znaleziono:
         <span class="categories-amount">{{ categories.length }}</span>
       </div>
+    </ng-container>
     </div>
   </ng-container>
   <mat-tab-group (selectedIndexChange)="tabChange($event)">
