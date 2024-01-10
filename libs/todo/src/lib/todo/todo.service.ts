@@ -43,7 +43,6 @@ export class TodoService {
   }
 
   constructor() {
-    console.log('//TODO: service CTOR');
     this.data$().subscribe();
   }
 
@@ -54,30 +53,10 @@ export class TodoService {
         return throwError(err);
       }),
       filter((x) => !!x)
-      // tap(
-      //   (tokenEmail) =>
-      //     (this.headers = { Authorization: `Bearer ${tokenEmail?.token}` })
-      // )
-      // TODO: finish after first call
-
-      // switchMap((tokenEmail) => {
-      //   if (tokenEmail?.token) {
-      //     return this.fetchAll$(tokenEmail.token);
-      //   } else {
-      //     return of(null);
-      //   }
-      // })
     );
   }
 
-  // testHttp() {
-  //   this.http
-  //     .get(this.URL)
-  //     .pipe(tap((x) => console.log('testHttp', x)))
-  //     .subscribe();
-  // }
-
-  fetchAll$(token: string | null) {
+  fetchAll$() {
     if (!this.dataLoaded) {
       return this.http.get<Todo[]>(this.URL).pipe(
         tap(() => (this.dataLoaded = true)),
@@ -116,7 +95,6 @@ export class TodoService {
         console.log(message, err);
         return throwError(err);
       }),
-      // tap((x) => console.log('EDIT result', x)),
       shareReplay()
     );
   }
@@ -152,7 +130,6 @@ export class TodoService {
       ...currentTodo,
       status,
     };
-    console.log('[updateStatus]', event, todo);
 
     this.edit$(id, todo).subscribe();
   }

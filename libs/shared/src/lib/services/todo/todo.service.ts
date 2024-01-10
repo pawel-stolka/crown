@@ -96,7 +96,6 @@ export class TodoService {
         console.log(message, err);
         return throwError(err);
       }),
-      // tap((x) => console.log('EDIT result', x)),
       shareReplay()
     );
   }

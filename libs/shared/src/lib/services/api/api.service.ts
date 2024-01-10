@@ -12,7 +12,7 @@ export class ApiService {
   private injector = inject(Injector);
   private authService!: AuthService;
 
-  tokenEmail$ = this.getAuthService()
+  tokenEmail$ = this.getAuthService();
 
   get<T>(url: string, body?: any, headers?: HttpHeaders) {
     return this.makeRequest<T>(Method.GET, url, body, headers);
@@ -37,7 +37,6 @@ export class ApiService {
     headers?: HttpHeaders
   ): Observable<T> {
     console.log(method, url);
-    // const tokenEmail$ = this.getAuthService()//.tokenEmail$;
 
     return this.tokenEmail$.pipe(
       switchMap((tokenEmail) => {
@@ -51,7 +50,7 @@ export class ApiService {
           headers,
           observe: 'body',
         });
-      }),
+      })
     );
   }
 
@@ -59,8 +58,6 @@ export class ApiService {
     if (!this.authService) {
       this.authService = this.injector.get(AuthService);
     }
-    return this.authService.tokenEmail$.pipe(
-      tap((tokenEmail) => console.log('%c[tokenEmail]', Colors.RED, tokenEmail))
-    );
+    return this.authService.tokenEmail$;
   }
 }

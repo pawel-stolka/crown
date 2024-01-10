@@ -128,7 +128,6 @@ export class MoneyService {
 
   create$(changes: Partial<Money>) {
     changes = setNoonAsDate(changes);
-    console.log('[create | MoneyService]', changes);
 
     return this.api.post<Money>(this.URL, changes).pipe(
       tap((money) => {
