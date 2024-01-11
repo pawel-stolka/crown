@@ -20,6 +20,19 @@
   width: 95%;
   margin-top: 20px;
 
+
+  @for $i from 2 through 12 {
+    tr:nth-child(#{$i}) {
+      @if $i % 2 == 0 {
+        // background-color: $demo-accent1; // Style for even rows
+        background-color: $row10; // Style for even rows
+      } @else {
+        // background-color: $demo-secondary; // Style for odd rows
+        background-color: $row11; // Style for odd rows
+      }
+    }
+  }
+
   tr > th:not(:first-child):not(:last-child) {
     border: 1px solid $danger;
     text-align: center;
@@ -32,6 +45,8 @@
   tr > th:last-child {
     // border: 10px solid $danger;
     background: none;
+    background: $demo-basic;
+    // background-color: #fafafa;
     border: none;
   }
 
@@ -39,8 +54,9 @@
     text-align: center;
     height: 40px;
     border: 1px dotted $blue;
-    background-color: $demo-primary-0;
+    // background-color: $demo-primary-0;
   }
+
 
   tr > td:first-child {
     // padding: 0 10px;
@@ -53,7 +69,8 @@
 
   tr > td:last-child {
     // background-color: lightgray;
-    background-color: $demo-primary;
+
+    // background-color: $demo-primary;
 
     // border: 3px solid $blue;
     border: 3px solid $dark-blue;
@@ -61,14 +78,20 @@
   }
   tr:last-child > td:last-child {
     // border: 3px solid $warn;
-    background-color: $demo-accent2;
+    // background-color: $demo-accent2;
+    background-color: $blue;
     border: 5px solid $dark-blue;
   }
 
   tr:last-child > td:first-child {
     background: none;
     border: none;
+    background-color: #fafafa;
   }
+
+  // tr:nth-child(2) {
+  //   background-color: $blue; /* Example: Light gray background for even rows */
+  // }
 
   // SUMMARY ROW
   tr:last-child > td:not(:first-child):not(:last-child) {
@@ -83,7 +106,17 @@
     font-size: 1.2rem;
     background-color: lightgray;
   }
+
+
 }
+
+// tr:nth-child(2) {
+//   background-color: $demo-primary; /* Example: Light gray background for even rows */
+// }
+// tr:nth-child(3) {
+//   background-color: $demo-secondary; /* Example: Light gray background for even rows */
+// }
+
 
 .last {
   font-size: 1.3rem;
@@ -96,3 +129,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+
+// @for $i from 1 through $max-toasts {
+//   :host:nth-of-type(#{$i}) {
+//     top: $top-margin + ($toast-height + $spacing) * ($i - 1);
+//   }
+// }
