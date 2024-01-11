@@ -27,6 +27,7 @@ import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+// import { DateRange } from '@angular/material/datepicker';
 
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WSZYSTKO';
@@ -85,19 +86,29 @@ export class TabsContainerComponent {
   message$: Observable<string> = this.moneyService.message$;
 
   // TODO: MoneyFilter
-  dateRange$: Observable<DateRange> = this.filteredMoney$.pipe(
+  // mf: MoneyFilter = {
+  //   startDate: new Date(),
+  //   endDate: new Date(),
+  //   type: 'string',
+  //   year: 1,
+  // };
+  // l: DateRange = {
+  //   from: new Date(),
+  //   to: new Date(),
+  // };
+  dateRange$: Observable<MoneyFilter> = this.filteredMoney$.pipe(
     map((fm) => fm.map((f) => f.createdAt)),
     map((money) => {
-      let [from] = money;
-      let to = from;
+      let [startDate] = money;
+      let endDate = startDate;
 
       money.forEach((date) => {
-        if (date < from) from = date;
-        if (date > to) to = date;
+        if (date < startDate) startDate = date;
+        if (date > endDate) endDate = date;
       });
       return {
-        from,
-        to,
+        startDate,
+        endDate,
       };
     })
   );
@@ -117,7 +128,7 @@ export class TabsContainerComponent {
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private dialog: MatDialog,
-    private moneyService: MoneyService, // TODO: private toastService: ToastService
+    private moneyService: MoneyService,
     private fb: FormBuilder
   ) {
     this.monthsData$ = this.moneyService.moneyGroups$.pipe(
@@ -162,10 +173,6 @@ export class TabsContainerComponent {
     this.updateFilters(this.currentFilters);
   }
 
-  updateFilters(filters: MoneyFilter) {
-    this.moneyService.updateFilters(filters);
-  }
-
   filterByYear(year: number) {
     let currFilters = {
       ...this.currentFilters,
@@ -180,6 +187,10 @@ export class TabsContainerComponent {
       type,
     };
     this.moneyService.updateFilters(currFilters);
+  }
+
+  updateFilters(filters: MoneyFilter) {
+    this.moneyService.updateFilters(filters);
   }
 
   resetFilters() {

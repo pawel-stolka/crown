@@ -3,7 +3,7 @@
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #menuSidenav [mode]="menuMode.value || 'over'">
-    
+
     <crown-navigation
       (toggleMenu)="toggleMenu()"
       (toggle)="toggleTodos()"
@@ -16,7 +16,7 @@
     [mode]="todoMode.value || 'over'"
     (openedStart)="toggleMenu()"
   >
-    <div class="sidenav-buttons">
+    <div class="sidenav-todos">
       <crown-todo-container></crown-todo-container>
     </div>
   </mat-sidenav>

@@ -2,34 +2,28 @@
 
 .wrapper {
   margin: 10px;
-  // border: 5px dotted;
 }
+
+// mat-sidenav {
+//   width: 250px;
+// }
 
 .sidenav-container {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .sidenav-todos {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
 }
-
-mat-sidenav {
-  width: 250px; /* Adjust as needed */
-}
-
-// #toastContainer {
-//   position: fixed;
-//   top: 0;
-//   right: 0;
-//   z-index: 1000; /* High z-index to overlay other content */
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   pointer-events: none; /* Allow clicks to pass through */
-// }
-
-// .toast {
-//   pointer-events: auto; /* Enable interaction with the toast */
-//   margin-top: 10px; /* Spacing between toasts */
-//   /* Additional styling for the toast itself */
-// }
 
 .toast-container {
   position: fixed;
@@ -40,56 +34,5 @@ mat-sidenav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: visible; /* Ensure this allows showing all toasts */
+  overflow: visible;
 }
-
-.sidenav-container0 {
-  // border: 5px dotted;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: $demo-primary-background;
-
-  .sidenav-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: start; /* Align items to the start of the container */
-
-    // border: 3px dotted magenta;
-    // width: 20vw;
-  }
-}
-
-
-// .example-is-mobile .example-toolbar {
-//   position: fixed;
-//   /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-//   z-index: 2;
-// }
-
-// h1.example-app-name {
-//   margin-left: 8px;
-// }
-
-// .example-sidenav-container {
-//   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-//      causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-//   flex: 1;
-// }
-
-// .example-is-mobile .example-sidenav-container {
-//   /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-//      `<body>` to be our scrolling element for mobile layouts. */
-//   flex: 1 0 auto;
-// }
-
-// // mat-sidenav {
-// .mat-drawer-inner-container {
-//   display: flex;
-//   flex-direction: column;
-//   align-content: center;
-// }

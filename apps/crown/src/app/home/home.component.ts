@@ -6,14 +6,22 @@ import { Component } from '@angular/core';
     <div class="title">Witaj w Crownie 👋</div>
 
     <div class="info">
-      To appka stworzona przeze mnie na prywatne potrzeby analizy wydatków
-      <div class="ps">(na podstawie kursu Crown)</div>
+      <div>
+        To appka stworzona przeze mnie na prywatne potrzeby analizy wydatków
+      </div>
+
+      <div class="ps">
+        <div>(na podstawie kursu Crown)</div>
+        <a href="https://dlarodziny.eu/crown/" target="_blank"
+          >dlarodziny.eu/crown/</a
+        >
+      </div>
     </div>
 
     <div class="intro">
-      Na początek wypróbuj ją na koncie testowym
-      <span class="highlight"> zaloguj się ☝️</span>
+      <div>Na początek wypróbuj ją na koncie testowym</div>
     </div>
+    <span class="highlight"> zaloguj się ☝️</span>
   `,
   styleUrls: ['./home.component.scss'],
 })

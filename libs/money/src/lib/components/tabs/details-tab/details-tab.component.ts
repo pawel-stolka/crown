@@ -28,7 +28,7 @@ const COLUMNS_RENDERED = [
 ];
 
 @Component({
-  selector: 'crown-new-details-tab',
+  selector: 'crown-details-tab',
   standalone: true,
   imports: [CommonModule, MaterialModule],
   templateUrl: './details-tab.component.html',

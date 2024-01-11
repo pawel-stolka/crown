@@ -40,7 +40,7 @@
                     <input
                       matInput
                       [matDatepicker]="fromDatepicker"
-                      [value]="dateRange.from"
+                      [value]="dateRange.startDate"
                       #searchInput
                       formControlName="startDate"
                     />
@@ -57,7 +57,7 @@
                     <input
                       matInput
                       [matDatepicker]="toDatepicker"
-                      [value]="dateRange.to"
+                      [value]="dateRange.endDate"
                       #searchInput
                       formControlName="endDate"
                     />
@@ -119,9 +119,9 @@
     </mat-tab>
 
     <mat-tab label="{{ DETAILS_LABEL }}">
-      <crown-new-details-tab
+      <crown-details-tab
         [money]="(filteredMoney$ | async) || undefined"
-      ></crown-new-details-tab>
+      ></crown-details-tab>
     </mat-tab>
   </mat-tab-group>
   <!-- <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
