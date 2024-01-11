@@ -20,8 +20,9 @@ import {
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
-import { ToastService } from '@crown/ui';
+// import { ToastService } from '@crown/ui';
 import { MoneyService } from '../../../services/money.service';
+import { NewToastService } from '@crown/ui';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -63,7 +64,7 @@ export class AddDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
     private newMoneyService: MoneyService,
-    private toastService: ToastService
+    private toastService: NewToastService
   ) {}
 
   ngOnInit() {

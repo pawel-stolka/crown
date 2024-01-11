@@ -22,7 +22,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, startWith, map, of } from 'rxjs';
 import { MoneyService } from '../../../services/money.service';
-import { ToastService } from '@crown/ui';
+import { NewToastService } from '@crown/ui';
 
 @Component({
   selector: 'crown-edit-money-dialog',

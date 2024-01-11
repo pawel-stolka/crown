@@ -21,6 +21,7 @@ export * from './lib/enums/Status';
 export * from './lib/enums/Icon';
 export * from './lib/enums/Priority';
 export * from './lib/enums/TodoAction';
+export * from './lib/enums/ToastIcon';
 
 export * from './lib/lists/PRIORITIES';
 export * from './lib/lists/STATUSES';

@@ -1,0 +1,57 @@
+// :host {
+//   position: fixed;
+//   top: 10px; /* or your desired position */
+//   left: 50%;
+//   transform: translateX(-50%);
+//   z-index: 1050; /* above other elements */
+//   /* other styles */
+// }
+
+
+:host {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  // left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  /* other styles */
+
+}
+.toast {
+  /* Add your styling here */
+  border: 2px solid rgba(0, 128, 0, 0.74);
+  border-radius: 10px;
+  background-color: greenyellow;
+  opacity: 85%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+:host:nth-of-type(1) {
+  top: 10px;
+}
+
+:host:nth-of-type(2) {
+  top: 110px; /* Adjust this value based on your toast height */
+}
+
+:host:nth-of-type(3) {
+  top: 210px; /* Adjust this value based on your toast height */
+}
+
+:host:nth-of-type(4) {
+  top: 310px;
+}
+
+:host:nth-of-type(5) {
+  top: 410px; /* Adjust this value based on your toast height */
+}
+
+:host:nth-of-type(6) {
+  top: 260px; /* Adjust this value based on your toast height */
+}
+
+/* Add more if you expect more than 3 toasts at once */
