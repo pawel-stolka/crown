@@ -18,7 +18,7 @@
 
     a {
       // margin: 20px 0;
-      background-color:  $demo-accent1;
+      background-color: $demo-accent1;
     }
 
     .ps {
@@ -33,5 +33,18 @@
     border: 1px solid $white;
     border-radius: 10px;
     padding: 15px;
+  }
+
+  mat-expansion-panel {
+    margin: 25px 0;
+    // mat-expansion-panel-header {
+    //   width: 200px;
+    // }
+  }
+
+  .tutorial {
+    display: flex;
+    flex-direction: column;
+    margin: 50px 0;
   }
 }

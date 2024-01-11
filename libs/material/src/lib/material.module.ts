@@ -31,7 +31,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
@@ -82,6 +83,7 @@ import 'moment/locale/pl';
     MatSortModule,
     MatAutocompleteModule,
     MatSlideToggleModule,
+    MatExpansionModule,
   ],
 })
 export class MaterialModule {}
