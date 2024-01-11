@@ -27,7 +27,7 @@ export class ToastService {
     title: string,
     message: string,
     icon: string,
-    duration: number = 6000
+    duration: number = 50000
   ) {
     const factory = this.resolver.resolveComponentFactory(ToastComponent);
     const componentRef = this.toastContainerRef.createComponent(factory);
