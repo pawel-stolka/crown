@@ -22,7 +22,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, startWith, map, of } from 'rxjs';
 import { MoneyService } from '../../../services/money.service';
-import { NewToastService } from '@crown/ui';
+import { ToastService } from '@crown/shared';
 
 @Component({
   selector: 'crown-edit-money-dialog',
@@ -63,16 +63,13 @@ export class EditMoneyDialog implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditMoneyDialog>,
     private moneyService: MoneyService,
-
+    private toastService: ToastService,
     @Inject(MAT_DIALOG_DATA) money: Money
   ) {
     this.money = money;
   }
 
-
-
   ngOnInit() {
-
     const { userId, type, price, fromWho, createdAt, isVat, isDeleted } =
       this.money;
 
@@ -117,7 +114,14 @@ export class EditMoneyDialog implements OnInit {
 
     this.moneyService.edit$(this.money.id, changes).subscribe((res) => {
       this.dialogRef.close(res);
+      console.log('changes', changes);
+
+      this.toast('Dodałeś rachunek...');
     });
+  }
+
+  toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
+    this.toastService.showToast(undefined, 'Sukces', message, 'icon-class', 5000);
   }
 
   close() {

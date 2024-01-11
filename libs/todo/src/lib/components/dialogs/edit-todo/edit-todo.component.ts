@@ -18,8 +18,8 @@ import {
   Todo,
 } from '@crown/data';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TodoService } from '../../../../../../shared/src/lib/services/todo/todo.service';
 import { MaterialModule } from '@crown/material';
+import { TodoService } from '@crown/todo';
 
 @Component({
   selector: 'crown-edit-todo',

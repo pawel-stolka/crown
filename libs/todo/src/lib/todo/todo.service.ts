@@ -17,7 +17,7 @@ import {
   shareReplay,
   of,
 } from 'rxjs';
-import { ApiService, AuthService } from '@crown/ui';
+import { ApiService, AuthService } from '@crown/shared';
 
 @Injectable({
   providedIn: 'root',

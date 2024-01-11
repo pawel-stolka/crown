@@ -1,12 +1,13 @@
 import {
-  ApplicationRef,
   ComponentFactoryResolver,
   ComponentRef,
   Injectable,
-  Injector,
   ViewContainerRef,
 } from '@angular/core';
 import { ToastComponent } from '../toast/toast.component';
+import {
+  NotificationType,
+} from '@crown/data';
 
 @Injectable({
   providedIn: 'root',
@@ -15,119 +16,72 @@ export class ToastService {
   private toastContainerRef!: ViewContainerRef;
   private toasts: ComponentRef<ToastComponent>[] = [];
 
-  constructor(private resolver: ComponentFactoryResolver) {
-    this.setToastContainer(this.toastContainerRef)
-  }
+  constructor(private resolver: ComponentFactoryResolver) {}
 
   setToastContainer(container: ViewContainerRef) {
     this.toastContainerRef = container;
-    console.log('[this.toastContainerRef]', this.toastContainerRef);
-
   }
 
-  showSuccess(msg: string) {
-    this.showToast('Sukces', msg, 'check');
-  }
-  showInfo(msg: string) {
-    this.showToast('Info', msg, 'warning');
-  }
-  showWarning(msg: string) {
-    this.showToast('Ostrzeżenie', msg, 'priority_high');
-  }
-  showError(msg: string) {
-    this.showToast('Błąd', msg, 'error');
-  }
-
-  showToast(title: string, message: string, icon: string, duration: number = 5000) {
+  showToast(
+    type: NotificationType = NotificationType.INFO,
+    title: string,
+    message: string,
+    icon: string,
+    duration: number = 6000
+  ) {
     const factory = this.resolver.resolveComponentFactory(ToastComponent);
     const componentRef = this.toastContainerRef.createComponent(factory);
 
-    // Calculate position based on the number of existing toasts
-    const position = this.toasts.length * 100; // Adjust 50 to your toast height + margin
-
-    // ... set the properties and handle removal
+    componentRef.instance.type = type;
     componentRef.instance.title = title;
     componentRef.instance.message = message;
     componentRef.instance.icon = icon;
     componentRef.instance.duration = duration;
-    componentRef.instance.position = position;
-
-    console.log('duration', duration);
-
 
     this.toasts.push(componentRef);
-    console.log('[this.toasts]', this.toasts);
 
-    const totalDuration = duration + 300;
-    // TODO: don't remove temporarly
     setTimeout(() => {
       const index = this.toasts.indexOf(componentRef);
       if (index >= 0) {
         this.toastContainerRef.remove(index);
         this.toasts.splice(index, 1);
       }
-    }, totalDuration);
-    // STOP
-
-    // Automatically remove the toast after the duration
-    // setTimeout(() => {
-    //   this.toastContainerRef.remove(this.toastContainerRef.indexOf(componentRef.hostView));
-    // }, duration);
-
-    // this.appRef.attachView(componentRef.hostView);
-
-    // const domElem = (componentRef.hostView as any).rootNodes[0] as HTMLElement;
-    // document.body.appendChild(domElem);
-
-    // this.toastComponents.push(componentRef);
-
-    // setTimeout(() => {
-    //   this.appRef.detachView(componentRef.hostView);
-    //   componentRef.destroy();
-    //   this.toastComponents = this.toastComponents.filter(
-    //     (compRef) => compRef !== componentRef
-    //   );
-    // }, duration);
-  }
-
-  /*
-  private toastComponents: unknown[] = [];
-
-  constructor(
-    private appRef: ApplicationRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector
-  ) {}
-
-  showToast(
-    title: string,
-    message: string,
-    icon: string,
-    duration: number = 3000
-  ) {
-    const componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(ToastComponent);
-    const componentRef = componentFactory.create(this.injector);
-
-    componentRef.instance.title = title;
-    componentRef.instance.message = message;
-    componentRef.instance.icon = icon;
-    componentRef.instance.duration = duration;
-
-    this.appRef.attachView(componentRef.hostView);
-
-    const domElem = (componentRef.hostView as any).rootNodes[0] as HTMLElement;
-    document.body.appendChild(domElem);
-
-    this.toastComponents.push(componentRef);
-
-    setTimeout(() => {
-      this.appRef.detachView(componentRef.hostView);
-      componentRef.destroy();
-      this.toastComponents = this.toastComponents.filter(
-        (compRef) => compRef !== componentRef
-      );
     }, duration);
   }
-  */
+
+  showSuccess(title: string, message: string) {
+    this.showToast(NotificationType.SUCCESS, title, message, 'check');
+  }
+  showInfo(title: string, message: string) {
+    this.showToast(NotificationType.INFO, title, message, 'info');
+  }
+  showWarning(title: string, message: string) {
+    this.showToast(
+      NotificationType.WARNING,
+      title,
+      message,
+      'priority_high'
+    );
+  }
+  showError(title: string, message: string) {
+    this.showToast(NotificationType.ERROR, title, message, 'error');
+  }
+
+  ngOnDestroy(): void {
+    console.log('[this.ngOnDestroy]');
+
+    // const container = this._containerElement;
+
+    // if (container && container.parentNode) {
+    //   container.parentNode.removeChild(container);
+    // }
+  }
+
+  // private _createContainer(): HTMLElement {
+  //   const container = this._document.createElement('div');
+  //   // container.classList.add('notifications-container');
+  //   this._document.body.appendChild(container);
+
+  //   return container;
+  // }
 }

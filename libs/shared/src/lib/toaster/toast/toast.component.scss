@@ -1,23 +1,118 @@
+@import '@colors';
 
-:host {
+// :host {
+//   position: fixed;
+//   top: 10px; /* or your desired position */
+//   left: 50%;
+//   transform: translateX(-50%);
+//   z-index: 1050; /* above other elements */
+//   /* other styles */
+// }
+
+
+// :host {
+//   position: fixed;
+//   top: 10px;
+//   right: 10px;
+//   // left: 50%;
+//   transform: translateX(-50%);
+//   z-index: 1050;
+//   /* other styles */
+
+// }
+// .toast {
+//   /* Add your styling here */
+//   border: 2px solid rgba(0, 128, 0, 0.74);
+//   border-radius: 10px;
+//   background-color: greenyellow;
+//   opacity: 85%;
+//   padding: 10px;
+//   display: flex;
+//   flex-direction: column;
+// }
+
+:host  {
   position: fixed;
-  top: 10px;
-  right: 10px;
-  // left: 50%;
-  transform: translateX(-50%);
-  z-index: 1050;
-  /* other styles */
-
+  width: 390px;
+  height: auto;
+  z-index: 4000;
+  bottom: 100px;
+  right: 30px;
 }
+
 .toast {
-  /* Add your styling here */
-  border: 2px solid rgba(0, 128, 0, 0.74);
-  border-radius: 10px;
-  background-color: greenyellow;
-  opacity: 85%;
-  padding: 10px;
+  animation: toastIn 1s;
+  width: 390px;
+  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  margin-top: 30px;
+  height: 80px;
+  transform: translateX(0);
+  opacity: 0.85;
+  // border: 5px dotted black;
+
+
+  &.info {
+    // background-color: $blue;
+    background-color: $demo-accent1;
+    color: $white;
+  }
+
+  &.success {
+    background-color: $success;
+    // background-color: green;
+    color: $white;
+  }
+
+  &.error {
+    background-color: $warn;
+    color: $white;
+  }
+
+  &.warning {
+    background-color: $warn-light;
+    color: $white;
+  }
+
+  .icon {
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+  }
+
+  .content {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    .title {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .message {
+      font-size: 0.875rem;
+      font-weight: normal;
+      word-break: break-word;
+      padding-right: 5px;
+      overflow: hidden;
+      display: block;
+      max-height: 50px;
+    }
+  }
+
+  .close {
+    display: flex;
+    border-left: 1px solid $white;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    color: $white;
+  }
 }
 
 

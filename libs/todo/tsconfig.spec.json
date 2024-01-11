@@ -6,18 +6,14 @@
     "target": "es2016",
     "types": ["jest", "node"],
     "paths": {
-      // defer
       "@crown/admin": ["libs/admin/src/index.ts"],
+      "@crown/shared": ["libs/shared/src/index"],
       "@crown/auth": ["libs/auth/src/index.ts"],
-      "@crown/api": ["libs/shared/src/index"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],
-      // defer
       "@crown/money": ["libs/money/src/index.ts"],
-      // defer
-      "@crown/todo": ["libs/todo/src/index.ts"],
-      "@crown/ui": ["libs/shared/src/index.ts"],
+      "@crown/todo": ["libs/todo/src/index.ts"]
     }
   },
   "files": ["src/test-setup.ts"],

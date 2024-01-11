@@ -20,9 +20,8 @@ import {
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
-// import { ToastService } from '@crown/ui';
 import { MoneyService } from '../../../services/money.service';
-import { NewToastService } from '@crown/ui';
+import { ToastService } from '@crown/shared';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -64,7 +63,7 @@ export class AddDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
     private newMoneyService: MoneyService,
-    private toastService: NewToastService
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -112,7 +111,7 @@ export class AddDialogComponent {
   }
 
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-    this.toastService.showToast('Sukces', message, 'icon-class', 5000);
+    this.toastService.showToast(undefined, 'Sukces', message, 'icon-class', 5000);
   }
 
   save() {
@@ -120,7 +119,8 @@ export class AddDialogComponent {
 
     this.newMoneyService.create$(changes).subscribe(() => {
       this.dialogRef.close();
-      // TODO(toast):
+      console.log('changes', changes);
+
       this.toast('Dodałeś rachunek...');
     });
   }

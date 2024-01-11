@@ -3,6 +3,11 @@
     <mat-icon>menu</mat-icon>
   </button>
 
+  <button (click)="showSuccess('showSuccess')">showSuccess</button>
+  <button (click)="showInfo('showInfo')">showInfo</button>
+  <button (click)="showWarning('showWarning')">showWarning</button>
+  <button (click)="showError('showError')">showError</button>
+
   <div class="auth">
     <button
       *ngIf="isLoggedOut$ | async"

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '@crown/material';
-import { AppInfoComponent } from '@crown/ui';
+import { AppInfoComponent } from '@crown/shared';
 
 @Component({
   selector: 'crown-navigation',
@@ -16,7 +16,6 @@ export class NavigationComponent {
   @Output() toggle = new EventEmitter();
   @Output() toggleMenu = new EventEmitter();
 
-  // tokenEmail$ = this.authService.tokenEmail$;
   isLoggedIn$ = this.authService.isLoggedIn$;
   isLoggedOut$ = !this.authService.isLoggedIn$;
 

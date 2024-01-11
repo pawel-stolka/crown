@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Money, dialogConfig } from '@crown/data';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -10,7 +16,6 @@ import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dia
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
 import { MaterialModule } from '@crown/material';
-import { NewToastService } from '@crown/ui';
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -42,24 +47,16 @@ export class NewDetailsTabComponent {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  constructor(private dialog: MatDialog, private toastService: NewToastService,) {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.money);
-    // this.dataSource.filter = this.filter;
     this.updateSortPag();
   }
 
   ngAfterViewInit(): void {
     this.updateSortPag();
-    // this.toast('Dodałeś rachunek...');
   }
-
-  // toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-  //   console.log('[this.toast]', message);
-
-  //   this.toastService.showToast('Sukces', message, 'icon-class', 5000);
-  // }
 
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);

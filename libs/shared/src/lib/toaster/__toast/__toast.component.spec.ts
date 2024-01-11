@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NewToastComponent } from './new-toast.component';
+import { __ToastComponent as __ToastComponent } from './__toast.component';
 
-describe('NewToastComponent', () => {
-  let component: NewToastComponent;
-  let fixture: ComponentFixture<NewToastComponent>;
+describe('__ToastComponent', () => {
+  let component: __ToastComponent;
+  let fixture: ComponentFixture<__ToastComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewToastComponent],
+      imports: [__ToastComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NewToastComponent);
+    fixture = TestBed.createComponent(__ToastComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

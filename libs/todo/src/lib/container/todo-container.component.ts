@@ -7,7 +7,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
 import { filter, map, take, tap } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
-import { TodoService } from '../todo/todo.service';
+import { TodoService } from '@crown/todo';
 
 @Component({
   selector: 'crown-todo-container',

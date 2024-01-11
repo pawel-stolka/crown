@@ -8,6 +8,7 @@ export * from './lib/interfaces/Todo';
 export * from './lib/interfaces/TodoEvent';
 export * from './lib/interfaces/MonthsCategories';
 export * from './lib/interfaces/Method';
+export * from './lib/interfaces/NotificationMessage';
 
 export * from './lib/configs/constants';
 export * from './lib/configs/Colors';
@@ -22,6 +23,7 @@ export * from './lib/enums/Icon';
 export * from './lib/enums/Priority';
 export * from './lib/enums/TodoAction';
 export * from './lib/enums/ToastIcon';
+export * from './lib/enums/NotificationType';
 
 export * from './lib/lists/PRIORITIES';
 export * from './lib/lists/STATUSES';
