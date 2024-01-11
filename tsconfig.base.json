@@ -17,7 +17,7 @@
     "paths": {
       "@colors": ["apps/crown/src/styles/_colors.scss"],
       "@crown/admin": ["libs/admin/src/index.ts"],
-      "@crown/api/service": ["libs/shared/src/lib/services/api/api.service"],
+      "@crown/api": ["libs/shared/src/index.ts"],
       "@crown/auth": ["libs/auth/src/index.ts"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],

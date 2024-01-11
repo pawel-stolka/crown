@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { Status, Todo, compareBy, dialogConfig } from '@crown/data';
 import { TodoListComponent } from '../components/todo-list/todo-list.component';
-// import { TodoService } from '../../../../shared/src/lib/services/todo/todo.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
 import { filter, map, take, tap } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
 import { TodoService } from '../todo/todo.service';
-// import { TodoService } from 'libs/shared/src/lib/services/todo/todo.service';
 
 @Component({
   selector: 'crown-todo-container',

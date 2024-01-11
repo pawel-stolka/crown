@@ -1,7 +1,6 @@
 export function getMonth(date: Date) {
   const dateString = date.toString()?.substring(0, 7);
   // const dateString = date.toISOString()?.substring(0, 7);
-  console.log('dateString', dateString);
 
   const [year, month] = dateString.split('-');
   // return +month

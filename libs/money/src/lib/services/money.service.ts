@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { ApiService } from '@crown/api/service';
+import { ApiService } from '@crown/api';
 import {
   API_URL,
   Colors,

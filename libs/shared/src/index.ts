@@ -4,4 +4,5 @@ export * from './lib/navigation/navigation.component';
 export * from './lib/app-info/app-info.component';
 
 export * from './lib/services/auth/auth.service';
+export * from './lib/services/api/api.service';
 export * from './lib/toaster/service/new-toast.service';

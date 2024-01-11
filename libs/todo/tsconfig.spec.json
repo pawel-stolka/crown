@@ -9,6 +9,7 @@
       // defer
       "@crown/admin": ["libs/admin/src/index.ts"],
       "@crown/auth": ["libs/auth/src/index.ts"],
+      "@crown/api": ["libs/shared/src/index"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],
@@ -17,7 +18,6 @@
       // defer
       "@crown/todo": ["libs/todo/src/index.ts"],
       "@crown/ui": ["libs/shared/src/index.ts"],
-      "@crown/api/service": ["libs/shared/src/lib/services/api/api.service"]
     }
   },
   "files": ["src/test-setup.ts"],

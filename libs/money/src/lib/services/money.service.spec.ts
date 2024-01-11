@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { MoneyService } from './money.service';
 import { Money, chooseCurrentYear, getMonth } from '@crown/data';
 import { of } from 'rxjs';
-import { ApiService } from '@crown/api/service';
+import { ApiService } from '@crown/api';
 
 describe('NewMoneyService', () => {
   let service: MoneyService;
