@@ -5,7 +5,8 @@
     <th class="trim-text" *ngFor="let category of data?.categories">
       <span class="trim-text">{{ category }}</span>
     </th>
-    <th class="summary">Ʃ</th>
+    <!-- <th class="summary">Ʃ/miesiąc</th> -->
+    <th class="summary"></th>
   </tr>
 
   <tr *ngFor="let item of data?.months; let last = last">
@@ -15,7 +16,6 @@
     <td *ngFor="let category of data?.categories">
       <span [ngClass]="{ last: last }">
         {{ item.typePrices | priceByType : category }}
-        <!-- {{ item.typePrices | json}} -->
       </span>
     </td>
     <!-- summary column -->

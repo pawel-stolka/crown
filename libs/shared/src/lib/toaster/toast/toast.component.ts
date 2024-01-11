@@ -31,7 +31,7 @@ export class ToastComponent {
   @Input() message: string = 'message';
   @Input() icon: string = ToastIcon.Info;
   @Input() duration: number = 5000;
-  @Input() position: number = 50; // Position of the toast
+  @Input() position: number = 0; // Position of the toast
 
   private _iconMap = {
     info: 'info',

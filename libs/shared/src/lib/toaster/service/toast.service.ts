@@ -5,9 +5,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ToastComponent } from '../toast/toast.component';
-import {
-  NotificationType,
-} from '@crown/data';
+import { NotificationType } from '@crown/data';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +25,7 @@ export class ToastService {
     title: string,
     message: string,
     icon: string,
-    duration: number = 50000
+    duration: number = 5000
   ) {
     const factory = this.resolver.resolveComponentFactory(ToastComponent);
     const componentRef = this.toastContainerRef.createComponent(factory);
@@ -56,32 +54,13 @@ export class ToastService {
     this.showToast(NotificationType.INFO, title, message, 'info');
   }
   showWarning(title: string, message: string) {
-    this.showToast(
-      NotificationType.WARNING,
-      title,
-      message,
-      'priority_high'
-    );
+    this.showToast(NotificationType.WARNING, title, message, 'priority_high');
   }
   showError(title: string, message: string) {
     this.showToast(NotificationType.ERROR, title, message, 'error');
   }
 
   ngOnDestroy(): void {
-    console.log('[this.ngOnDestroy]');
-
-    // const container = this._containerElement;
-
-    // if (container && container.parentNode) {
-    //   container.parentNode.removeChild(container);
-    // }
+    // TODO
   }
-
-  // private _createContainer(): HTMLElement {
-  //   const container = this._document.createElement('div');
-  //   // container.classList.add('notifications-container');
-  //   this._document.body.appendChild(container);
-
-  //   return container;
-  // }
 }
