@@ -58,7 +58,6 @@ export class AddTodoComponent {
 
     this.todoService.create$(changes).subscribe(() => {
       this.dialogRef.close();
-      // this.toast('Dodałeś rachunek...')
     });
   }
 

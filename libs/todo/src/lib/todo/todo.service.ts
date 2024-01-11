@@ -17,7 +17,7 @@ import {
   shareReplay,
   of,
 } from 'rxjs';
-import { ApiService, AuthService } from '@crown/shared';
+import { ApiService, AuthService, ToastService } from '@crown/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +25,7 @@ import { ApiService, AuthService } from '@crown/shared';
 export class TodoService {
   private http = inject(ApiService);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
 
   private URL = `${API_URL}/todo`;
   private dataLoaded = false;
@@ -49,6 +50,8 @@ export class TodoService {
     return this.authService.tokenEmail$.pipe(
       catchError((err) => {
         console.log('Could not get token', err);
+        this.toast.showError('Błąd autoryzacji', 'Could not get token');
+
         return throwError(err);
       }),
       filter((x) => !!x)
@@ -90,6 +93,7 @@ export class TodoService {
     return this.http.put<Todo>(`${this.URL}/${id}`, changes).pipe(
       catchError((err) => {
         const message = `Could not edit Todo: ${changes.id}`;
+        this.toast.showError('Błąd edycji', `Nie poszło z ${changes.title}`);
         // this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);

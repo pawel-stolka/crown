@@ -115,13 +115,17 @@ export class EditMoneyDialog implements OnInit {
     this.moneyService.edit$(this.money.id, changes).subscribe((res) => {
       this.dialogRef.close(res);
       console.log('changes', changes);
-
-      this.toast('Dodałeś rachunek...');
     });
   }
 
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-    this.toastService.showToast(undefined, 'Sukces', message, 'icon-class', 5000);
+    this.toastService.showToast(
+      undefined,
+      'Sukces',
+      message,
+      'icon-class',
+      5000
+    );
   }
 
   close() {

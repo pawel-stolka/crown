@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -9,6 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../../shared/src/lib/services/auth/auth.service';
 import { MaterialModule } from '@crown/material';
+import { ToastService } from '@crown/shared';
 
 const TEST_EMAIL = 'test@test';
 const TEST_PASS = 'test';
@@ -22,6 +23,7 @@ const TEST_PASS = 'test';
 })
 export class LoginComponent {
   form: FormGroup;
+  private toast = inject(ToastService)
 
   constructor(
     private fb: FormBuilder,
@@ -38,10 +40,11 @@ export class LoginComponent {
     const { email, password } = this.form.value;
     this.auth.login(email, password).subscribe(
       () => {
+        this.toast.showInfo('Super!', 'Witaj na pokładzie :)');
         this.router.navigateByUrl('/money'); // TODO
       },
       (err) => {
-        alert('Login failed!');
+        this.toast.showError('Błąd autoryzacji', 'złe dane');
       }
     );
   }

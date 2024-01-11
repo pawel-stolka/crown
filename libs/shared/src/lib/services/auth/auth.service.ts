@@ -2,12 +2,14 @@ import { ApiService } from 'libs/shared/src/lib/services/api/api.service';
 import { Injectable, Injector, inject } from '@angular/core';
 import { API_URL, AUTH_TOKEN_EMAIL, Colors, TokenEmail } from '@crown/data';
 import { BehaviorSubject, Observable, map, tap, shareReplay, take } from 'rxjs';
+import { ToastService } from '../../toaster/service/toast.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiService!: ApiService;
+  private toast = inject(ToastService);
 
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
   private _isAdminSubj = new BehaviorSubject<boolean>(true);
@@ -42,6 +44,7 @@ export class AuthService {
         take(1),
         tap((res) => {
           this._tokenEmailSubj.next(res);
+
           localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
         })
         // shareReplay()

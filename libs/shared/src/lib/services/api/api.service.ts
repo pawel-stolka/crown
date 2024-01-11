@@ -2,7 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector, inject } from '@angular/core';
 import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import { Colors, EMPTY_STRING, Method } from '@crown/data';
-import { Observable, shareReplay, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  shareReplay,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
+import { ToastService } from '../../toaster/service/toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +19,7 @@ export class ApiService {
   private http = inject(HttpClient);
   private injector = inject(Injector);
   private authService!: AuthService;
+  private toast = inject(ToastService);
 
   tokenEmail$ = this.getAuthService();
 
@@ -45,11 +54,20 @@ export class ApiService {
             ? `Bearer ${tokenEmail.token}`
             : EMPTY_STRING,
         });
-        return this.http.request<T>(method, url, {
-          body,
-          headers,
-          observe: 'body',
-        });
+        return this.http
+          .request<T>(method, url, {
+            body,
+            headers,
+            observe: 'body',
+          })
+          .pipe(
+            catchError((err) => {
+              const message = 'Coś nie tak...';
+              // this.toast.showError('Błąd sieci', message);
+              console.log(`%c${message}`, Colors.RED, err);
+              return throwError(err);
+            })
+          );
       })
     );
   }

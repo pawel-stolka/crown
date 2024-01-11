@@ -111,7 +111,13 @@ export class AddDialogComponent {
   }
 
   toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-    this.toastService.showToast(undefined, 'Sukces', message, 'icon-class', 5000);
+    this.toastService.showToast(
+      undefined,
+      'Sukces',
+      message,
+      'icon-class',
+      5000
+    );
   }
 
   save() {
@@ -119,9 +125,6 @@ export class AddDialogComponent {
 
     this.newMoneyService.create$(changes).subscribe(() => {
       this.dialogRef.close();
-      console.log('changes', changes);
-
-      this.toast('Dodałeś rachunek...');
     });
   }
 
