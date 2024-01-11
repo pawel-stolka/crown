@@ -1,23 +1,21 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnChanges,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Money, dialogConfig } from '@crown/data';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Money, dialogConfig, NoYearPipe, EMPTY_STRING } from '@crown/data';
-import { MaterialModule } from '@crown/material';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { filter } from 'rxjs';
 import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
-import { filter } from 'rxjs';
+import { MaterialModule } from '@crown/material';
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -30,16 +28,15 @@ const COLUMNS_RENDERED = [
 ];
 
 @Component({
-  selector: 'crown-details-tab',
+  selector: 'crown-new-details-tab',
   standalone: true,
-  imports: [CommonModule, MaterialModule, NoYearPipe],
+  imports: [CommonModule, MaterialModule],
   templateUrl: './details-tab.component.html',
   styleUrl: './details-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailsTabComponent implements AfterViewInit, OnChanges {
+export class DetailsTabComponent {
   @Input() money!: Money[] | undefined;
-  @Input() filter = EMPTY_STRING;
 
   dataSource!: MatTableDataSource<Money>;
 
@@ -54,7 +51,6 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.money);
-    this.dataSource.filter = this.filter;
     this.updateSortPag();
   }
 

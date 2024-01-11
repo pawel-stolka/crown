@@ -4,7 +4,7 @@ import { MoneyService } from '../../services/money.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 import { MaterialModule } from '@crown/material';
-import { NewGroupsComponent } from '../../components/tabs/new-groups/new-groups.component';
+import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   EMPTY_STRING,
@@ -21,7 +21,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Observable, filter, map, tap } from 'rxjs';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
-import { NewDetailsTabComponent } from '../../components/tabs/new-details-tab/new-details-tab.component';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
@@ -32,11 +31,6 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WSZYSTKO';
 
-interface DateAccumulator {
-  earliest: Date;
-  latest: Date;
-}
-
 interface DateRange {
   from: Date;
   to: Date;
@@ -44,7 +38,7 @@ interface DateRange {
   year?: number;
 }
 @Component({
-  selector: 'crown-tabs-2',
+  selector: 'crown-tabs',
   standalone: true,
   imports: [
     CommonModule,
@@ -52,8 +46,7 @@ interface DateRange {
     FormsModule,
     ReactiveFormsModule,
     DataFilterComponent,
-    NewGroupsComponent,
-    NewDetailsTabComponent,
+    GroupsTabComponent,
     DetailsTabComponent,
     YearSelectorComponent,
   ],

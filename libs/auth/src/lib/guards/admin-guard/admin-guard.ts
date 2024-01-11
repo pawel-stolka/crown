@@ -21,7 +21,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
   ): Observable<boolean> {
     return of(false);
     // return this.authService.isAdmin$.pipe(
-    //   take(1), // TODO: CRUCIAL !!
+    //   take(1),
     //   map((x) => !!x),
     //   map((isAdmin) => {
     //     console.log('[isAdmin]', isAdmin);

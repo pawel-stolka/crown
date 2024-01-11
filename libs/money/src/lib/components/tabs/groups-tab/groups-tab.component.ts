@@ -1,28 +1,20 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
-  MonthsCategories,
-  NoYearPipe,
-  PriceByTypePipe,
-  SumByMonthPipe,
-} from '@crown/data';
-import { SearchResultsComponent } from '../../search-results/search-results.component';
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PriceByTypePipe, SumByMonthPipe } from '@crown/data';
 
 @Component({
-  selector: 'crown-groups-tab',
+  selector: 'crown-new-groups',
   standalone: true,
+  imports: [CommonModule, SumByMonthPipe, PriceByTypePipe],
   templateUrl: './groups-tab.component.html',
   styleUrl: './groups-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    SearchResultsComponent,
-    NoYearPipe,
-    SumByMonthPipe,
-    PriceByTypePipe,
-  ],
 })
 export class GroupsTabComponent {
-  @Input() data!: MonthsCategories | null | any; // TODO: no any
-  @Input() filtered = false;
+  // @Input() data!: any; // TODO: no any
+  @Input() data: any;
 }

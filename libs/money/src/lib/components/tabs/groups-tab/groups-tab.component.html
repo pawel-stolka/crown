@@ -1,23 +1,17 @@
-
-
-<!-- TODO: make it nicer -->
-@if(data) { @if(filtered) {
-<div class="query-result">
-  <crown-search-results [results]="data"></crown-search-results>
-</div>
-} @if (data.total > 0) {
+@if (data?.total > 0) {
 <table class="table __mat-elevation-z8">
   <tr>
     <th></th>
     <th class="trim-text" *ngFor="let category of data?.categories">
       <span class="trim-text">{{ category }}</span>
     </th>
-    <th class="summary">Ʃ</th>
+    <!-- <th class="summary">Ʃ/miesiąc</th> -->
+    <th class="summary"></th>
   </tr>
 
   <tr *ngFor="let item of data?.months; let last = last">
     <!-- <td class="period" *ngIf="true">{{ item.period | noYear }}</td> -->
-    <td class="period" *ngIf="true">{{ item.period }}</td>
+    <td>{{ item.period }}</td>
 
     <td *ngFor="let category of data?.categories">
       <span [ngClass]="{ last: last }">
@@ -26,8 +20,9 @@
     </td>
     <!-- summary column -->
     <td>{{ item.typePrices | sumByMonth }}</td>
+    <!-- <td>{{ item.typePrices | json }}</td> -->
   </tr>
 </table>
-} } @if(data.total === 0) {
-<div>nic tu nie ma.</div>
+} @else {
+<div>no data</div>
 }

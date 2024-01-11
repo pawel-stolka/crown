@@ -22,7 +22,6 @@ export const MAX_TEXT_LENGTH = 25;
 export const MIN_PRICE = 0.01;
 export const MAX_PRICE = 1_000_000;
 
-// TODO: check
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD-MM-YYYY',

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GroupsTabComponent } from './groups-tab.component';
 
-describe('GroupsTabComponent', () => {
+describe('NewGroupsComponent', () => {
   let component: GroupsTabComponent;
   let fixture: ComponentFixture<GroupsTabComponent>;
 

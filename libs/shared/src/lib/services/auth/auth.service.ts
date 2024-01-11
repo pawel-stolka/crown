@@ -28,18 +28,10 @@ export class AuthService {
     }
   }
 
-  // TODO: DELETE
-  getToken() {
-    return this._tokenEmailSubj.value;
-  }
-
   login(email: string, password: string): Observable<any> {
     const URL = `${API_URL}/signin`;
     return this.getApiService()
-      .post(
-        URL,
-        { email, password }
-      )
+      .post(URL, { email, password })
       .pipe(
         take(1),
         tap((res) => {
