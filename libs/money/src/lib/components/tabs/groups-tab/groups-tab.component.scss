@@ -7,6 +7,17 @@
 :host {
   display: flex;
   flex-direction: column;
+  background-color: $white;
+  // background-color: orange;
+  // background-color: $active-tab;
+  // border-left: 5px solid $blue;
+  // border-right: 5px solid $blue;
+  // border-bottom: 5px solid $blue;
+  // border-top: 5px solid $blue;
+  // border-top-width: 50%;
+
+  padding: 10px;
+  // width: 100%;
 
   // .query-result {
   //   display: flex;
@@ -14,12 +25,24 @@
   //   justify-items: center;
   //   margin: 10px 0;
   // }
+
+  // position: relative;
 }
+// :host::before {
+// :host::after {
+//   content: '';
+//   position: absolute;
+//   top: 0;
+//   left: 75%;
+//   width: 100%; /* Adjusts the width of the border */
+//   height: 0;
+//   border-top: 5px solid $blue; /* Adjusts the color and thickness of the border */
+// }
 
 .table {
   width: 95%;
   margin-top: 20px;
-
+  // border: 10px dotted;
 
   @for $i from 2 through 12 {
     tr:nth-child(#{$i}) {
@@ -56,7 +79,6 @@
     border: 1px dotted $blue;
     // background-color: $demo-primary-0;
   }
-
 
   tr > td:first-child {
     // padding: 0 10px;
@@ -106,8 +128,6 @@
     font-size: 1.2rem;
     background-color: lightgray;
   }
-
-
 }
 
 // tr:nth-child(2) {
@@ -116,7 +136,6 @@
 // tr:nth-child(3) {
 //   background-color: $demo-secondary; /* Example: Light gray background for even rows */
 // }
-
 
 .last {
   font-size: 1.3rem;
@@ -129,7 +148,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 // @for $i from 1 through $max-toasts {
 //   :host:nth-of-type(#{$i}) {

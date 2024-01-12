@@ -41,7 +41,7 @@ export class DetailsTabComponent {
   dataSource!: MatTableDataSource<Money>;
 
   pageSizeOptions = [5, 10, 25];
-  pageSize = this.pageSizeOptions[0];
+  pageSize = this.pageSizeOptions[1];
   COLUMNS = COLUMNS_RENDERED;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;

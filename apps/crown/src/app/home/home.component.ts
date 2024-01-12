@@ -8,12 +8,11 @@ import { MaterialModule } from '@crown/material';
     <div class="title">Witaj w Crownie 👋</div>
 
     <div class="info">
-      <div>
-        To appka stworzona przeze mnie na prywatne potrzeby analizy wydatków
-      </div>
+      <span>
+        To appka stworzona przeze mnie na prywatne potrzeby analizy wydatków (na potrzeby kursu Crown).
+      </span>
 
-      <div class="ps">
-        <div>(na podstawie kursu Crown)</div>
+      <div>
         <a href="https://dlarodziny.eu/crown/" target="_blank"
           >dlarodziny.eu/crown/</a
         >
@@ -22,12 +21,12 @@ import { MaterialModule } from '@crown/material';
 
     <div class="intro">
       <div>Na początek wypróbuj ją na koncie testowym</div>
+      <div class="highlight"> zaloguj się ☝️</div>
     </div>
-    <span class="highlight"> zaloguj się ☝️</span>
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <div> krótki przewodnik po apce </div>
+        <div>krótki przewodnik po apce</div>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>

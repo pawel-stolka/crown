@@ -30,7 +30,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 // import { DateRange } from '@angular/material/datepicker';
 
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
-const DETAILS_LABEL = 'WSZYSTKO';
+const DETAILS_LABEL = 'WPISY';
 
 interface DateRange {
   from: Date;

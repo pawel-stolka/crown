@@ -1,3 +1,5 @@
+@import '@colors';
+
 .help {
   border: 2px dotted dodgerblue;
 }
@@ -31,41 +33,41 @@ mat-form-field {
 
   .row {
     display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .temp-filters {
-
-    // border: 5px dotted;
-    display: flex;
     justify-content: space-between;
+    align-items: center;
 
-    .dateRange {
-      gap: 5px;
-      height: 56;
-      // border: 5px dotted burlywood;
+    .temp-filters {
+      // border: 5px dotted;
       display: flex;
-      // align-items: baseline;
-      align-items: center;
+      justify-content: space-between;
 
-      mat-dialog-content {
-        height: 56px;
-        // border: 5px dotted green;
+      .dateRange {
+        gap: 5px;
+        height: 56;
+        // border: 5px dotted burlywood;
+        display: flex;
+        // align-items: baseline;
+        align-items: center;
 
-        mat-form-field {
-          padding: 0;
+        mat-dialog-content {
           height: 56px;
-          // width: 90px;
-          // border: 5px dotted red;
+          // border: 5px dotted green;
+
+          mat-form-field {
+            padding: 0;
+            height: 56px;
+            // width: 90px;
+            // border: 5px dotted red;
+          }
         }
       }
-    }
-    .dateRange2 {
-      // border: 5px dotted blue;
-      height: 56px;
+      .dateRange2 {
+        // border: 5px dotted blue;
+        height: 56px;
+        background-color: $white;
+      }
     }
   }
-}
 }
 
 .filter-message {
@@ -122,7 +124,6 @@ mat-form-field {
 //   opacity: 1;
 // }
 
-
 .__actions {
   display: flex;
   justify-content: space-between;
@@ -136,4 +137,116 @@ mat-form-field {
     align-content: center;
     font-size: 14px;
   }
+}
+
+// ACTIVE
+// mdc-tab mat-mdc-tab mat-mdc-focus-indicator ng-star-inserted mdc-tab--active mdc-tab-indicator--active
+// INACTIVE
+// mdc-tab mat-mdc-tab mat-mdc-focus-indicator ng-star-inserted
+
+/* Active tab styling */
+.mat-tab-group .mat-tab-labels .mat-tab-label-active {
+  background-color: pink;
+  // border: 1px solid black;
+  /* Add other styles as needed */
+}
+
+/* Inactive tab styling */
+.mat-tab-group .mat-tab-labels .mat-tab-label:not(.mat-tab-label-active) {
+  background-color: grey;
+  background-color: $inactive-tab;
+  /* Add other styles as needed */
+}
+
+// :host ::ng-deep .mat-tab-group .mat-tab-labels .mat-tab-label-active {
+:host ::ng-deep //.mat-tab-group .mat-tab-labels
+.mdc-tab-active {
+  /* Active tab styles */
+  // background-color: pink;
+  // border: 1px solid black;
+}
+
+:host
+  ::ng-deep
+  .mat-tab-group
+  .mat-tab-labels
+  .mat-tab-label:not(.mat-tab-label-active) {
+
+  /* Inactive tab styles */
+}
+
+:host ::ng-deep .mat-tab-group {
+  // border: 10px dotted black;
+  .mat-mdc-tab-group {
+
+    //mat-primary mat-mdc-tab-group-stretch-tabs ng-star-inserted
+    // background-color: pink;
+  }
+}
+
+// :host ::ng-deep  .mat-mdc-tab.mdc-tab { background-color: grey; }
+// :host ::ng-deep  .mat-mdc-tab-body.mat-mdc-tab-body-active { min-height: 48px; background-color: coral; }
+:host ::ng-deep .mat-mdc-tab.mdc-tab {
+  // background-color: rgb(211, 209, 209);
+
+  &.mat-mdc-focus-indicator {
+    background-color: $inactive-tab;
+  }
+
+  &.mdc-tab-indicator--active {
+    background-color: orange;
+    background-color: $active-tab;
+    // font-size: large;
+    font-weight: bolder;
+    // color: black;
+
+    // border: 3px solid $blue; <-- HERE is BORDER OF TABS
+    // border-right: 2px solid black;
+    // border-left: 2px solid black;
+    border-bottom: none;
+  }
+}
+
+:host ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  // color: $blue;
+  color: black;
+  color: $dark-blue2;
+    font-size: larger;
+  }
+
+:host {
+  ::ng-deep
+    .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active.mdc-tab__text-label {
+    // color: orange;
+    // color: $active-tab;
+    border: 5px dotted red;
+    }
+
+    // ::ng-deep
+    .mdc-tab-indicator--active {
+    // .mdc-tab-indicator__content--underline {
+      border: 5px dotted red;
+      // --mdc-tab-indicator-active-indicator-color: green;
+    }
+
+    ::ng-deep
+    .mdc-tab
+    .mdc-tab-indicator {
+      // width: 50%;
+      // padding: 0 50px;
+      display: none;
+    }
+
+    // .mdc-tab mat-mdc-tab mat-mdc-focus-indicator mdc-tab--active ng-star-inserted mdc-tab-indicator--active
+    // .mdc-tab mat-mdc-tab mat-mdc-focus-indicator mdc-tab--active mdc-tab-indicator--active
+    // .mdc-tab
+    // mat-mdc-tab
+    // ::ng-deep mat-mdc-focus-indicator {
+    .mdc-tab--active .mdc-tab-indicator--active {
+      // ::ng-deep .mdc-tab-indicator {
+      // .mdc-tab-indicator__content.mdc-tab-indicator__content--underline {
+
+      // border-top-width: 4px;
+      // border: 10px dotted red;
+    }
 }

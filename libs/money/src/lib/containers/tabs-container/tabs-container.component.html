@@ -24,6 +24,7 @@
 
       <ng-template #range>
         <div class="dateRange" disabled>
+          <!-- TODO: make separate component !!! -->
           <ng-container *ngIf="dateRange$ | async as dateRange">
             <div class="_dateRange">
               <div class="inline">
@@ -93,10 +94,10 @@
   </div>
 </div>
 
-<div *ngIf="message$ | async as message" class="filter-message">
+<!-- <div *ngIf="message$ | async as message" class="filter-message">
   filter-message...
   {{ message }}
-</div>
+</div> -->
 <ng-container *ngIf="filteredMoney$ | async as money; else EMPTY">
   <ng-container *ngIf="money.length > 0; then DATA; else NO_DATA">
   </ng-container>

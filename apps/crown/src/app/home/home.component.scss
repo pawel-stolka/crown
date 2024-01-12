@@ -15,13 +15,14 @@
 
   .info {
     padding: 40px 0;
+    display: flex;
+    flex-direction: column;
 
     a {
-      // margin: 20px 0;
       background-color: $demo-accent1;
     }
 
-    .ps {
+    div {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -30,16 +31,25 @@
   }
 
   .intro {
-    border: 1px solid $white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .highlight {
+      margin: 10px 0;
+      width: auto;
+      text-align: center;
+    }
+
+    border: 1px solid $blue;
     border-radius: 10px;
     padding: 15px;
+
+
   }
 
   mat-expansion-panel {
     margin: 25px 0;
-    // mat-expansion-panel-header {
-    //   width: 200px;
-    // }
   }
 
   .tutorial {
