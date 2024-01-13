@@ -1,7 +1,18 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="openRoutes()" class="example-icon">
-    <mat-icon>menu</mat-icon>
-  </button>
+  <div class="main">
+    <button mat-icon-button (click)="openRoutes()" class="example-icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <button
+      mat-button
+      routerLink=""
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>home</mat-icon>
+    </button>
+
+  </div>
 
   <div class="auth">
     <button

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -6,6 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
+import { ToastService } from '@crown/shared';
 import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
 import { Observable, map, of, take, tap } from 'rxjs';
 
@@ -13,12 +14,17 @@ import { Observable, map, of, take, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AdminGuard implements CanActivate, CanActivateChild {
+  private toast = inject(ToastService);
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
+    this.toast.showWarning(
+      'Brak uprawnień',
+      'Zaloguj się na konto administratora'
+    );
     return of(false);
     // return this.authService.isAdmin$.pipe(
     //   take(1),

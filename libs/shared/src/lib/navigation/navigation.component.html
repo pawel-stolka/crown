@@ -1,15 +1,4 @@
 <div class="routes">
-  <button
-    class="_title"
-    mat-button
-    routerLink=""
-    routerLinkActive="active-link"
-    [routerLinkActiveOptions]="{ exact: true }"
-    (click)="openRoutes()"
-  >
-    <mat-icon>home</mat-icon>
-  </button>
-
   <ng-container *ngIf="isLoggedIn$ | async">
     <button
       mat-stroked-button
@@ -29,7 +18,7 @@
 <div class="info">
   <button
     *ngIf="isLoggedIn$ | async"
-    mat-stroked-button
+    mat-flat-button
     routerLink="admin"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
@@ -38,7 +27,5 @@
   >
     admin
   </button>
-  <div class="a-info">
-    <crown-app-info></crown-app-info>
-  </div>
+  <crown-app-info></crown-app-info>
 </div>

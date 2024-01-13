@@ -1,11 +1,20 @@
+
+
+:host {
+  .main {
+    display: flex;
+    align-items: center;
+  }
+}
+
 mat-toolbar {
   display: flex;
   justify-content: space-between;
+  
 
   .auth {
     .details {
       display: flex;
-      align-content: center;
       align-items: center;
       gap: 10px;
 
