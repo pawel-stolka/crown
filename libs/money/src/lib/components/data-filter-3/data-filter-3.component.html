@@ -1,1 +1,23 @@
-<p>data-filter-3 works!</p>
+<mat-form-field
+  appearance="outline"
+  class="all-width"
+  [ngClass]="{ expanded: expanded }"
+>
+  <mat-icon matPrefix>search</mat-icon>
+  <input
+    matInput
+    placeholder="Search"
+    type="text"
+    (focus)="toggleExpanded()"
+    (blur)="toggleExpanded()"
+    [value]="filterValue$ | async"
+    (input)="applyFilter($event)"
+  />
+  <mat-icon
+    matSuffix
+    *ngIf="filterValue$ | async"
+    (mousedown)="preventBlur($event)"
+    (click)="clearSearch($event)"
+    >close</mat-icon
+  >
+</mat-form-field>

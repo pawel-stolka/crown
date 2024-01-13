@@ -27,17 +27,11 @@ import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-// import { DateRange } from '@angular/material/datepicker';
+import { DataFilter3Component } from '../../components/data-filter-3/data-filter-3.component';
 
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WPISY';
 
-interface DateRange {
-  from: Date;
-  to: Date;
-  type?: string;
-  year?: number;
-}
 @Component({
   selector: 'crown-tabs',
   standalone: true,
@@ -47,6 +41,7 @@ interface DateRange {
     FormsModule,
     ReactiveFormsModule,
     DataFilterComponent,
+    DataFilter3Component,
     GroupsTabComponent,
     DetailsTabComponent,
     YearSelectorComponent,
