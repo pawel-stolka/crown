@@ -12,7 +12,7 @@ export class AuthService {
   private toast = inject(ToastService);
 
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
-  private _isAdminSubj = new BehaviorSubject<boolean>(true);
+  private _isAdminSubj = new BehaviorSubject<boolean>(false);
 
   tokenEmail$: Observable<TokenEmail | null> =
     this._tokenEmailSubj.asObservable();
