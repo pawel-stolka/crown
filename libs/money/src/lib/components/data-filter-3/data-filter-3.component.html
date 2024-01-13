@@ -9,7 +9,7 @@
     placeholder="Search"
     type="text"
     (focus)="toggleExpanded()"
-    (blur)="toggleExpanded()"
+    (blur)="handleBlur()"
     [value]="filterValue$ | async"
     (input)="applyFilter($event)"
   />

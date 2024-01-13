@@ -91,7 +91,7 @@
   </div>
   <div class="row" *ngIf="(allYears$ | async)?.length">
     <crown-data-filter-3 (filter)="filterByType($event)"></crown-data-filter-3>
-    <crown-data-filter (filter)="filterByType($event)"></crown-data-filter>
+    <!-- <crown-data-filter (filter)="filterByType($event)"></crown-data-filter> -->
   </div>
 </div>
 
