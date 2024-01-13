@@ -17,14 +17,13 @@
     "paths": {
       "@colors": ["apps/crown/src/styles/_colors.scss"],
       "@crown/admin": ["libs/admin/src/index.ts"],
-      // "@crown/api": ["libs/shared/src/index.ts"],
       "@crown/auth": ["libs/auth/src/index.ts"],
       "@crown/data": ["libs/data/src/index.ts"],
       "@crown/login": ["libs/auth/src/index.ts"],
       "@crown/material": ["libs/material/src/index.ts"],
       "@crown/money": ["libs/money/src/index.ts"],
-      "@crown/todo": ["libs/todo/src/index.ts"],
-      "@crown/shared": ["libs/shared/src/index.ts"]
+      "@crown/shared": ["libs/shared/src/index.ts"],
+      "@crown/todo": ["libs/todo/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
