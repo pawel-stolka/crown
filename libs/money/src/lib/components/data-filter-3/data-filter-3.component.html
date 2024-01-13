@@ -4,9 +4,9 @@
   [ngClass]="{ expanded: expanded }"
 >
   <mat-icon matPrefix>search</mat-icon>
+  <!-- placeholder="filtr..." -->
   <input
     matInput
-    placeholder="Search"
     type="text"
     (focus)="toggleExpanded()"
     (blur)="handleBlur()"
