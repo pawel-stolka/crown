@@ -1,22 +1,18 @@
-<mat-form-field
-  appearance="outline"
-  class="all-width"
-  [ngClass]="{ expanded: expanded }"
->
+<mat-form-field appearance="outline" class="all-width" [ngClass]="{'activeSearch': hasContent}">
   <mat-icon matPrefix>search</mat-icon>
   <!-- placeholder="filtr..." -->
+  <mat-label>Filtruj</mat-label>
+  <!-- [class.white-background]="hasContent" -->
   <input
     matInput
     type="text"
-    (focus)="toggleExpanded()"
-    (blur)="handleBlur()"
+
     [value]="filterValue$ | async"
     (input)="applyFilter($event)"
   />
   <mat-icon
     matSuffix
     *ngIf="filterValue$ | async"
-    (mousedown)="preventBlur($event)"
     (click)="clearSearch($event)"
     >close</mat-icon
   >
