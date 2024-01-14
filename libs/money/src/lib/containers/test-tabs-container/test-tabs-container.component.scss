@@ -1,0 +1,123 @@
+$content: dodgerblue;
+$content: white;
+$content: wheat;
+
+:host ::ng-deep .mat-tab-group {
+  // border: 10px dotted black;
+  // background-color: red;
+
+  .mat-mdc-tab-group {
+    //mat-primary mat-mdc-tab-group-stretch-tabs ng-star-inserted
+    // background-color: pink;
+  }
+}
+
+//  .mat-mdc-tab-group.mat-primary mat-mdc-tab-group-stretch-tabs
+:host {
+  // ::ng-deep .mat-mdc-tab-group.mat-primary.mat-tab-body-wrapper {
+  // mdc-tab
+  // mat-mdc-tab
+  // mat-mdc-focus-indicator
+  // ng-star-inserted
+  // ::ng-deep .mdc-tab--active
+  //   // mdc-tab-indicator--active
+  // {
+  //   background-color: fuchsia;
+  //   border: 3px solid black;
+  //   border-bottom: none;
+  // }
+
+  ::ng-deep .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    padding: 10px;
+    background-color: $content;
+    border-bottom-left-radius: 10px; /* Adjust radius as needed */
+    border-bottom-right-radius: 10px; /* Adjust radius as needed */
+  }
+
+  // ::ng-deep .mat-mdc-tab-group.mat-primary.mat-mdc-tab-body-content {
+  //   border-bottom-left-radius: 10px; /* Adjust radius as needed */
+  //   border-bottom-right-radius: 10px; /* Adjust radius as needed */
+  // }
+
+  ::ng-deep .mat-mdc-tab-group.mat-primary {
+    //.mat-mdc-tab-group-stretch-tabs {
+    /* Style for the tab labels */
+    //  ::ng-deep .mat-tab-group.mat-primary .mat-tab-label {
+    // border-top-left-radius: 10px; /* Adjust radius as needed */
+    // border-top-right-radius: 10px; /* Adjust radius as needed */
+
+    border-bottom: 3px solid black; /* Adjust color and size as needed */
+    // border-bottom-left-radius: 10px;
+    // border-right: 3px solid black; /* Adjust color and size as needed */
+    border-radius: 10px; /* Adjust radius as needed */
+    overflow: hidden;
+  }
+
+  // ::ng-deep .mat-mdc-tab-group.mat-primary.mat-tab-body-wrapper {
+  // mdc-tab
+  // mat-mdc-tab
+  // mat-mdc-focus-indicator
+  // ng-star-inserted
+  ::ng-deep .mdc-tab--active
+    // mdc-tab-indicator--active
+  {
+    background-color: $content;
+    border-left: 3px solid black; /* Adjust color and size as needed */
+    border-right: 3px solid black; /* Adjust color and size as needed */
+    border-top: 3px solid black; /* Adjust color and size as needed */
+    // border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    // border: 3px solid black;
+    border-bottom: none;
+    // border-top: none;
+  }
+
+  // mdc-tab
+  // mat-mdc-tab
+  // mat-mdc-focus-indicator
+  // ng-star-inserted
+  // ::ng-deep .mdc-tab--active
+  //   // mdc-tab-indicator--active
+  ::ng-deep .mat-ripple.mat-mdc-tab-ripple {
+    color: red;
+  }
+
+  ::ng-deep .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active) {
+    // background-color: yellow;
+    border-bottom: 3px solid black;
+  }
+  ::ng-deep .mat-mdc-focus-indicator.mdc-tab-indicator--active {
+    // background-color: red;
+    // color: $content;
+    // border-bottom: 10px solid $content;
+  }
+  ::ng-deep .mat-ripple.mat-mdc-tab-ripple--active {
+    // border-bottom: 1px solid $content;
+    background-color: $content;
+  }
+  // ::ng-deep .mat-ripple:not(.mat-mdc-tab-ripple--active) {
+  //   // border-bottom: 1px solid $content;
+  //   background-color: red;
+  // }
+
+  // mat-mdc-tab-body
+  //   mat-mdc-tab-body-active
+  ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    border-left: 3px solid black; /* Adjust color and size as needed */
+    border-right: 3px solid black;
+    background-color: red;
+  }
+
+  ::ng-deep .mdc-tab .mdc-tab-indicator {
+    // width: 50%;
+    // padding: 0 50px;
+    display: none;
+  }
+}
+
+.help {
+  .tab {
+    height: 100px;
+  }
+}

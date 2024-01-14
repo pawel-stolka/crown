@@ -80,17 +80,6 @@ export class TabsContainerComponent {
 
   message$: Observable<string> = this.moneyService.message$;
 
-  // TODO: MoneyFilter
-  // mf: MoneyFilter = {
-  //   startDate: new Date(),
-  //   endDate: new Date(),
-  //   type: 'string',
-  //   year: 1,
-  // };
-  // l: DateRange = {
-  //   from: new Date(),
-  //   to: new Date(),
-  // };
   dateRange$: Observable<MoneyFilter> = this.filteredMoney$.pipe(
     map((fm) => fm.map((f) => f.createdAt)),
     map((money) => {
