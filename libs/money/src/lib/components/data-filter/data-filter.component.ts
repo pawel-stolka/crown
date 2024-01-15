@@ -17,16 +17,16 @@ import { EMPTY_STRING } from '@crown/data';
   styleUrl: './data-filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataFilter3Component {
+export class DataFilterComponent {
   expanded = false;
   clearClicked = false;
+  @Output() filter = new EventEmitter();
 
   private _filterSubj = new BehaviorSubject<string>(EMPTY_STRING);
   filterValue$ = this._filterSubj.asObservable();
 
   hasContent: boolean = false;
 
-  @Output() filter = new EventEmitter();
   filterValue: any;
 
   applyFilter(event: Event) {
@@ -36,6 +36,7 @@ export class DataFilter3Component {
       : EMPTY_STRING;
     this.filterValue = filterValue.trim().toLowerCase();
     this._filterSubj.next(filterValue);
+
     this.filter.emit(filterValue);
 
     this.hasContent = filterValue !== EMPTY_STRING;
