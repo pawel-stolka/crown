@@ -1,7 +1,7 @@
 import { ApiService } from 'libs/shared/src/lib/services/api/api.service';
 import { Injectable, Injector, inject } from '@angular/core';
-import { API_URL, AUTH_TOKEN_EMAIL, Colors, TokenEmail } from '@crown/data';
-import { BehaviorSubject, Observable, map, tap, shareReplay, take } from 'rxjs';
+import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
+import { BehaviorSubject, Observable, map, tap, take } from 'rxjs';
 import { ToastService } from '../../toaster/service/toast.service';
 
 @Injectable({

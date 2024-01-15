@@ -55,6 +55,4 @@ export class AppComponent implements AfterViewInit {
   toggleMenu() {
     this.menuSidenav.toggle();
   }
-
- 
 }

@@ -2,14 +2,17 @@
 @import '@styles';
 
 // --------------- OVERRIDE MATERIAL ---------------
+$inactive-tab-font-size: 12px;
 
 :host {
   ::ng-deep
     .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
+    font-size: $inactive-tab-font-size;
     border-bottom: $border-width solid $border-color;
   }
   ::ng-deep
     .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-1 {
+    font-size: $inactive-tab-font-size;
     border-bottom: $border-width solid $border-color;
   }
 
@@ -22,11 +25,6 @@
     border-right: $border-width solid $border-color;
   }
 
-  ::ng-deep .mdc-tab:not(.mdc-tab--active) {
-    background-color: $inactive-tab;
-    border-top-left-radius: $border-radius;
-    border-top-right-radius: $border-radius;
-  }
   ::ng-deep .mdc-tab--active {
     background-color: $active-tab;
     border-top: $border-width solid $border-color;
@@ -40,6 +38,12 @@
     font-size: larger;
   }
 
+  ::ng-deep .mdc-tab:not(.mdc-tab--active) {
+    background-color: $inactive-tab;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+
   ::ng-deep
     .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
     border-bottom: $border-width solid $border-color;
@@ -49,5 +53,3 @@
     display: none;
   }
 }
-
-

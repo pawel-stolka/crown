@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { Status, Todo, compareBy, dialogConfig } from '@crown/data';
 import { TodoListComponent } from '../components/todo-list/todo-list.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddTodoComponent } from '../components/dialogs/add-todo/add-todo.component';
-import { filter, map, take, tap } from 'rxjs';
+import { filter, map, take } from 'rxjs';
 import { EditTodoComponent } from '../components/dialogs/edit-todo/edit-todo.component';
 import { TodoService } from '@crown/todo';
 
@@ -16,7 +16,7 @@ import { TodoService } from '@crown/todo';
   templateUrl: './todo-container.component.html',
   styleUrl: './todo-container.component.scss',
 })
-export class TodoContainerComponent implements OnInit {
+export class TodoContainerComponent {
   isAdmin$ = this.todoService.isAdmin$;
   all$ = this.todoService.todos$.pipe(
     map((todos) => todos.sort(compareBy('priority')))
@@ -39,8 +39,6 @@ export class TodoContainerComponent implements OnInit {
   );
 
   constructor(private dialog: MatDialog, private todoService: TodoService) {}
-
-  ngOnInit(): void {}
 
   add() {
     const dialogRef = this.dialog.open(AddTodoComponent, dialogConfig);
