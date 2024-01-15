@@ -6,7 +6,6 @@
   align-items: center;
   margin-top: 50px;
   font-size: 18px;
-  color: $demo-danger;
 
   .title {
     font-size: 30px;
@@ -57,16 +56,17 @@
 
     .title {
       font-size: larger;
-      color:  $blue;
+      color: $blue;
     }
 
-    div
-    {
+    div {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
       padding: 15px 0;
+      color: $demo-danger;
+      font-size: larger;
     }
 
     img {

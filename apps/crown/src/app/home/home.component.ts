@@ -27,16 +27,14 @@ import { NgOptimizedImage } from '@angular/common';
     </div>
 
     <div class="tutorial">
-      <div>CHCESZ WIEDZIEĆ WIĘCEJ? 👇</div>
-
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <div class="title">Przewodnik po apce</div>
+          <div class="title">CHCESZ WIEDZIEĆ WIĘCEJ? 👇</div>
         </mat-expansion-panel-header>
 
         <ng-template matExpansionPanelContent>
           <div class="highlight">
-            <h2>Apka ogarnia sumowanie wydatków:</h2>
+            <h1>Apka ogarnia sumowanie wydatków:</h1>
             <div>potrzebuje Twoje wydatki - datę | cenę | kategorię</div>
             <div>👉 grupuje po TYPIE, DACIE i SUMUJE</div>
           </div>
