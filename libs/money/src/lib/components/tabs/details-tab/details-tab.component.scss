@@ -1,10 +1,28 @@
 @import '@styles';
+@import '@colors';
 
 :host {
   display: flex;
   flex-direction: column;
   padding: $padding;
   background-color: $white;
+
+  .table {
+    width: 100%;
+    border: 1px dotted $border-color;
+  }
+
+  tr {
+    width: 100%;
+  }
+
+  .bold {
+    font-weight: 'bold';
+  }
+
+  .blue {
+    color: $blue;
+  }
 
   .mat-mdc-header-row {
     background-color: $header-background;
@@ -14,5 +32,23 @@
   mat-paginator {
     color: $white;
     background-color: $footer-background;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: $white;
+    border-radius: 5px;
+  }
+
+  ::ng-deep .mat-paginator .mat-select .mat-select-trigger {
+    color: $footer-background;
+    fill: $white;
+  }
+
+  ::ng-deep .mat-mdc-tooltip-trigger {
+    fill: $white;
+  }
+
+  ::ng-deep .mat-mdc-paginator-icon {
+    fill: $white;
   }
 }

@@ -143,11 +143,7 @@ export class MoneyContainerComponent {
     this.moneyService.updateFilters(currFilters);
   }
 
-  tabChange(index: number) {
-    console.log('tabs0 | tabChange', index);
-  }
-
-  // CRUD
+  // --- CRUD ---
   add() {
     const dialogRef = this.dialog.open(AddDialogComponent, dialogConfig);
     this.handleDialog(dialogRef);

@@ -19,6 +19,8 @@ import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dia
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
 import { MaterialModule } from '@crown/material';
+import hash from 'string-hash';
+import { TinyColor } from '@ctrl/tinycolor';
 
 @Injectable()
 export class CustomMatPaginatorIntl extends MatPaginatorIntl {
@@ -26,7 +28,7 @@ export class CustomMatPaginatorIntl extends MatPaginatorIntl {
     super();
     this.firstPageLabel = 'Pierwsza strona';
     this.lastPageLabel = 'Ostatnia strona';
-    this.itemsPerPageLabel = 'Wpisów na stronie';
+    this.itemsPerPageLabel = 'Pozycji na stronie';
   }
   override getRangeLabel = (page: number, pageSize: number, length: number) => {
     if (length === 0 || pageSize === 0) {
@@ -41,7 +43,7 @@ export class CustomMatPaginatorIntl extends MatPaginatorIntl {
         ? Math.min(startIndex + pageSize, length)
         : startIndex + pageSize;
 
-    return `Aktualnie: ${startIndex + 1} - ${endIndex} z ${length} wpisów`;
+    return `${startIndex + 1} - ${endIndex} z ${length} wpisów`;
   };
 }
 
@@ -54,6 +56,11 @@ const COLUMNS_RENDERED = [
   'updatedAt',
   'action',
 ];
+
+const COLUMNS_WIDTHS = {
+  narrow: '5%',
+  wide: '15%',
+};
 
 @Component({
   selector: 'crown-details-tab',
@@ -72,6 +79,7 @@ export class DetailsTabComponent {
   pageSizeOptions = [5, 10, 25];
   pageSize = this.pageSizeOptions[1];
   COLUMNS = COLUMNS_RENDERED;
+  WIDTHS = COLUMNS_WIDTHS;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
@@ -88,6 +96,18 @@ export class DetailsTabComponent {
 
   ngAfterViewInit(): void {
     this.updateSortPag();
+  }
+
+  getClass(text: string) {
+    return {
+      border: `3px solid ${getColorFromText(text)}`,
+      'border-radius': '10px',
+      padding: '5px',
+    };
+  }
+
+  getColorFrom(text: string) {
+    return getColorFromText(text);
   }
 
   add() {
@@ -120,4 +140,12 @@ export class DetailsTabComponent {
         // this.toast();
       });
   }
+}
+
+function getColorFromText(text: string) {
+  const hashValue = hash(text);
+  let res = new TinyColor({ h: hashValue % 360, s: 100, l: 50 }).toHexString();
+  console.log('getColorFromText', res);
+
+  return res;
 }

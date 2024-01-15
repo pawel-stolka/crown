@@ -84,7 +84,6 @@ export class MoneyService {
         if (tokenEmail) {
           return this.fetchAll$();
         } else {
-          console.log('[initializeDataFetch]', 'EMPTY');
           return of([]);
         }
       }),

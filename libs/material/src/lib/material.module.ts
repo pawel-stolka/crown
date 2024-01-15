@@ -41,7 +41,7 @@ import {
   MAT_MOMENT_DATE_FORMATS,
 } from '@angular/material-moment-adapter';
 
-import 'moment/locale/pl';
+// import 'moment/locale/pl';
 
 @NgModule({
   imports: [CommonModule],

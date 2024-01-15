@@ -1,6 +1,6 @@
 <ng-container *ngIf="dataSource">
   <table
-    class="table __mat-elevation-z8"
+    class="table mat-table-flex __mat-elevation-z8"
     mat-table
     [dataSource]="dataSource"
     matSort
@@ -9,6 +9,49 @@
     matSortDirection="asc"
     multiTemplateDataRows
   >
+    <ng-container matColumnDef="createdAt">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        [ngStyle]="{ width: WIDTHS.narrow }"
+      >
+        data zakupu
+      </th>
+      <td mat-cell *matCellDef="let el" [ngStyle]="{ width: WIDTHS.narrow }">
+        {{ el.createdAt | date : 'dd.MM.yyyy' }}
+        <!-- {{ el.createdAt | noYear }} -->
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        [ngStyle]="{ width: WIDTHS.wide }"
+        >
+
+        kategoria
+      </th>
+
+      <td mat-cell *matCellDef="let el" [ngStyle]="{ 'font-weight': 'bold' }">
+        <!-- <span [ngStyle]="getClass(el.type)">{{ el.type }}</span> -->
+        <span class="blue">{{ el.type | uppercase }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
+      <td
+        mat-cell
+        *matCellDef="let el"
+        [ngStyle]="{ width: WIDTHS.narrow, 'font-weight': 'bold' }"
+      >
+        {{ el.price }}
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="fromWho">
       <th
         mat-header-cell
@@ -21,33 +64,30 @@
       <td mat-cell *matCellDef="let el">{{ el.fromWho }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>cena</th>
-      <td mat-cell *matCellDef="let el">{{ el.price }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>kategoria</th>
-      <td mat-cell *matCellDef="let el">{{ el.type }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>data zakupu</th>
-      <td mat-cell *matCellDef="let el">
-        {{ el.createdAt | date : 'dd.MM.yyyy' }}
-        <!-- {{ el.createdAt | noYear }} -->
-      </td>
-    </ng-container>
     <ng-container matColumnDef="isVat">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>VAT</th>
-      <td mat-cell *matCellDef="let el">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        [ngStyle]="{ width: WIDTHS.narrow }"
+        mat-sort-header
+      >
+        VAT
+      </th>
+      <td mat-cell *matCellDef="let el" [ngStyle]="{ width: WIDTHS.narrow }">
         <mat-icon *ngIf="el.isVat">done</mat-icon>
       </td>
     </ng-container>
     <ng-container matColumnDef="updatedAt">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>data wpisu</th>
-      <td mat-cell *matCellDef="let el">
-        {{ el.updatedAt | date : 'dd.MM.yyyy HH:mm' }}
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        [ngStyle]="{ width: WIDTHS.narrow }"
+      >
+        data wpisu
+      </th>
+      <td mat-cell *matCellDef="let el" [ngStyle]="{ width: WIDTHS.narrow }">
+        {{ el.updatedAt | date : 'dd.MM.yyyy' }}
         <!-- {{ el.updatedAt | noYear }} -->
       </td>
     </ng-container>
