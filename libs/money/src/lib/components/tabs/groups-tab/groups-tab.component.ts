@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { PriceByTypePipe, SumByMonthPipe } from '@crown/data';
 
 @Component({
-  selector: 'crown-new-groups',
+  selector: 'crown-groups-tab',
   standalone: true,
   imports: [CommonModule, SumByMonthPipe, PriceByTypePipe],
   templateUrl: './groups-tab.component.html',

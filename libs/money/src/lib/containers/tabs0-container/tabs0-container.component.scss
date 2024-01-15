@@ -1,0 +1,54 @@
+@import '@colors';
+
+// --------------- OVERRIDE BORDERS ---------------
+$content: dodgerblue;
+$content: white;
+$border-width: 2px;
+$border-color: #c3bcac;
+// $border-color: red;
+$border-radius: 10px;
+
+:host {
+  // ::ng-deep .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active) {
+  //   border-bottom: $border-width solid $border-color;
+  // }
+  border-radius: $border-radius;
+
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
+    border-bottom: $border-width solid $border-color;
+  }
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-1 {
+    border-bottom: $border-width solid $border-color;
+  }
+
+  // ::ng-ddep.mat-mdc-tab-group .mat-primary .mat-mdc-tab-group-stretch-tabs {
+  ::ng-deep.mat-mdc-tab-group-stretch-tabs {
+
+    border-bottom: $border-width solid $border-color;
+
+  }
+
+  // ::ng-deep.mat-ripple.mat-mdc-tab-ripple:not(.mdc-tab-indicator--active) {
+  // ::ng-deep.mat-mdc-tab-ripple:not(.mdc-tab--active) {
+  //   border-bottom: $border-width solid violet;
+  // }
+
+  // ::ng-deep .mat-mdc-button-persistent-ripple .mdc-button__ripple {
+  ::ng-deep .mat-mdc-button-persistent-ripple {
+    // background-color: magenta;
+    // border: $border-width dotted;
+    // border-bottom: 15px dotted dodgerblue;
+  }
+  ::ng-deep .mdc-button__ripple {
+    // .mdc-button__ripple {
+    // background-color: yellow;
+    // border: none;
+    // border-bottom: 15px dotted dodgerblue;
+  }
+
+  ::ng-deep .mat-mdc-focus-indicator {
+    // border-bottom: 5px dashed green;
+  }
+}

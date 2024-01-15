@@ -36,7 +36,8 @@ const COLUMNS_RENDERED = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsTabComponent {
-  @Input() money!: Money[] | undefined;
+  // @Input() money!: Money[] | null;
+  @Input() money: Money[] | undefined;
 
   dataSource!: MatTableDataSource<Money>;
 

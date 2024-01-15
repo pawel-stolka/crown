@@ -28,6 +28,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DataFilter3Component } from '../../components/data-filter-3/data-filter-3.component';
+import { Tabs0ContainerComponent } from '../tabs0-container/tabs0-container.component';
 
 const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
 const DETAILS_LABEL = 'WPISY';
@@ -45,6 +46,7 @@ const DETAILS_LABEL = 'WPISY';
     GroupsTabComponent,
     DetailsTabComponent,
     YearSelectorComponent,
+    Tabs0ContainerComponent
   ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',

@@ -140,33 +140,86 @@ mat-form-field {
 }
 
 // --------------- OVERRIDE BORDERS ---------------
+$content: dodgerblue;
+$content: white;
+$border-width: 2px;
+$border-color: #c3bcac;
+// $content: wheat;
 
+:host {
+  ::ng-deep .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    // padding: 10px;
+    // background-color: $content;
+    // border-bottom-left-radius: 10px; /* Adjust radius as needed */
+    // border-bottom-right-radius: 10px; /* Adjust radius as needed */
+  }
 
+  ::ng-deep .mat-mdc-tab-group.mat-primary {
+    // border-bottom: $border-width solid $border-color; /* Adjust color and size as needed */
+    // border-bottom-left-radius: 10px;
+    // border-right: 3px solid black; /* Adjust color and size as needed */
+    // border-radius: 10px; /* Adjust radius as needed */
+    // overflow: hidden;
+  }
 
+  ::ng-deep .mdc-tab--active
+    // mdc-tab-indicator--active
+  {
+    background-color: $content;
+    border-left: $border-width solid $border-color; /* Adjust color and size as needed */
+    border-right: $border-width solid $border-color; /* Adjust color and size as needed */
+    border-top: $border-width solid $border-color; /* Adjust color and size as needed */
+    // border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    // border: 3px solid black;
+    border-bottom: none;
+    // border-top: none;
+  }
+  // ::ng-deep .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active) {
+  //   // background-color: yellow;
+  //   border-bottom: $border-width solid $border-color;
+  // }
 
+  // under inactive tab
+  ::ng-deep .mat-ripple.mat-mdc-tab-ripple--active {
+    // border-bottom: 1px solid $content;
+    background-color: $content;
+  }
+
+  ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    border-left: $border-width solid $border-color; /* Adjust color and size as needed */
+    border-right: $border-width solid $border-color;
+    // background-color: red; !!!!!!!!!!!!!!!!!!
+  }
+
+  ::ng-deep .mdc-tab .mdc-tab-indicator {
+    // width: 50%;
+    // padding: 0 50px;
+    display: none;
+  }
+}
+
+/*
 // ACTIVE
 // mdc-tab mat-mdc-tab mat-mdc-focus-indicator ng-star-inserted mdc-tab--active mdc-tab-indicator--active
 // INACTIVE
 // mdc-tab mat-mdc-tab mat-mdc-focus-indicator ng-star-inserted
 
-/* Active tab styling */
 .mat-tab-group .mat-tab-labels .mat-tab-label-active {
   background-color: pink;
   // border: 1px solid black;
-  /* Add other styles as needed */
 }
 
-/* Inactive tab styling */
 .mat-tab-group .mat-tab-labels .mat-tab-label:not(.mat-tab-label-active) {
   background-color: grey;
   background-color: $inactive-tab;
-  /* Add other styles as needed */
 }
 
 // :host ::ng-deep .mat-tab-group .mat-tab-labels .mat-tab-label-active {
 :host ::ng-deep //.mat-tab-group .mat-tab-labels
 .mdc-tab-active {
-  /* Active tab styles */
+
   // background-color: pink;
   // border: 1px solid black;
 }
@@ -177,7 +230,7 @@ mat-form-field {
   .mat-tab-labels
   .mat-tab-label:not(.mat-tab-label-active) {
 
-  /* Inactive tab styles */
+
 }
 
 :host ::ng-deep .mat-tab-group {
@@ -254,4 +307,5 @@ mat-form-field {
       // border-top-width: 4px;
       // border: 10px dotted red;
     }
-}
+  }
+  */

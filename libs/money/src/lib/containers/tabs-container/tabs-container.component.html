@@ -1,5 +1,3 @@
-
-
 <div class="temp-actions">
   <div class="row">
     <div class="temp-filters">
@@ -115,9 +113,13 @@
       </ng-container>
     </div>
   </ng-container>
-  <mat-tab-group (selectedIndexChange)="tabChange($event)">
+  <crown-tabs0-container
+    [data]="monthsData$ | async"
+    [money]="filteredMoney$ | async"
+  ></crown-tabs0-container>
+  <!-- <mat-tab-group (selectedIndexChange)="tabChange($event)">
     <mat-tab label="{{ GROUPS_LABEL }}">
-      <crown-new-groups [data]="monthsData$ | async"></crown-new-groups>
+      <crown-groups-tab [data]="monthsData$ | async"></crown-groups-tab>
     </mat-tab>
 
     <mat-tab label="{{ DETAILS_LABEL }}">
@@ -125,7 +127,7 @@
         [money]="(filteredMoney$ | async) || undefined"
       ></crown-details-tab>
     </mat-tab>
-  </mat-tab-group>
+  </mat-tab-group> -->
   <!-- <div *ngIf="pendingFetch$ | async" class="directory-content-loader">
     <mat-spinner [strokeWidth]="2"></mat-spinner>
   </div> -->

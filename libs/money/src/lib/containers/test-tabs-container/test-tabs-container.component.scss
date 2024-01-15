@@ -85,7 +85,7 @@ $content: wheat;
 
   ::ng-deep .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active) {
     // background-color: yellow;
-    border-bottom: 3px solid black;
+    // border-bottom: 3px solid black;
   }
   ::ng-deep .mat-mdc-focus-indicator.mdc-tab-indicator--active {
     // background-color: red;
@@ -106,7 +106,7 @@ $content: wheat;
   ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
     border-left: 3px solid black; /* Adjust color and size as needed */
     border-right: 3px solid black;
-    background-color: red;
+    // background-color: red;
   }
 
   ::ng-deep .mdc-tab .mdc-tab-indicator {
