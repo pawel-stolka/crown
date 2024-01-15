@@ -31,10 +31,15 @@ import { NgOptimizedImage } from '@angular/common';
 
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <div>krótki przewodnik po apce</div>
+          <div class="title">Przewodnik po apce</div>
         </mat-expansion-panel-header>
 
         <ng-template matExpansionPanelContent>
+          <div class="highlight">
+            <h2>Apka ogarnia sumowanie wydatków:</h2>
+            <div>potrzebuje Twoje wydatki - datę | cenę | kategorię</div>
+            <div>👉 grupuje po TYPIE, DACIE i SUMUJE</div>
+          </div>
           <img
             ngSrc="assets/screen_3.PNG"
             width="1098"
