@@ -7,17 +7,16 @@ $max-toasts: 10;
 
 :host {
   position: fixed;
-  width: 390px;
+  max-width: 390px;
   height: auto;
   z-index: 4000;
   top: 100px;
   bottom: 100px;
-  right: 50px;
+  right: 10vw;
 }
 
 .toast {
   animation: toastIn 1s;
-  width: 390px;
   position: relative;
   display: flex;
   flex-direction: row;
