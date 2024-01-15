@@ -1,8 +1,11 @@
-import { Component, Inject, Input, LOCALE_ID, ViewChild } from '@angular/core';
+import { Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MoneyService } from '../../services/money.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 import { MaterialModule } from '@crown/material';
-import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   EMPTY_STRING,
   Money,
@@ -14,52 +17,52 @@ import {
   groupTypePrices,
   uniqueCategories,
 } from '@crown/data';
-import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Observable, filter, map, tap } from 'rxjs';
-import { MoneyService } from '../../services/money.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
+import { Observable, filter, map, tap } from 'rxjs';
+import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { YearSelectorComponent } from '../../components/year-selector/year-selector.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { DataFilter3Component } from '../../components/data-filter-3/data-filter-3.component';
 import { TabsContainerComponent } from '../tabs-container/tabs-container.component';
 
+const GROUPS_LABEL = 'GRUPY - MIESIĄCAMI';
+const DETAILS_LABEL = 'WPISY';
+
 @Component({
-  selector: 'crown-money-container',
+  selector: 'crown-tabs',
   standalone: true,
   imports: [
     CommonModule,
     MaterialModule,
-    TabsContainerComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    DataFilterComponent,
+    DataFilter3Component,
     GroupsTabComponent,
     DetailsTabComponent,
     YearSelectorComponent,
+    TabsContainerComponent,
   ],
-  templateUrl: './money-container.component.html',
-  styleUrl: './money-container.component.scss',
+  templateUrl: './tabs-container.component.html',
+  styleUrl: './tabs-container.component.scss',
 })
-export class MoneyContainerComponent {
-  @Input() data: MonthsCategories | null = {} as MonthsCategories;
-  @Input() money: any;
-
+export class PS__TabsContainerComponent {
   dataSource!: MatTableDataSource<Money>;
-
-  monthsData$: Observable<MonthsCategories>;
-
-  dateRanged = false;
-  currentFilters!: MoneyFilter;
 
   filters = this.fb.group({
     startDate: [null],
     endDate: [null],
   });
 
-  filters$ = this.moneyService.filters$.pipe(
-    tap((filters) => (this.currentFilters = filters))
-  );
+  dateRanged = false;
+  yearFilter = this.dateRanged;
+  chooseDatesLabel = 'zakres...';
+  currentFilters: any;
 
   allYears$ = this.moneyService.allYears$;
   currentYear$ = this.moneyService.currentYear$;
@@ -72,9 +75,41 @@ export class MoneyContainerComponent {
       this.dataSource.paginator = this.paginator;
     })
   );
-  // TODO: to children?
+
+  filters$ = this.moneyService.filters$.pipe(
+    tap((filters) => (this.currentFilters = filters))
+  );
+
+  message$: Observable<string> = this.moneyService.message$;
+
+  dateRange$: Observable<MoneyFilter> = this.filteredMoney$.pipe(
+    map((fm) => fm.map((f) => f.createdAt)),
+    map((money) => {
+      let [startDate] = money;
+      let endDate = startDate;
+
+      money.forEach((date) => {
+        if (date < startDate) startDate = date;
+        if (date > endDate) endDate = date;
+      });
+      return {
+        startDate,
+        endDate,
+      };
+    })
+  );
+
+  monthsData$: Observable<MonthsCategories>;
+
+  GROUPS_LABEL = GROUPS_LABEL;
+  DETAILS_LABEL = DETAILS_LABEL;
+
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
+
+  updateMessage(message: string) {
+    this.moneyService.updateMessage(message);
+  }
 
   constructor(
     @Inject(LOCALE_ID) public locale: string,
@@ -119,6 +154,11 @@ export class MoneyContainerComponent {
       .subscribe();
   }
 
+  onToggleChange(event: MatSlideToggleChange) {
+    this.dateRanged = event.checked;
+    this.updateFilters(this.currentFilters);
+  }
+
   filterByYear(year: number) {
     let currFilters = {
       ...this.currentFilters,
@@ -135,16 +175,19 @@ export class MoneyContainerComponent {
     this.moneyService.updateFilters(currFilters);
   }
 
-  filterBy(filter: MoneyFilter) {
-    let currFilters = {
-      ...this.currentFilters,
-      filter,
-    };
-    this.moneyService.updateFilters(currFilters);
+  updateFilters(filters: MoneyFilter) {
+    this.moneyService.updateFilters(filters);
+  }
+
+  resetFilters() {
+    this.moneyService.resetFilters();
   }
 
   tabChange(index: number) {
-    console.log('tabs0 | tabChange', index);
+    if (index === 1) {
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   // CRUD
@@ -169,7 +212,7 @@ export class MoneyContainerComponent {
     dialogRef
       .afterClosed()
       .pipe(filter((val) => !!val))
-      .subscribe((_) => {
+      .subscribe((_: any) => {
         // this.toast();
       });
   }

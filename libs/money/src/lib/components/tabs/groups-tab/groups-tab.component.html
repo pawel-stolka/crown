@@ -5,12 +5,11 @@
     <th class="trim-text" *ngFor="let category of data?.categories">
       <span class="trim-text">{{ category }}</span>
     </th>
-    <!-- <th class="summary">Ʃ/miesiąc</th> -->
     <th class="summary"></th>
   </tr>
 
   <tr *ngFor="let item of data?.months; let last = last">
-    <!-- <td class="period" *ngIf="true">{{ item.period | noYear }}</td> -->
+    <!-- <td class="period">{{ item.period | noYear }}</td> -->
     <td>{{ item.period }}</td>
 
     <td *ngFor="let category of data?.categories">

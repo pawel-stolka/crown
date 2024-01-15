@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Tabs0ContainerComponent } from './tabs0-container.component';
+import { TabsContainerComponent } from './tabs-container.component';
 
-describe('Tabs0ContainerComponent', () => {
-  let component: Tabs0ContainerComponent;
-  let fixture: ComponentFixture<Tabs0ContainerComponent>;
+describe('Tabs2Component', () => {
+  let component: TabsContainerComponent;
+  let fixture: ComponentFixture<TabsContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Tabs0ContainerComponent],
+      imports: [TabsContainerComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Tabs0ContainerComponent);
+    fixture = TestBed.createComponent(TabsContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

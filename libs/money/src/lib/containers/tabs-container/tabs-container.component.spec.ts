@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TabsContainerComponent } from './tabs-container.component';
 
-describe('Tabs2Component', () => {
+describe('Tabs0ContainerComponent', () => {
   let component: TabsContainerComponent;
   let fixture: ComponentFixture<TabsContainerComponent>;
 

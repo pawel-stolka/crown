@@ -1,311 +1,53 @@
 @import '@colors';
+@import '@styles';
 
-.help {
-  border: 2px dotted dodgerblue;
-}
-
-.inline {
-  // border: 3px dotted dodgerblue;
-  display: flex;
-  justify-content: space-around;
-  align-items: baseline;
-  // gap: 5px;
-  // flex-wrap: wrap;
-  // align-items:center;
-  // align-content:center;
-}
-
-mat-form-field {
-  width: 150px;
-}
-
-.categories-amount {
-  // text-transform:uppercase;
-  font-weight: bold;
-}
-
-.temp-actions {
-  padding: 5px 0;
-  // height: 56;
-  // border: 10px dotted magenta;
-  display: flex;
-  flex-direction: column;
-
-  .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .temp-filters {
-      // border: 5px dotted;
-      display: flex;
-      justify-content: space-between;
-
-      .dateRange {
-        gap: 5px;
-        height: 56;
-        // border: 5px dotted burlywood;
-        display: flex;
-        // align-items: baseline;
-        align-items: center;
-
-        mat-dialog-content {
-          height: 56px;
-          // border: 5px dotted green;
-
-          mat-form-field {
-            padding: 0;
-            height: 56px;
-            // width: 90px;
-            // border: 5px dotted red;
-          }
-        }
-      }
-      .dateRange2 {
-        // border: 5px dotted blue;
-        height: 56px;
-        background-color: $white;
-      }
-    }
-  }
-}
-
-.filter-message {
-  margin: 5px 0;
-  // border: 5px dotted goldenrod;
-  height: 30px;
-}
-
-.actions {
-  // height: 56;
-  border: 5px dotted;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  // align-content: center;
-  // align-items:center;
-  // align-items: flex-start;
-  margin: 15px 0;
-
-  .filters {
-    // border: 10px dotted dodgerblue;
-    width: 100%;
-    height: 64;
-    // width: 80%;
-    display: flex;
-    align-items: center;
-    // align-content: center;
-    // justify-content: space-between;
-
-    .range-type {
-      // border: 10px dotted goldenrod;
-      display: flex;
-      justify-content: space-between;
-      height: 56;
-
-      gap: 10px;
-
-      .dateRange {
-        &-message {
-          border: 7px dotted pink;
-        }
-      }
-    }
-  }
-}
-
-// .fade-animation {
-//   transition: opacity 0.5s;
-//   opacity: 0;
-//   overflow: hidden;
-// }
-
-// .fade-animation-active {
-//   opacity: 1;
-// }
-
-.__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 15px 0;
-  width: 100%;
-
-  .__filters {
-    display: flex;
-    width: 100%;
-    align-content: center;
-    font-size: 14px;
-  }
-}
-
-// --------------- OVERRIDE BORDERS ---------------
-$content: dodgerblue;
-$content: white;
-$border-width: 2px;
-$border-color: #c3bcac;
-// $content: wheat;
+// --------------- OVERRIDE MATERIAL ---------------
 
 :host {
-  ::ng-deep .mat-mdc-tab-body.mat-mdc-tab-body-active {
-    // padding: 10px;
-    // background-color: $content;
-    // border-bottom-left-radius: 10px; /* Adjust radius as needed */
-    // border-bottom-right-radius: 10px; /* Adjust radius as needed */
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
+    border-bottom: $border-width solid $border-color;
+  }
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-1 {
+    border-bottom: $border-width solid $border-color;
   }
 
-  ::ng-deep .mat-mdc-tab-group.mat-primary {
-    // border-bottom: $border-width solid $border-color; /* Adjust color and size as needed */
-    // border-bottom-left-radius: 10px;
-    // border-right: 3px solid black; /* Adjust color and size as needed */
-    // border-radius: 10px; /* Adjust radius as needed */
-    // overflow: hidden;
-  }
-
-  ::ng-deep .mdc-tab--active
-    // mdc-tab-indicator--active
-  {
-    background-color: $content;
-    border-left: $border-width solid $border-color; /* Adjust color and size as needed */
-    border-right: $border-width solid $border-color; /* Adjust color and size as needed */
-    border-top: $border-width solid $border-color; /* Adjust color and size as needed */
-    // border-radius: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    // border: 3px solid black;
-    border-bottom: none;
-    // border-top: none;
-  }
-  // ::ng-deep .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active) {
-  //   // background-color: yellow;
-  //   border-bottom: $border-width solid $border-color;
-  // }
-
-  // under inactive tab
-  ::ng-deep .mat-ripple.mat-mdc-tab-ripple--active {
-    // border-bottom: 1px solid $content;
-    background-color: $content;
+  ::ng-deep .mat-mdc-tab-group-stretch-tabs {
+    border-bottom: $border-width solid $border-color;
   }
 
   ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
-    border-left: $border-width solid $border-color; /* Adjust color and size as needed */
+    border-left: $border-width solid $border-color;
     border-right: $border-width solid $border-color;
-    // background-color: red; !!!!!!!!!!!!!!!!!!
+  }
+
+  ::ng-deep .mdc-tab:not(.mdc-tab--active) {
+    background-color: $inactive-tab;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+  ::ng-deep .mdc-tab--active {
+    background-color: $active-tab;
+    border-top: $border-width solid $border-color;
+    border-left: $border-width solid $border-color;
+    border-right: $border-width solid $border-color;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    border-bottom: none;
+
+    color: $dark-blue;
+    font-size: larger;
+  }
+
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
+    border-bottom: $border-width solid $border-color;
   }
 
   ::ng-deep .mdc-tab .mdc-tab-indicator {
-    // width: 50%;
-    // padding: 0 50px;
     display: none;
   }
 }
 
-/*
-// ACTIVE
-// mdc-tab mat-mdc-tab mat-mdc-focus-indicator ng-star-inserted mdc-tab--active mdc-tab-indicator--active
-// INACTIVE
-// mdc-tab mat-mdc-tab mat-mdc-focus-indicator ng-star-inserted
 
-.mat-tab-group .mat-tab-labels .mat-tab-label-active {
-  background-color: pink;
-  // border: 1px solid black;
-}
-
-.mat-tab-group .mat-tab-labels .mat-tab-label:not(.mat-tab-label-active) {
-  background-color: grey;
-  background-color: $inactive-tab;
-}
-
-// :host ::ng-deep .mat-tab-group .mat-tab-labels .mat-tab-label-active {
-:host ::ng-deep //.mat-tab-group .mat-tab-labels
-.mdc-tab-active {
-
-  // background-color: pink;
-  // border: 1px solid black;
-}
-
-:host
-  ::ng-deep
-  .mat-tab-group
-  .mat-tab-labels
-  .mat-tab-label:not(.mat-tab-label-active) {
-
-
-}
-
-:host ::ng-deep .mat-tab-group {
-  // border: 10px dotted black;
-  .mat-mdc-tab-group {
-
-    //mat-primary mat-mdc-tab-group-stretch-tabs ng-star-inserted
-    // background-color: pink;
-  }
-}
-
-// :host ::ng-deep  .mat-mdc-tab.mdc-tab { background-color: grey; }
-// :host ::ng-deep  .mat-mdc-tab-body.mat-mdc-tab-body-active { min-height: 48px; background-color: coral; }
-:host ::ng-deep .mat-mdc-tab.mdc-tab {
-  // background-color: rgb(211, 209, 209);
-
-  &.mat-mdc-focus-indicator {
-    background-color: $inactive-tab;
-  }
-
-  &.mdc-tab-indicator--active {
-    background-color: orange;
-    background-color: $active-tab;
-    // font-size: large;
-    font-weight: bolder;
-    // color: black;
-
-    // border: 3px solid $blue; <-- HERE is BORDER OF TABS
-    // border-right: 2px solid black;
-    // border-left: 2px solid black;
-    border-bottom: none;
-  }
-}
-
-:host ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  // color: $blue;
-  color: black;
-  color: $dark-blue2;
-    font-size: larger;
-  }
-
-:host {
-  ::ng-deep
-    .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active.mdc-tab__text-label {
-    // color: orange;
-    // color: $active-tab;
-    border: 5px dotted red;
-    }
-
-    // ::ng-deep
-    .mdc-tab-indicator--active {
-    // .mdc-tab-indicator__content--underline {
-      border: 5px dotted red;
-      // --mdc-tab-indicator-active-indicator-color: green;
-    }
-
-    ::ng-deep
-    .mdc-tab
-    .mdc-tab-indicator {
-      // width: 50%;
-      // padding: 0 50px;
-      display: none;
-    }
-
-    // .mdc-tab mat-mdc-tab mat-mdc-focus-indicator mdc-tab--active ng-star-inserted mdc-tab-indicator--active
-    // .mdc-tab mat-mdc-tab mat-mdc-focus-indicator mdc-tab--active mdc-tab-indicator--active
-    // .mdc-tab
-    // mat-mdc-tab
-    // ::ng-deep mat-mdc-focus-indicator {
-    .mdc-tab--active .mdc-tab-indicator--active {
-      // ::ng-deep .mdc-tab-indicator {
-      // .mdc-tab-indicator__content.mdc-tab-indicator__content--underline {
-
-      // border-top-width: 4px;
-      // border: 10px dotted red;
-    }
-  }
-  */

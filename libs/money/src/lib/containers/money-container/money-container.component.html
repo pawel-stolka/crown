@@ -1,1 +1,42 @@
-<p>money-container works!</p>
+<!-- <div class="help">
+  <div>dateRanged: {{ dateRanged }}</div>
+  <div>allYears$: {{ allYears$ | async }}</div>
+  <div>filteredMoney$: {{ filteredMoney$ | async | json }}</div>
+  <div>monthsData$: {{ monthsData$ | async | json }}</div>
+  <div>currentYear$: {{ currentYear$ | async | json }}</div>
+</div> -->
+
+<div class="actions">
+  <div class="row">
+    <div class="filters">
+      <div class="dateRange">
+        <ng-container *ngIf="!dateRanged; then year; else range">
+        </ng-container>
+      </div>
+
+      <ng-template #year>
+        <div class="dateRange2" *ngIf="allYears$ | async as allYears">
+          <crown-year-selector
+            *ngIf="allYears.length"
+            [year]="currentYear$ | async"
+            [allYears]="allYears"
+            (currentYear)="filterByYear($event)"
+          ></crown-year-selector>
+        </div>
+      </ng-template>
+
+      <ng-template #range>#range...</ng-template>
+    </div>
+
+    <div class="add">
+      <button mat-fab color="accent" (click)="add()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<crown-tabs-container
+  [data]="monthsData$ | async"
+  [money]="(filteredMoney$ | async) || undefined"
+></crown-tabs-container>

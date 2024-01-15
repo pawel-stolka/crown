@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@styles": ["apps/crown/src/styles/styles.scss"],
       "@colors": ["apps/crown/src/styles/_colors.scss"],
       "@crown/admin": ["libs/admin/src/index.ts"],
       "@crown/auth": ["libs/auth/src/index.ts"],

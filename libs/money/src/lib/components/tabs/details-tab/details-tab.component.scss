@@ -1,9 +1,18 @@
+@import '@styles';
+
 :host {
-  mat-paginator {
-    background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  padding: $padding;
+  background-color: $white;
+
+  .mat-mdc-header-row {
+    background-color: $header-background;
+    font-weight: bolder;
   }
 
-  .table {
-    border-bottom: 1px dotted red;
+  mat-paginator {
+    color: $white;
+    background-color: $footer-background;
   }
 }

@@ -1,14 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Inject,
+  Injectable,
   Input,
+  LOCALE_ID,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Money, dialogConfig } from '@crown/data';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { filter } from 'rxjs';
@@ -16,6 +19,31 @@ import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dia
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
 import { MaterialModule } from '@crown/material';
+
+@Injectable()
+export class CustomMatPaginatorIntl extends MatPaginatorIntl {
+  constructor() {
+    super();
+    this.firstPageLabel = 'Pierwsza strona';
+    this.lastPageLabel = 'Ostatnia strona';
+    this.itemsPerPageLabel = 'Wpisów na stronie';
+  }
+  override getRangeLabel = (page: number, pageSize: number, length: number) => {
+    if (length === 0 || pageSize === 0) {
+      return `0 z ${length}`;
+    }
+
+    length = Math.max(length, 0);
+
+    const startIndex = page * pageSize;
+    const endIndex =
+      startIndex < length
+        ? Math.min(startIndex + pageSize, length)
+        : startIndex + pageSize;
+
+    return `Aktualnie: ${startIndex + 1} - ${endIndex} z ${length} wpisów`;
+  };
+}
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -31,12 +59,12 @@ const COLUMNS_RENDERED = [
   selector: 'crown-details-tab',
   standalone: true,
   imports: [CommonModule, MaterialModule],
+  providers: [{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }],
   templateUrl: './details-tab.component.html',
   styleUrl: './details-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsTabComponent {
-  // @Input() money!: Money[] | null;
   @Input() money: Money[] | undefined;
 
   dataSource!: MatTableDataSource<Money>;
@@ -48,7 +76,10 @@ export class DetailsTabComponent {
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    @Inject(LOCALE_ID) public locale: string
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.money);

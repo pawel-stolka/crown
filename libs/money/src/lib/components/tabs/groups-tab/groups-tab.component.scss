@@ -1,57 +1,22 @@
 @import '@colors';
-
-.help {
-  border: 5px dotted dodgerblue;
-}
+@import '@styles';
 
 :host {
   display: flex;
   flex-direction: column;
   background-color: $white;
-  // background-color: orange;
-  // background-color: $active-tab;
-  // border-left: 5px solid $blue;
-  // border-right: 5px solid $blue;
-  // border-bottom: 5px solid $blue;
-  // border-top: 5px solid $blue;
-  // border-top-width: 50%;
-
-  padding: 10px;
-  // width: 100%;
-
-  // .query-result {
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-items: center;
-  //   margin: 10px 0;
-  // }
-
-  // position: relative;
+  padding: $padding;
 }
-// :host::before {
-// :host::after {
-//   content: '';
-//   position: absolute;
-//   top: 0;
-//   left: 75%;
-//   width: 100%; /* Adjusts the width of the border */
-//   height: 0;
-//   border-top: 5px solid $blue; /* Adjusts the color and thickness of the border */
-// }
 
 .table {
-  width: 95%;
   margin-top: 20px;
-  // border: 10px dotted;
 
   @for $i from 2 through 12 {
     tr:nth-child(#{$i}) {
       @if $i % 2 == 0 {
-        // background-color: $demo-accent1; // Style for even rows
-        background-color: $row10; // Style for even rows
+        background-color: $row10;
       } @else {
-        // background-color: $demo-secondary; // Style for odd rows
-        background-color: $row11; // Style for odd rows
+        background-color: $row11;
       }
     }
   }
@@ -60,16 +25,11 @@
     border: 1px solid $danger;
     text-align: center;
     background-color: $demo-accent1;
-    // background-color: $warn-light;
-    // background-color: $dark-blue2;
-    // color: $white;
+    background-color: $header-background;
   }
 
   tr > th:last-child {
-    // border: 10px solid $danger;
-    background: none;
     background: $demo-basic;
-    // background-color: #fafafa;
     border: none;
   }
 
@@ -77,51 +37,39 @@
     text-align: center;
     height: 40px;
     border: 1px dotted $blue;
-    // background-color: $demo-primary-0;
   }
 
   tr > td:first-child {
-    // padding: 0 10px;
     width: 80px;
     font-weight: 700;
     text-transform: uppercase;
-    border: 5px dotted red;
     border: 3px solid $blue;
   }
 
+  // SUMMARY COLUMN
   tr > td:last-child {
-    // background-color: lightgray;
-
-    // background-color: $demo-primary;
-
-    // border: 3px solid $blue;
+    width: 80px;
     border: 3px solid $dark-blue;
     font-size: 1.2rem;
-  }
-  tr:last-child > td:last-child {
-    // border: 3px solid $warn;
-    // background-color: $demo-accent2;
-    background-color: $blue;
     border: 5px solid $dark-blue;
   }
 
-  tr:last-child > td:first-child {
-    background: none;
-    border: none;
-    background-color: #fafafa;
+  // SUMMARY ROW
+  tr:last-child {
+    color: $white;
+    background-color: $footer-background;
+    border: 3px solid $dark-blue;
   }
 
-  // tr:nth-child(2) {
-  //   background-color: $blue; /* Example: Light gray background for even rows */
-  // }
+  // first cell
+  tr:last-child > td:first-child {
+    border: none;
+    background-color: $white;
+  }
 
-  // SUMMARY ROW
-  tr:last-child > td:not(:first-child):not(:last-child) {
-    // background-color: $demo-accent1;
-    // background-color: $dark-blue2;
-    background-color: $blue;
-    color: $white;
-    border: 3px solid $dark-blue;
+  // last cell
+  tr:last-child > td:last-child {
+    border: 5px solid $dark-blue;
   }
 
   .summary {
@@ -129,13 +77,6 @@
     background-color: lightgray;
   }
 }
-
-// tr:nth-child(2) {
-//   background-color: $demo-primary; /* Example: Light gray background for even rows */
-// }
-// tr:nth-child(3) {
-//   background-color: $demo-secondary; /* Example: Light gray background for even rows */
-// }
 
 .last {
   font-size: 1.3rem;
@@ -148,9 +89,3 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-// @for $i from 1 through $max-toasts {
-//   :host:nth-of-type(#{$i}) {
-//     top: $top-margin + ($toast-height + $spacing) * ($i - 1);
-//   }
-// }
