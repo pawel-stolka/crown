@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DataFilter3Component } from './data-filter.component';
+import { DataFilterComponent } from './data-filter.component';
 
 describe('DataFilter3Component', () => {
-  let component: DataFilter3Component;
-  let fixture: ComponentFixture<DataFilter3Component>;
+  let component: DataFilterComponent;
+  let fixture: ComponentFixture<DataFilterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataFilter3Component],
+      imports: [DataFilterComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DataFilter3Component);
+    fixture = TestBed.createComponent(DataFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

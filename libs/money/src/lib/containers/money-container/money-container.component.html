@@ -6,6 +6,10 @@
         </ng-container>
       </div>
 
+      <!-- <div class="type-filter">
+        <crown-data-filter (filter)="applyDataFilter($event)"></crown-data-filter>
+      </div> -->
+
       <ng-template #year>
         <div class="dateRange2" *ngIf="allYears$ | async as allYears">
           <crown-year-selector

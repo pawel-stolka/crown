@@ -26,6 +26,7 @@ import { AddDialogComponent } from '../../components/dialogs/add-money-dialog/ad
 import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
 import { TabsContainerComponent } from '../tabs-container/tabs-container.component';
+import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 
 @Component({
   selector: 'crown-money-container',
@@ -37,6 +38,7 @@ import { TabsContainerComponent } from '../tabs-container/tabs-container.compone
     GroupsTabComponent,
     DetailsTabComponent,
     YearSelectorComponent,
+    DataFilterComponent,
   ],
   templateUrl: './money-container.component.html',
   styleUrl: './money-container.component.scss',
@@ -75,6 +77,11 @@ export class MoneyContainerComponent {
   // TODO: to children?
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
+
+  applyDataFilter(event: any) {
+    console.log('[TODO: this.applyDataFilter]', event);
+    // this.moneyService.updateFilters({type: event})
+  }
 
   constructor(
     @Inject(LOCALE_ID) public locale: string,
