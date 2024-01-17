@@ -6,12 +6,10 @@ $spacing: 10px;
 $max-toasts: 10;
 
 :host {
-  position: fixed;
+  position: absolute;
   max-width: 390px;
   height: auto;
   z-index: 4000;
-  top: 100px;
-  bottom: 100px;
   right: 10vw;
 }
 
@@ -22,7 +20,7 @@ $max-toasts: 10;
   flex-direction: row;
   height: $toast-height;
   transform: translateX(0);
-  opacity: 0.93;
+  opacity: 0.95;
   border: 3px solid $white;
 
   &.info {

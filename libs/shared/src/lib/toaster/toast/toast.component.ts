@@ -52,6 +52,7 @@ export class ToastComponent {
 
   close(): void {
     this.container.style.animation = 'toastOut 1s';
+    this.closeToast.emit();
   }
 
   animationDone(event: AnimationEvent): void {

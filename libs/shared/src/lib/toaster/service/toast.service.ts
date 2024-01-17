@@ -45,6 +45,10 @@ export class ToastService {
         this.toasts.splice(index, 1);
       }
     }, duration);
+
+    componentRef.instance.closeToast.subscribe(() => {
+      this.removeToast(componentRef);
+    });
   }
 
   showSuccess(title: string, message: string) {
@@ -58,6 +62,15 @@ export class ToastService {
   }
   showError(title: string, message: string) {
     this.showToast(NotificationType.ERROR, title, message, 'error');
+  }
+
+  private removeToast(componentRef: ComponentRef<ToastComponent>) {
+    const index = this.toasts.indexOf(componentRef);
+
+    if (index >= 0) {
+      this.toastContainerRef.remove(index);
+      this.toasts.splice(index, 1);
+    }
   }
 
   ngOnDestroy(): void {

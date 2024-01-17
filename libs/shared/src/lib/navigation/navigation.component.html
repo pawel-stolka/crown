@@ -10,12 +10,14 @@
       Wydatki
     </button>
 
-    <button mat-stroked-button color="primary" (click)="toggleTodos()">
-      <mat-icon>info</mat-icon>błędy
-    </button>
+
   </ng-container>
 </div>
 <div class="info">
+  <button mat-flat-button color="primary" (click)="toggleTodos()">
+    <mat-icon>info</mat-icon>błędy
+  </button>
+
   <button
     *ngIf="isLoggedIn$ | async"
     mat-flat-button
