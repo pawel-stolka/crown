@@ -1,0 +1,9 @@
+@import '@colors';
+
+.center {
+  margin: 10vh 15vw;
+  height: 100%;
+  border: 3px solid $warn;
+  background-color: $warn-light;
+  color: $warn;
+}
