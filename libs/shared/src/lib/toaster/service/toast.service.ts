@@ -46,8 +46,10 @@ export class ToastService {
       }
     }, duration);
 
-    componentRef.instance.closeToast.subscribe(() => {
+    const subscription = componentRef.instance.closeToast.subscribe(() => {
       this.removeToast(componentRef);
+      subscription.unsubscribe();
+      componentRef.destroy();
     });
   }
 
