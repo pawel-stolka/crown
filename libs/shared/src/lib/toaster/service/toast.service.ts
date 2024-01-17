@@ -5,7 +5,11 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ToastComponent } from '../toast/toast.component';
-import { NotificationType } from '@crown/data';
+import {
+  EMPTY_STRING,
+  NotificationMessage,
+  NotificationType,
+} from '@crown/data';
 
 @Injectable({
   providedIn: 'root',
@@ -14,38 +18,39 @@ export class ToastService {
   private toastContainerRef!: ViewContainerRef;
   private toasts: ComponentRef<ToastComponent>[] = [];
 
+  icon!: string;
+  duration: number = 5000;
+
   constructor(private resolver: ComponentFactoryResolver) {}
 
   setToastContainer(container: ViewContainerRef) {
     this.toastContainerRef = container;
   }
 
-  showToast(
-    type: NotificationType = NotificationType.INFO,
-    title: string,
-    message: string,
-    icon: string,
-    duration: number = 5000
-  ) {
+  notify(notification: NotificationMessage): void {
     const factory = this.resolver.resolveComponentFactory(ToastComponent);
     const componentRef = this.toastContainerRef.createComponent(factory);
 
-    componentRef.instance.type = type;
-    componentRef.instance.title = title;
-    componentRef.instance.message = message;
-    componentRef.instance.icon = icon;
-    componentRef.instance.duration = duration;
+    componentRef.instance.type = notification.type;
+    componentRef.instance.title = notification.title;
+    componentRef.instance.message = notification.message ?? EMPTY_STRING;
+    componentRef.instance.icon = notification.icon;
+    componentRef.instance.duration = this.duration;
 
     this.toasts.push(componentRef);
 
-    setTimeout(() => {
-      const index = this.toasts.indexOf(componentRef);
-      if (index >= 0) {
-        this.toastContainerRef.remove(index);
-        this.toasts.splice(index, 1);
-      }
-    }, duration);
-
+    if (
+      notification.type === NotificationType.INFO ||
+      notification.type === NotificationType.SUCCESS
+    ) {
+      setTimeout(() => {
+        const index = this.toasts.indexOf(componentRef);
+        if (index >= 0) {
+          this.toastContainerRef.remove(index);
+          this.toasts.splice(index, 1);
+        }
+      }, this.duration);
+    }
     const subscription = componentRef.instance.closeToast.subscribe(() => {
       this.removeToast(componentRef);
       subscription.unsubscribe();
@@ -54,16 +59,34 @@ export class ToastService {
   }
 
   showSuccess(title: string, message: string) {
-    this.showToast(NotificationType.SUCCESS, title, message, 'check');
+    this.notify({
+      type: NotificationType.SUCCESS,
+      title,
+      message,
+      icon: 'check',
+    });
   }
+
   showInfo(title: string, message: string) {
-    this.showToast(NotificationType.INFO, title, message, 'info');
+    this.notify({ type: NotificationType.INFO, title, message, icon: 'info' });
   }
+
   showWarning(title: string, message: string) {
-    this.showToast(NotificationType.WARNING, title, message, 'priority_high');
+    this.notify({
+      type: NotificationType.WARNING,
+      title,
+      message,
+      icon: 'priority_high',
+    });
   }
+
   showError(title: string, message: string) {
-    this.showToast(NotificationType.ERROR, title, message, 'error');
+    this.notify({
+      type: NotificationType.ERROR,
+      title,
+      message,
+      icon: 'error',
+    });
   }
 
   private removeToast(componentRef: ComponentRef<ToastComponent>) {
