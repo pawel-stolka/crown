@@ -20,6 +20,8 @@
     "@angular/router": "~17.0.0",
     "@ctrl/tinycolor": "^4.0.2",
     "@nx/angular": "17.1.3",
+    "chart.js": "^4.4.1",
+    "primeng": "^17.3.2",
     "rxjs": "~7.8.0",
     "string-hash": "^1.1.3",
     "tslib": "^2.3.0",
