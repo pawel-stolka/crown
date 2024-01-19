@@ -7,6 +7,7 @@ import { DetailsTabComponent } from '../../components/tabs/details-tab/details-t
 import { ChartComponent } from '../../components/chart/chart.component';
 import { ChartDemoComponent } from '../../components/chart-demo/chart-demo.component';
 import { DoughnutDemoComponent } from '../../components/doughnut-demo/doughnut-demo.component';
+import { DoughnutComponent } from '../../components/doughnut/doughnut.component';
 
 @Component({
   selector: 'crown-tabs-container',
@@ -18,7 +19,8 @@ import { DoughnutDemoComponent } from '../../components/doughnut-demo/doughnut-d
     DetailsTabComponent,
     ChartComponent,
     ChartDemoComponent,
-    DoughnutDemoComponent
+    DoughnutDemoComponent,
+    
   ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',

@@ -3,13 +3,14 @@ import {
   Component,
   Input,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule,  } from '@angular/common';
 import { PriceByTypePipe, SumByMonthPipe } from '@crown/data';
+import { DoughnutComponent } from '../../doughnut/doughnut.component';
 
 @Component({
   selector: 'crown-groups-tab',
   standalone: true,
-  imports: [CommonModule, SumByMonthPipe, PriceByTypePipe],
+  imports: [CommonModule, SumByMonthPipe, PriceByTypePipe, DoughnutComponent],
   templateUrl: './groups-tab.component.html',
   styleUrl: './groups-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
