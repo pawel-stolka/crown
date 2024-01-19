@@ -3,11 +3,41 @@ import {
   Component,
   Input,
   OnChanges,
+  OnInit,
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
-import { TypePrice } from '@crown/data';
+import { TypePrice, convertHexToRGBA, initFirst30Colors } from '@crown/data';
+import { Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+// interface Context {
+//   chart: {
+//     data: {
+//       datasets: any,
+//       // labels: { [x: string]: string; }
+//       labels: any
+//     }
+// },
+// dataset: any,
+// dataIndex: string | number
+// }
+
+interface LabelProps {
+  color: string; // Set the color of the labels
+  background_color: string;
+  backgroundOpacity: number;
+  borderColor: string;
+  borderRadius: number;
+  borderWidth: number;
+  padding: number;
+  anchor: string;
+  align: string;
+  offset: number;
+  position: string;
+  // other settings
+}
 
 @Component({
   selector: 'crown-doughnut',
@@ -17,13 +47,28 @@ import { TypePrice } from '@crown/data';
   styleUrl: './doughnut.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DoughnutComponent implements OnChanges {
+export class DoughnutComponent implements OnChanges, OnInit {
   @Input() dataset: any;
-  @Input() aspectRatio: number = 500 / 800;
+  @Input() aspectRatio: number = 500 / 1200;
+  @Input() labelProps: LabelProps = {
+    background_color: '#ffffff',
+    backgroundOpacity: 0.6,
+
+    borderColor: 'black',
+    borderRadius: 4,
+    borderWidth: 1,
+    padding: 6,
+    color: '#000',
+    anchor: 'end',
+    align: 'start',
+    offset: 10,
+    position: 'outside',
+  };
 
   data: any;
   documentStyle = getComputedStyle(document.documentElement);
   color = this.documentStyle.getPropertyValue('--text-color');
+  labelsBackgroundColors = initFirst30Colors(this.documentStyle);
 
   options = {
     cutout: '50%',
@@ -36,8 +81,34 @@ export class DoughnutComponent implements OnChanges {
           color: this.color,
         },
       },
+      datalabels: {
+        ...this.labelProps,
+        backgroundColor: convertHexToRGBA(
+          this.labelProps.background_color,
+          0.6
+        ),
+        formatter: (value: number, ctx: any) => {
+          const { chart, dataset, dataIndex } = ctx;
+          const { datasets, labels } = chart.data;
+          const [first] = datasets;
+          const { data } = first;
+
+          if (datasets.indexOf(dataset) === datasets.length - 1) {
+            const sum = data.reduce((a: number, b: number) => a + b, 0);
+            const percentage = Math.round((value / sum) * 100);
+            const label = labels[dataIndex];
+            return `${label} ${percentage}%`;
+          } else {
+            return '';
+          }
+        },
+      },
     },
   };
+
+  ngOnInit(): void {
+    Chart.register(ChartDataLabels);
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { categories, months } = this.dataset;
@@ -48,8 +119,8 @@ export class DoughnutComponent implements OnChanges {
       datasets: [
         {
           data: getValues(categories, typePrices),
-          backgroundColor: generateColors(this.documentStyle),
-          hoverBackgroundColor: generateColors(this.documentStyle),
+          backgroundColor: this.labelsBackgroundColors,
+          hoverBackgroundColor: this.labelsBackgroundColors,
         },
       ],
     };
@@ -62,39 +133,4 @@ function getValues(labels: string[], typePrices: TypePrice[]) {
       return labels.indexOf(a.type) - labels.indexOf(b.type);
     })
     .map((tp) => tp.price);
-}
-
-function generateColors(documentStyle: CSSStyleDeclaration) {
-  return [
-    documentStyle.getPropertyValue('--red'),
-    documentStyle.getPropertyValue('--orange'),
-    documentStyle.getPropertyValue('--yellow'),
-    documentStyle.getPropertyValue('--lime'),
-    documentStyle.getPropertyValue('--green'),
-    documentStyle.getPropertyValue('--mint'),
-    documentStyle.getPropertyValue('--teal'),
-    documentStyle.getPropertyValue('--cyan'),
-    documentStyle.getPropertyValue('--lightBlue'),
-    documentStyle.getPropertyValue('--blue'),
-    documentStyle.getPropertyValue('--indigo'),
-    documentStyle.getPropertyValue('--deepPurple'),
-    documentStyle.getPropertyValue('--purple'),
-    documentStyle.getPropertyValue('--pink'),
-    documentStyle.getPropertyValue('--hotPink'),
-    documentStyle.getPropertyValue('--warmGray'),
-    documentStyle.getPropertyValue('--gray'),
-    documentStyle.getPropertyValue('--coolGray'),
-    documentStyle.getPropertyValue('--brown'),
-    documentStyle.getPropertyValue('--burgundy'),
-    documentStyle.getPropertyValue('--olive'),
-    documentStyle.getPropertyValue('--beige'),
-    documentStyle.getPropertyValue('--coral'),
-    documentStyle.getPropertyValue('--navy'),
-    documentStyle.getPropertyValue('--maroon'),
-    documentStyle.getPropertyValue('--lightGreen'),
-    documentStyle.getPropertyValue('--turquoise'),
-    documentStyle.getPropertyValue('--skyBlue'),
-    documentStyle.getPropertyValue('--gold'),
-    documentStyle.getPropertyValue('--plum'),
-  ];
 }

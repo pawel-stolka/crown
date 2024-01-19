@@ -40,3 +40,5 @@ export * from './lib/functions/getMonth';
 export * from './lib/functions/chooseCurrentYear';
 export * from './lib/functions/uniqueCategories';
 export * from './lib/functions/groupTypePrices';
+export * from './lib/functions/chartColors';
+export * from './lib/functions/convertHexToRGBA';
