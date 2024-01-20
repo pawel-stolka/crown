@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start:mock": "json-server --routes ./mock/routes.json --watch ./mock/db.json --port 3000",
-    "bundle-report-crown": "npx nx run crown:build source-map-explorer dist/*.js"
+    "start:mock": "json-server --routes ./mock/routes.json --watch ./mock/db.json --port 3000"
   },
   "private": true,
   "dependencies": {

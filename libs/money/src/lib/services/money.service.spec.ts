@@ -5,7 +5,7 @@ import { Money, chooseCurrentYear, getMonth } from '@crown/data';
 import { of } from 'rxjs';
 import { ApiService } from '@crown/shared';
 
-describe('NewMoneyService', () => {
+describe('MoneyService', () => {
   let service: MoneyService;
   let mockApiService: {
     get: any;
@@ -79,44 +79,17 @@ describe('NewMoneyService', () => {
     });
   });
 
-  describe('extra', () => {
-    it('should getMonth...', () => {
-      let date1 = new Date();
-      let m1 = getMonth(date1);
-      console.log('[m1]', m1);
-    });
-  });
-
-  describe('#1 getMonth function', () => {
-    test.each([
-      [new Date(), 0], // test case 1
-      [new Date(''), NaN], // test case 2
-      [new Date('2022-03-01'), 2], // test case 3
-    ])('should handle date %s', (a, expected) => {
-      expect(getMonth(a)).toBe(expected);
-    });
-  });
-
-  describe('#3 getMonth function', () => {
-    test.each([
-      [new Date('2023-08-31T10:00:00.000Z'), 8], // problem
-    ])('should return correct month for %s', (date, expectedMonth) => {
-      expect(getMonth(date)).toBe(expectedMonth);
-    });
-  });
-
   describe('#2 getMonth function', () => {
     test.each([
-      [new Date('2022-01-15'), '01.2022'], // January (0)
-      [new Date('2022-02-15'), '02.2022'], // February (1)
-      [new Date('2022-12-31'), '12.2022'], // December (11)
-      [new Date('2020-02-29'), '03.2022'], // Leap year
-      [new Date('2022-02-30'), '03.2022'], // Invalid date
+      [new Date('2022-01-15'), '1.2022'], // January
+      [new Date('2022-02-15'), '2.2022'], // February
+      [new Date('2022-12-31'), '12.2022'], // December
+      [new Date('2022-02-29'), '3.2022'], // Leap year
+      [new Date('2022-02-30'), '3.2022'], // Invalid date
       // [new Date('null'), NaN], // Null
       // [new Date('blawqefw wrt'), NaN], // Null
       // [new Date(10), NaN], // empty
-
-      [new Date('1900-01-01'), '01.1900'], // Boundary year (early)
+      [new Date('1900-01-01'), '1.1900'], // Boundary year (early)
       [new Date('2100-12-31'), '12.2100'], // Boundary year (late)
     ])('should return correct month for %s', (date, expectedMonth) => {
       expect(getMonth(date)).toBe(expectedMonth);

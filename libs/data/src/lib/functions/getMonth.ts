@@ -1,26 +1,18 @@
-export function getMonth(date: Date) {
-  const dateString = date.toString()?.substring(0, 7);
-  // const dateString = date.toISOString()?.substring(0, 7);
-
-  const [year, month] = dateString.split('-');
-  // return +month
-  return `${month}.${year}`;
-
-  // TODO - temporary
-  /*
-  let res
-  if (!(date instanceof Date)) {
-    date = new Date(date);
+export function getMonth(dateInput: any) {
+  // Check if the input is a Date object and is valid
+  if (dateInput instanceof Date && !isNaN(dateInput.valueOf())) {
+    const year = dateInput.getFullYear();
+    const month = dateInput.getMonth() + 1; //(1-12 instead of 0-11)
+    return `${month}.${year}`;
   } else {
-    console.log('[getMonth ERROR]', typeof date, date); // Debugging line
-    // return date?.getMonth() + 1 ?? 0;
+    let parsedDate = new Date(dateInput);
+    // Check if the parsed date is valid
+    if (!isNaN(parsedDate.valueOf())) {
+      const year = parsedDate.getFullYear();
+      const month = parsedDate.getMonth() + 1;
+      return `${month}.${year}`;
+    } else {
+      throw new Error('Input is not a valid date');
+    }
   }
-
-  let onlyDate = date.getDate();
-  // console.log('%c[onlyDate]', Colors.INFO, onlyDate);
-  // return date.toString().substring(0, 7);
-  res = date?.getMonth();
-  console.log('[getMonth]', date, res);
-
-  return res + 1;*/
 }
