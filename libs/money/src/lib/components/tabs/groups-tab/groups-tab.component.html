@@ -19,9 +19,12 @@
     </td>
     <!-- summary column -->
     <td>{{ item.typePrices | sumByMonth }}</td>
-    <!-- <td>{{ item.typePrices | json }}</td> -->
   </tr>
 </table>
+
+<crown-budget [data]="data"></crown-budget>
+
+<crown-doughnut [dataset]="data"></crown-doughnut>
 } @else {
 <div>no data</div>
 }
