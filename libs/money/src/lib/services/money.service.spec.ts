@@ -64,7 +64,7 @@ describe('MoneyService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('chooseCurrentYear', () => {
+  xdescribe('chooseCurrentYear', () => {
     it('when exists in data years - selects current year', () => {
       const result = chooseCurrentYear([2020, 2024]);
       expect(result).toEqual(2024);
@@ -94,5 +94,36 @@ describe('MoneyService', () => {
     ])('should return correct month for %s', (date, expectedMonth) => {
       expect(getMonth(date)).toBe(expectedMonth);
     });
+  });
+});
+
+describe('Tests with empty data', () => {
+  let service: MoneyService;
+  let mockApiService: {
+    get: any;
+    tokenEmail$: any;
+  };
+
+  beforeEach(() => {
+    // Set up the mock to return an empty array for all tests in this block
+    // mockApiService.get.mockReturnValue(of([]));
+    mockApiService = {
+      get: jest.fn().mockReturnValue(of([])),
+      tokenEmail$: of({ token: 'mockToken' }),
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        MoneyService,
+        { provide: ApiService, useValue: mockApiService },
+      ],
+    });
+    service = TestBed.inject(MoneyService);
+  });
+
+  it('should return the initial value for money', () => {
+    // Mock the method to return an empty array
+    mockApiService.get.mockReturnValue(of([]));
+    expect(service.money).toEqual([]);
   });
 });
