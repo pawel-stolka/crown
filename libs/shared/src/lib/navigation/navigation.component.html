@@ -9,9 +9,15 @@
     >
       Wydatki
     </button>
-
-
   </ng-container>
+  <button
+    mat-stroked-button
+    routerLink="sandbox"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    sandbox
+  </button>
 </div>
 <div class="info">
   <button mat-flat-button color="primary" (click)="toggleTodos()">

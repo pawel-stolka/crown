@@ -1,18 +1,17 @@
 import { ApiService } from 'libs/shared/src/lib/services/api/api.service';
-import { Injectable, Injector, inject } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
 import { BehaviorSubject, Observable, map, tap, take } from 'rxjs';
-import { ToastService } from '../../toaster/service/toast.service';
 
+const TEMP_ADMIN_FLAG = true;
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiService!: ApiService;
-  private toast = inject(ToastService);
 
   private _tokenEmailSubj = new BehaviorSubject<TokenEmail | null>(null);
-  private _isAdminSubj = new BehaviorSubject<boolean>(false);
+  private _isAdminSubj = new BehaviorSubject<boolean>(TEMP_ADMIN_FLAG);
 
   tokenEmail$: Observable<TokenEmail | null> =
     this._tokenEmailSubj.asObservable();
