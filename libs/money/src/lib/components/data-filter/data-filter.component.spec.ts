@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DataFilterComponent } from './data-filter.component';
 
-describe('DataFilter3Component', () => {
+describe('DataFilterComponent', () => {
   let component: DataFilterComponent;
   let fixture: ComponentFixture<DataFilterComponent>;
 

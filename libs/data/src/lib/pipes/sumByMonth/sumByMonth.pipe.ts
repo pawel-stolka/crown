@@ -8,7 +8,7 @@ import { TypePrice, formatValue } from '@crown/data';
 export class SumByMonthPipe implements PipeTransform {
   constructor(@Inject(LOCALE_ID) public locale: string) {}
   transform(typePrices: TypePrice[]): string {
-    let result = typePrices.reduce((sum, el) => {
+    const result = typePrices.reduce((sum, el) => {
       return (sum = sum + el.price);
     }, 0);
     return formatValue(result, this.locale);

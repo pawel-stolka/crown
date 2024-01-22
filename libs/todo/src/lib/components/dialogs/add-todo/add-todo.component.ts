@@ -57,6 +57,8 @@ export class AddTodoComponent {
     const changes: Partial<Todo> = this.form.value;
 
     this.todoService.create$(changes).subscribe(() => {
+      console.log('save');
+
       this.dialogRef.close();
     });
   }

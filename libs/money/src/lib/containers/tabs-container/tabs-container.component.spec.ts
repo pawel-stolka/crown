@@ -7,7 +7,6 @@ import { DetailsTabComponent } from '../../components/tabs/details-tab/details-t
 import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
 import { ChartDemoComponent } from '../../components/chart-demo/chart-demo.component';
 import { ChartComponent } from '../../components/chart/chart.component';
-import { DoughnutDemoComponent } from '../../components/doughnut-demo/doughnut-demo.component';
 import { By } from '@angular/platform-browser';
 import { MonthsCategories } from '@crown/data';
 
@@ -25,7 +24,6 @@ describe('TabsContainerComponent', () => {
         TabsContainerComponent,
         ChartComponent,
         ChartDemoComponent,
-        DoughnutDemoComponent,
       ],
       schemas: [NO_ERRORS_SCHEMA], // Use this if you don't want to deal with child components' details
     }).compileComponents();

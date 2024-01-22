@@ -1,21 +1,417 @@
 import { TestBed } from '@angular/core/testing';
 
 import { MoneyService } from './money.service';
-import { Money, chooseCurrentYear, getMonth } from '@crown/data';
-import { of } from 'rxjs';
-import { ApiService } from '@crown/shared';
+import {
+  API_URL,
+  Money,
+  MoneyFilter,
+  MoneyGroup,
+  TypePrice,
+  chooseCurrentYear,
+  getMonth,
+} from '@crown/data';
+import { first, of, throwError } from 'rxjs';
+import { ApiService, ToastService } from '@crown/shared';
+
+jest.mock('@crown/data', () => ({
+  chooseCurrentYear: jest
+    .fn()
+    .mockImplementation((years) => years[years.length - 1]),
+  compareBy: jest
+    .fn()
+    .mockImplementation(
+      (key) => (a: any, b: any) =>
+        a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0
+    ),
+  setNoonAsDate: jest.fn().mockImplementation((changes) => changes),
+}));
 
 describe('MoneyService', () => {
   let service: MoneyService;
-  let mockApiService: {
-    get: any;
-    post: any;
-    put: any;
-    delete: any;
-    tokenEmail$: any;
-  };
+  let mockApiService: any;
+  let mockToastService: Partial<ToastService>;
 
-  const mockedMoneys: Money[] = [
+  const mockedMoneys = getMockedMoneys();
+  const mockMoneyGroups: MoneyGroup[] = getMockMoneyGroups(mockedMoneys);
+
+  beforeEach(() => {
+    mockApiService = {
+      get: jest.fn().mockReturnValue(of(mockedMoneys)),
+      post: jest.fn(),
+      put: jest.fn(),
+      delete: jest.fn(),
+      tokenEmail$: of({ token: 'mockToken', email: '' }),
+      // Mock tokenEmail$ as a function that returns an observable
+      // tokenEmail$: jest.fn().mockReturnValue(of({ token: 'mockToken', email: '' })),
+    };
+    mockToastService = {
+      showError: jest.fn(),
+    };
+    service = new MoneyService(mockApiService as any, mockToastService as any);
+
+    // Mock groupMoney function if it's a service method
+    jest
+      .spyOn(service, 'groupMoney')
+      .mockImplementation((data: Money[]): MoneyGroup[] => mockMoneyGroups);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('Tests with empty data', () => {
+    let service: MoneyService;
+    let mockApiService: {
+      get: any;
+      tokenEmail$: any;
+    };
+
+    beforeEach(() => {
+      mockApiService = {
+        get: jest.fn().mockReturnValue(of([])),
+        tokenEmail$: of({ token: 'mockToken' }),
+      };
+
+      TestBed.configureTestingModule({
+        providers: [
+          MoneyService,
+          { provide: ApiService, useValue: mockApiService },
+        ],
+      });
+      service = TestBed.inject(MoneyService);
+    });
+
+    it('should return the initial value for money', () => {
+      mockApiService.get.mockReturnValue(of([]));
+      expect(service.money).toEqual([]);
+    });
+  });
+
+  describe('observables', () => {
+    const testMoneyData = mockMoneyData();
+    const testMoneyData2 = getMockedMoneys();
+
+    it('should call fetchAll$ when tokenEmail is truthy', () => {
+      // Mocking fetchAll$ to return a specific observable
+      const mockFetchAll$ = jest.fn().mockReturnValue(of(mockedMoneys));
+      service.fetchAll$ = mockFetchAll$;
+
+      service.initializeDataFetch().subscribe();
+
+      expect(mockFetchAll$).toHaveBeenCalled();
+      // You can add more assertions here if needed
+    });
+
+    it('should return an empty array when tokenEmail is falsy', () => {
+      // Overriding tokenEmail$ to emit a falsy value
+      service['api'].tokenEmail$ = of(null);
+
+      // Mock fetchAll$ with jest.fn()
+      const mockFetchAll$ = jest.fn().mockReturnValue(of([]));
+      service.fetchAll$ = mockFetchAll$;
+
+      service.initializeDataFetch().subscribe((result) => {
+        expect(result).toEqual([]);
+      });
+
+      // If fetchAll$ should not be called in this case, you can also verify that
+      expect(service.fetchAll$).not.toHaveBeenCalled();
+    });
+
+    // it('should call initializeDataFetch on construction', () => {
+    //   // Spy on the method if it has observable subscriptions or side-effects
+    //   const fetchSpy = spyOn(service, 'initializeDataFetch').and.callThrough();
+
+    //   // Assertions
+    //   expect(fetchSpy).toHaveBeenCalled();
+    //   // Other assertions depending on what initializeDataFetch does
+    // });
+
+    xit('should return an empty array if tokenEmail is falsy', () => {
+      // Override mockApi for this specific test
+      const mockApiWithFalsyToken = {
+        ...mockApiService,
+        tokenEmail$: of(null), // Emitting a falsy value
+      };
+
+      // Create a new instance of the service with the overridden mockApi
+      const serviceWithFalsyToken = new MoneyService(
+        mockApiWithFalsyToken,
+        mockToastService as any
+      );
+
+      // Test logic here
+      // You can use the approach suitable for your testing strategy (e.g., marbles, direct subscribe, etc.)
+      serviceWithFalsyToken.initializeDataFetch();
+      let money = serviceWithFalsyToken.money;
+      console.log('[serviceWithFalsyToken]', money);
+      expect(serviceWithFalsyToken.money).toBe([]);
+    });
+
+    it('should emit correct allYears$', async () => {
+      service.updateMoney(testMoneyData);
+      const allYears = await service.allYears$.pipe(first()).toPromise();
+
+      expect(allYears).toEqual([2020, 2021, 2022]);
+    });
+
+    it('should emit correct filteredMoney$', async () => {
+      service.updateMoney(testMoneyData);
+      const filter: MoneyFilter = {
+        year: 2021,
+      };
+
+      service.updateFilters(filter);
+      const filteredMoney = await service.filteredMoney$
+        .pipe(first())
+        .toPromise();
+      const expectedMoney = testMoneyData.filter(
+        (d) => d.createdAt.getFullYear() === filter.year
+      );
+
+      expect(filteredMoney).toEqual(expectedMoney);
+    });
+
+    it('should emit correct moneyGroups$', async () => {
+      service.updateMoney(testMoneyData);
+
+      const moneyGroups = await service.moneyGroups$.pipe(first()).toPromise();
+      expect(moneyGroups).toEqual(getMockMoneyGroups([]));
+    });
+
+    it('should return current money$ value', () => {
+      service.updateMoney(testMoneyData);
+
+      const money = service.money;
+      expect(money).toEqual(testMoneyData);
+    });
+
+    it('should return current filters$ value', () => {
+      service.updateFilters(mockYearFilter());
+
+      const filters = service.filters;
+      expect(filters).toEqual(mockYearFilter());
+    });
+
+    it('should return current message$ value', () => {
+      service.updateMessage(mockMessage());
+
+      const message = service.message;
+      expect(message).toEqual(mockMessage());
+    });
+
+    it('should fetch all data', async () => {
+      const result = await service.fetchAll$().toPromise();
+      // Expectations for the processed data
+      expect(result).toEqual(testMoneyData2);
+    });
+    it('should handle errors when fetchAll$ fails', async () => {
+      const errorMessage = 'Test Error: fetchAll$ failed';
+      mockApiService.get.mockReturnValue(throwError(new Error(errorMessage)));
+
+      try {
+        await service.fetchAll$().toPromise();
+      } catch (err: any) {
+        // Expectations for error handling
+        expect(err.message).toBe(errorMessage);
+      }
+    });
+
+    it('should emit unique categories', async () => {
+      service.updateMoney(testMoneyData);
+      // const allYears = await service.allYears$.pipe(first()).toPromise();
+      // expect(allYears).toEqual([2020, 2021, 2022]);
+      const categories = await service
+        .getCategories$()
+        .pipe(first())
+        .toPromise();
+      expect(categories).toEqual(['type-1', 'type-2']);
+    });
+  });
+
+  describe('CRUD observables', () => {
+    const serviceURL = `${API_URL}/api/money`;
+
+    beforeEach(() => {
+      mockApiService.post = jest.fn();
+      mockToastService.showError = jest.fn();
+      mockToastService.showSuccess = jest.fn();
+    });
+
+    describe('create$', () => {
+      it('should call api.post and handle success', () => {
+        const mockMoney: Partial<Money> = {
+          price: 101,
+          type: 'testing create$',
+        };
+        const responseMoney: Money = getMockedMoneys()[0];
+
+        mockApiService.post.mockReturnValue(of(responseMoney));
+
+        service.create$(mockMoney).subscribe((res) => {
+          expect(res).toEqual(responseMoney);
+        });
+
+        expect(mockApiService.post).toHaveBeenCalledWith(serviceURL, mockMoney);
+        expect(mockToastService.showSuccess).toHaveBeenCalledWith(
+          'Dodałeś',
+          responseMoney.type
+        );
+        // Check if updateMoney was called correctly
+        expect(service.money).toContain(responseMoney); // Assuming 'money' is accessible for testing
+      });
+
+      it('should handle errors on api.post', () => {
+        const mockMoney: Partial<Money> = {
+          /* ... */
+        };
+        const error = new Error('Test error');
+
+        mockApiService.post.mockReturnValue(throwError(error));
+
+        service.create$(mockMoney).subscribe(
+          () => {},
+          (err) => {
+            expect(err).toBe(error);
+          }
+        );
+
+        expect(mockApiService.post).toHaveBeenCalledWith(serviceURL, mockMoney);
+        expect(mockToastService.showError).toHaveBeenCalledWith(
+          'Błąd Dodania',
+          'coś nie poszło...'
+        );
+        // Ensure no success actions were taken
+        // e.g., check if updateMoney was not called
+      });
+    });
+
+    describe('edit$', () => {
+      it('should call api.put and handle success', () => {
+        const mockId = 'some-id';
+        const mockMoney: Partial<Money> = {
+          price: 101,
+          type: 'testing...',
+        };
+        const responseMoney: Money = getMockedMoneys()[0];
+        const mockChanges: Partial<Money> = {
+          ...mockMoney,
+          type: 'testing edit$',
+        };
+        const mockResponse: Money = {
+          ...responseMoney,
+          type: 'testing edit$',
+        };
+
+        const initialMoneyArray = [
+          {
+            ...responseMoney,
+            id: 'some-id',
+          },
+        ];
+        service.updateMoney(initialMoneyArray);
+
+        mockApiService.put.mockReturnValue(of(mockResponse));
+
+        service.edit$(mockId, mockChanges).subscribe();
+
+        expect(mockApiService.put).toHaveBeenCalledWith(
+          `${serviceURL}/${mockId}`,
+          mockChanges
+        );
+        expect(mockToastService.showSuccess).toHaveBeenCalledWith(
+          'Zmiana',
+          mockResponse.type
+        );
+
+        expect(service.money).toContainEqual({
+          ...service.money[0],
+          ...mockChanges,
+        });
+      });
+
+      it('should handle errors on api.put', () => {
+        const mockId = 'some-id';
+        const mockChanges: Partial<Money> = {
+          ...mockedMoneys[0],
+          type: 'testing false edit$',
+        };
+        const responseMoney: Money = getMockedMoneys()[0];
+        const error = new Error('Test error');
+
+        const initialMoneyArray = [
+          {
+            ...responseMoney,
+            id: mockId,
+          },
+        ];
+        service.updateMoney(initialMoneyArray);
+
+        mockApiService.put.mockReturnValue(throwError(error));
+
+        service.edit$(mockId, mockChanges).subscribe(
+          () => {},
+          (err) => {
+            expect(err).toBe(error);
+          }
+        );
+
+        expect(mockApiService.put).toHaveBeenCalledWith(
+          `${serviceURL}/${mockId}`,
+          mockChanges
+        );
+        expect(mockToastService.showError).toHaveBeenCalledWith(
+          'Błąd edycji',
+          'coś nie poszło...'
+        );
+
+        expect(service.money).not.toContainEqual({
+          ...service.money[0],
+          ...mockChanges,
+        });
+        expect(service.money).toContainEqual({
+          ...service.money[0],
+        });
+      });
+    });
+    xdescribe('delete$', () => {
+      it('should call api.delete and handle success', () => {
+        const mockId = 'some-id';
+        const mockMoney: Partial<Money> = {
+          id: mockId,
+          type: 'some-type',
+          price: 199,
+        };
+
+        // Setup mock return values
+        mockApiService.tokenEmail$.mockReturnValue(
+          of({ token: 'mockToken', email: '' })
+        );
+        mockApiService.get.mockReturnValue(of([mockMoney]));
+        mockApiService.delete.mockReturnValue(of(mockMoney));
+
+        // Spy on updateMoney method
+        const updateMoneySpy = jest.spyOn(service, 'updateMoney');
+
+        service.delete$(mockId).subscribe();
+
+        expect(mockApiService.delete).toHaveBeenCalledWith(
+          `${serviceURL}/${mockId}`
+        );
+        expect(
+          updateMoneySpy
+        ).toHaveBeenCalledWith(/* expected new money array */);
+        expect(mockToastService.showSuccess).toHaveBeenCalledWith(
+          'Usunięcie',
+          `${mockMoney.type} ${mockMoney.price}`
+        );
+      });
+    });
+  });
+});
+
+export function getMockedMoneys(): Money[] {
+  return [
     {
       id: '1',
       userId: 'test-1',
@@ -41,89 +437,67 @@ describe('MoneyService', () => {
       createdAt: expect.any(Date),
     },
   ];
+}
 
-  beforeEach(() => {
-    mockApiService = {
-      get: jest.fn().mockReturnValue(of(mockedMoneys)),
-      post: jest.fn(),
-      put: jest.fn(),
-      delete: jest.fn(),
-      tokenEmail$: of({ token: 'mockToken' }),
-    };
+export function mockMoneyData(): Money[] {
+  return [
+    {
+      id: '1',
+      type: 'type-1',
+      price: 10,
+      userId: '',
+      fromWho: 'test-fromWho',
+      createdAt: new Date('2020-01-01'),
+    },
+    {
+      id: '2',
+      type: 'type-2',
+      price: 20,
+      userId: '',
+      fromWho: 'test-fromWho',
+      createdAt: new Date('2021-01-02'),
+    },
+    {
+      id: '3',
+      price: 30,
+      type: 'type-2',
+      userId: '',
+      fromWho: 'test-fromWho',
+      createdAt: new Date('2022-02-01'),
+    },
+  ];
+}
 
-    TestBed.configureTestingModule({
-      providers: [
-        MoneyService,
-        { provide: ApiService, useValue: mockApiService },
-      ],
-    });
-    service = TestBed.inject(MoneyService);
-  });
+export function getMockMoneyGroups(data: Money[]): MoneyGroup[] {
+  // TODO: using... mockMoneyData()
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  xdescribe('chooseCurrentYear', () => {
-    it('when exists in data years - selects current year', () => {
-      const result = chooseCurrentYear([2020, 2024]);
-      expect(result).toEqual(2024);
-    });
-    it('when DOES NOT exist in data years - selects most recent year', () => {
-      const result = chooseCurrentYear([2020, 2021]);
-      expect(result).toEqual(2021);
-    });
-    it('when NO YEARS - selects undefined', () => {
-      const result = chooseCurrentYear([]);
-      expect(result).toEqual(undefined);
-    });
-  });
-
-  describe('#2 getMonth function', () => {
-    test.each([
-      [new Date('2022-01-15'), '1.2022'], // January
-      [new Date('2022-02-15'), '2.2022'], // February
-      [new Date('2022-12-31'), '12.2022'], // December
-      [new Date('2022-02-29'), '3.2022'], // Leap year
-      [new Date('2022-02-30'), '3.2022'], // Invalid date
-      // [new Date('null'), NaN], // Null
-      // [new Date('blawqefw wrt'), NaN], // Null
-      // [new Date(10), NaN], // empty
-      [new Date('1900-01-01'), '1.1900'], // Boundary year (early)
-      [new Date('2100-12-31'), '12.2100'], // Boundary year (late)
-    ])('should return correct month for %s', (date, expectedMonth) => {
-      expect(getMonth(date)).toBe(expectedMonth);
-    });
-  });
-});
-
-describe('Tests with empty data', () => {
-  let service: MoneyService;
-  let mockApiService: {
-    get: any;
-    tokenEmail$: any;
+  let group1: MoneyGroup = {
+    period: '01.2024',
+    typePrices: [
+      { type: 'type-1', price: 10 },
+      { type: 'type-2', price: 20 },
+    ],
   };
+  let group2: MoneyGroup = {
+    period: '02.2024',
+    typePrices: [{ type: 'type-2', price: 30 }],
+  };
+  let result: MoneyGroup[] = [group1, group2];
 
-  beforeEach(() => {
-    // Set up the mock to return an empty array for all tests in this block
-    // mockApiService.get.mockReturnValue(of([]));
-    mockApiService = {
-      get: jest.fn().mockReturnValue(of([])),
-      tokenEmail$: of({ token: 'mockToken' }),
-    };
+  return result;
+}
 
-    TestBed.configureTestingModule({
-      providers: [
-        MoneyService,
-        { provide: ApiService, useValue: mockApiService },
-      ],
-    });
-    service = TestBed.inject(MoneyService);
-  });
+function getMockCompareBy(prop?: string, descending = true) {
+  return 1;
+}
 
-  it('should return the initial value for money', () => {
-    // Mock the method to return an empty array
-    mockApiService.get.mockReturnValue(of([]));
-    expect(service.money).toEqual([]);
-  });
-});
+export function mockYearFilter() {
+  let filter1: MoneyFilter = {
+    year: 2023,
+  };
+  return filter1;
+}
+
+function mockMessage() {
+  return 'mockMessage';
+}

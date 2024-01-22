@@ -27,12 +27,16 @@ import {
   throwError,
 } from 'rxjs';
 
+const mf: MoneyFilter = {
+  
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class MoneyService {
-  private api = inject(ApiService);
-  private toast = inject(ToastService);
+  // private api = inject(ApiService);
+  // private toast = inject(ToastService);
   private URL = `${API_URL}/api/money`;
 
   private _moneySubj = new BehaviorSubject<Money[]>([]);
@@ -74,7 +78,11 @@ export class MoneyService {
     return this._filterSubj.value;
   }
 
-  constructor() {
+  get message() {
+    return this._messageSubj.value;
+  }
+
+  constructor(private api: ApiService, private toast: ToastService) {
     this.initializeDataFetch().subscribe();
   }
 
@@ -99,7 +107,7 @@ export class MoneyService {
         const message = '[fetchAll] Something wrong...';
         this.toast.showError('Błąd danych', 'coś nie poszło...');
         // this.messages.showErrors(message);
-        console.log(`%c${message}`, Colors.RED, err);
+        // console.log(`%c${message}`, Colors.RED, err);
         return throwError(err);
       }),
       // TODO: isDeleted toggle for admin?
@@ -112,8 +120,20 @@ export class MoneyService {
         }));
       }),
       // tap(() => this._pendingFetchSubj.next(false)),
-      tap((money: Money[]) => this._moneySubj.next(money))
+      tap((money: Money[]) => this.updateMoney(money))
     );
+  }
+
+  updateMoney(money: Money[]) {
+    this._moneySubj.next(money);
+  }
+
+  updateMessage(message: string) {
+    this._messageSubj.next(message);
+  }
+
+  updateFilters(filter: MoneyFilter) {
+    this._filterSubj.next(filter);
   }
 
   getCategories$(): Observable<string[]> {
@@ -139,8 +159,8 @@ export class MoneyService {
         return throwError(err);
       }),
       tap((money) => {
-        const update: Money[] = [...this._moneySubj.value, money];
-        this._moneySubj.next(update);
+        const update: Money[] = [...this.money, money];
+        this.updateMoney(update);
         this.toast.showSuccess('Dodałeś', `${money.type}`);
       })
     );
@@ -168,7 +188,8 @@ export class MoneyService {
         return throwError(err);
       }),
       tap(() => {
-        this._moneySubj.next(newMoneys);
+        this.updateMoney(newMoneys);
+        // this._moneySubj.next(newMoneys);
         this.toast.showSuccess('Zmiana', `${newMoney.type}`);
       }),
       shareReplay()
@@ -187,17 +208,10 @@ export class MoneyService {
       tap((money: Money) => {
         const newMoneyList = this.money.filter((x) => x.id !== money.id);
         this.toast.showSuccess('Usunięcie', `${money.type} ${money.price}`);
-        this._moneySubj.next(newMoneyList);
+        // this._moneySubj.next(newMoneyList);
+        this.updateMoney(newMoneyList);
       })
     );
-  }
-
-  updateMessage(message: string) {
-    this._messageSubj.next(message);
-  }
-
-  updateFilters(filter: MoneyFilter) {
-    this._filterSubj.next(filter);
   }
 
   resetFilters() {
@@ -230,7 +244,7 @@ export class MoneyService {
     });
   }
 
-  private groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
+ groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
     const selection = this.setGrouping(by);
     const groups: any[] = groupBy(data, selection);
     return this.summarize(groups);

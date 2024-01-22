@@ -74,6 +74,8 @@ export class TodoService {
       tap((todo) => {
         const todos: Todo[] = [...this._todosSubj.value, todo];
         this._todosSubj.next(todos);
+        console.log('[create$]', todo);
+
       })
     );
   }

@@ -18,7 +18,7 @@ export function fixNumber(num: number): number {
   return +num.toFixed(2);
 }
 
-export function compareBy(prop?: string, descending = false) {
+export function compareBy(prop?: string, descending = true) {
   const order = descending ? -1 : 1;
   return function (a: any, b: any) {
     const lowA = a.toString().toLowerCase();

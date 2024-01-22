@@ -74,6 +74,7 @@ export class MoneyContainerComponent {
       this.dataSource.paginator = this.paginator;
     })
   );
+
   // TODO: to children?
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();

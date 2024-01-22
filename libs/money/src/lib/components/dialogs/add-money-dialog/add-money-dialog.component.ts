@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -35,11 +35,11 @@ import { MoneyService } from '../../../services/money.service';
   templateUrl: './add-money-dialog.component.html',
   styleUrl: './add-money-dialog.component.scss',
 })
-export class AddDialogComponent {
+export class AddDialogComponent implements OnInit {
   title = 'Dodaj rachunek';
   form!: FormGroup;
 
-  private getCategories$ = this.newMoneyService.getCategories$();
+  private getCategories$ = this.moneyService.getCategories$();
   filteredCategories$: Observable<string[]> | undefined;
 
   get date() {
@@ -61,7 +61,7 @@ export class AddDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
-    private newMoneyService: MoneyService
+    private moneyService: MoneyService
   ) {}
 
   ngOnInit() {
@@ -111,7 +111,7 @@ export class AddDialogComponent {
   save() {
     const changes: Partial<Money> = this.form.value;
 
-    this.newMoneyService.create$(changes).subscribe(() => {
+    this.moneyService.create$(changes).subscribe(() => {
       this.dialogRef.close();
     });
   }
