@@ -24,6 +24,7 @@ export * from './lib/enums/Priority';
 export * from './lib/enums/TodoAction';
 export * from './lib/enums/ToastIcon';
 export * from './lib/enums/NotificationType';
+export * from './lib/enums/ToastMessage';
 
 export * from './lib/lists/PRIORITIES';
 export * from './lib/lists/STATUSES';

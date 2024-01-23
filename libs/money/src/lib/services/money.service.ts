@@ -7,6 +7,7 @@ import {
   Money,
   MoneyFilter,
   MoneyGroup,
+  ToastMessage,
   chooseCurrentYear,
   compareBy,
   fixNumber,
@@ -27,14 +28,11 @@ import {
   throwError,
 } from 'rxjs';
 
-const mf: MoneyFilter = {
-  
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class MoneyService {
+  // TODO: fix tests to inject these:
   // private api = inject(ApiService);
   // private toast = inject(ToastService);
   private URL = `${API_URL}/api/money`;
@@ -104,8 +102,7 @@ export class MoneyService {
     return this.api.get<Money[]>(this.URL).pipe(
       // finalize(() => this._pendingFetchSubj.next(false)),
       catchError((err) => {
-        const message = '[fetchAll] Something wrong...';
-        this.toast.showError('Błąd danych', 'coś nie poszło...');
+        this.toast.showError(ToastMessage.DATA_FAILURE, ToastMessage.STH_WRONG);
         // this.messages.showErrors(message);
         // console.log(`%c${message}`, Colors.RED, err);
         return throwError(err);
@@ -153,7 +150,7 @@ export class MoneyService {
     return this.api.post<Money>(this.URL, changes).pipe(
       catchError((err) => {
         const message = 'Could not create money';
-        this.toast.showError('Błąd Dodania', 'coś nie poszło...');
+        this.toast.showError(ToastMessage.DATA_FAILURE, ToastMessage.STH_WRONG);
         // this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);
@@ -182,15 +179,17 @@ export class MoneyService {
     return this.api.put<Money>(`${this.URL}/${id}`, changes).pipe(
       catchError((err) => {
         const message = 'Could not edit money';
-        this.toast.showError('Błąd edycji', 'coś nie poszło...');
+        this.toast.showError(ToastMessage.DATA_FAILURE, ToastMessage.STH_WRONG);
         // this.messages.showErrors(message);
         console.log(message, err);
         return throwError(err);
       }),
       tap(() => {
         this.updateMoney(newMoneys);
-        // this._moneySubj.next(newMoneys);
-        this.toast.showSuccess('Zmiana', `${newMoney.type}`);
+        this.toast.showSuccess(
+          ToastMessage.SUCCESS,
+          `ZMIANA: ${newMoney.type}`
+        );
       }),
       shareReplay()
     );
@@ -201,7 +200,7 @@ export class MoneyService {
       catchError((err) => {
         const message = '[delete] Something wrong...';
         // this.messages.showErrors(message);
-        this.toast.showError('Błąd usuwania', 'coś nie poszło...');
+        this.toast.showError(ToastMessage.DATA_FAILURE, ToastMessage.STH_WRONG);
         console.log(message, err);
         return throwError(err);
       }),
@@ -244,7 +243,7 @@ export class MoneyService {
     });
   }
 
- groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
+  groupMoney(data: Money[], by = 'byMonth'): MoneyGroup[] {
     const selection = this.setGrouping(by);
     const groups: any[] = groupBy(data, selection);
     return this.summarize(groups);
