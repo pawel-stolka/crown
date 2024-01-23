@@ -1,20 +1,20 @@
 <div class="routes">
-  <ng-container *ngIf="isLoggedIn$ | async">
-    <button
-      mat-stroked-button
-      routerLink="money"
-      routerLinkActive="active-link"
-      [routerLinkActiveOptions]="{ exact: true }"
-      (click)="openRoutes()"
-    >
-      Wydatki
-    </button>
-  </ng-container>
+  <button
+    *ngIf="isLoggedIn$ | async"
+    mat-stroked-button
+    routerLink="money"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="toggleNav()"
+  >
+    Wydatki
+  </button>
   <button
     mat-stroked-button
     routerLink="sandbox"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
+    (click)="toggleNav()"
   >
     sandbox
   </button>
@@ -30,7 +30,7 @@
     routerLink="admin"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="openRoutes()"
+    (click)="toggleNav()"
     color="warn"
   >
     admin

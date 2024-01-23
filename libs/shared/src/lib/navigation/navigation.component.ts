@@ -21,7 +21,7 @@ export class NavigationComponent {
 
   constructor(private authService: AuthService) {}
 
-  openRoutes() {
+  toggleNav() {
     this.toggleMenu.emit('left');
   }
 
