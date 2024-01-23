@@ -1,7 +1,6 @@
 import { TypePrice } from '@crown/data';
 import { PriceByTypePipe } from './priceByType.pipe';
 
-// Mocks the formatValue function if it's external
 jest.mock('@crown/data', () => ({
   formatValue: jest
     .fn()

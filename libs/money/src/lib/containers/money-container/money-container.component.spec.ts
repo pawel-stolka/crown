@@ -17,7 +17,6 @@ class MockMoneyService {
   currentYear$ = of(2024);
   moneyGroups$ = of(getMockMoneyGroups([]));
   filteredMoney$ = of(getMockedMoneys());
-  // ... other methods and properties
 }
 
 export class MatDialogMock {
@@ -26,33 +25,23 @@ export class MatDialogMock {
       afterClosed: () => of({}), // Replace with the expected return value
     };
   }
-  // Mock other methods used by your component if necessary
 }
 
 class FormBuilderMock {
   group(controlsConfig: { [key: string]: any }, options?: any) {
-    // Mock the form group structure based on your component's usage
-    // You can use simple jasmine.createSpyObj or jest.fn() for controls
     return {
-      // Example structure
       controls: {
         startDate: { value: null },
         endDate: { value: null },
-        // Add other controls as necessary
       },
-      valueChanges: of({}), // Replace with expected value or behavior
-      // Mock other properties and methods as needed
+      valueChanges: of({}),
     };
   }
-  // Mock other FormBuilder methods if used by your component
 }
 
-class MatPaginatorMock {
-  // Mock the methods and properties used by your component
-}
+class MatPaginatorMock {}
 
-class MatSortMock {
-}
+class MatSortMock {}
 
 describe('MoneyContainerComponent', () => {
   let component: MoneyContainerComponent;

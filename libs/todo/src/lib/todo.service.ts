@@ -85,7 +85,6 @@ export class TodoService {
       ...changes,
     };
 
-    // copy of todos
     const newTodos: Todo[] = this.todos.slice(0);
     newTodos[index] = newTodo;
     this._todosSubj.next(newTodos);

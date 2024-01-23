@@ -172,7 +172,6 @@ export class MoneyService {
       ...changes,
     };
 
-    // copy of moneys
     const newMoneys: Money[] = this.money.slice(0);
     newMoneys[index] = newMoney;
 

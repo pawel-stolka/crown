@@ -41,8 +41,6 @@ import {
   MAT_MOMENT_DATE_FORMATS,
 } from '@angular/material-moment-adapter';
 
-// import 'moment/locale/pl';
-
 @NgModule({
   imports: [CommonModule],
   providers: [
@@ -77,7 +75,6 @@ import {
     MatRadioModule,
     MatTooltipModule,
     MatGridListModule,
-    // MatLegacyChipsModule,
     ScrollingModule,
     MatPaginatorModule,
     MatSortModule,

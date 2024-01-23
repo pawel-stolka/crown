@@ -4,5 +4,4 @@ export interface MoneyFilter {
   endDate?: Date;
   type?: string;
   year?: number;
-  // Add more filter properties as needed
 }

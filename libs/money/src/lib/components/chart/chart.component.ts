@@ -14,6 +14,7 @@ import { ChartModule } from 'primeng/chart';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartComponent {
+  // TODO
   // @Input() money: Money[] | undefined;
   @Input() data: any;
 

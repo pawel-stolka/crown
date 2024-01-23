@@ -25,7 +25,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 // }
 
 interface LabelProps {
-  color: string; // Set the color of the labels
+  color: string;
   background_color: string;
   backgroundOpacity: number;
   borderColor: string;
@@ -36,7 +36,6 @@ interface LabelProps {
   align: string;
   offset: number;
   position: string;
-  // other settings
 }
 
 @Component({

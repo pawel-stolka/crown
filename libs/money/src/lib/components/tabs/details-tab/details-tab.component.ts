@@ -79,7 +79,6 @@ export class DetailsTabComponent {
   pageSizeOptions = [5, 10, 25, 100];
   pageSize = this.pageSizeOptions[1];
   COLUMNS = COLUMNS_RENDERED;
-  // WIDTHS = COLUMNS_WIDTHS;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();

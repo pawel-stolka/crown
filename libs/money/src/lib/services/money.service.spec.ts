@@ -45,7 +45,6 @@ describe('MoneyService', () => {
     };
     service = new MoneyService(mockApiService as any, mockToastService as any);
 
-    // Mock groupMoney function if it's a service method
     jest
       .spyOn(service, 'groupMoney')
       .mockImplementation((data: Money[]): MoneyGroup[] => mockMoneyGroups);
@@ -88,14 +87,12 @@ describe('MoneyService', () => {
     const testMoneyData2 = getMockedMoneys();
 
     it('should call fetchAll$ when tokenEmail is truthy', () => {
-      // Mocking fetchAll$ to return a specific observable
       const mockFetchAll$ = jest.fn().mockReturnValue(of(mockedMoneys));
       service.fetchAll$ = mockFetchAll$;
 
       service.initializeDataFetch().subscribe();
 
       expect(mockFetchAll$).toHaveBeenCalled();
-      // You can add more assertions here if needed
     });
 
     it('should return an empty array when tokenEmail is falsy', () => {
@@ -108,34 +105,20 @@ describe('MoneyService', () => {
         expect(result).toEqual([]);
       });
 
-      // If fetchAll$ should not be called in this case, you can also verify that
       expect(service.fetchAll$).not.toHaveBeenCalled();
     });
 
-    // it('should call initializeDataFetch on construction', () => {
-    //   // Spy on the method if it has observable subscriptions or side-effects
-    //   const fetchSpy = spyOn(service, 'initializeDataFetch').and.callThrough();
-
-    //   // Assertions
-    //   expect(fetchSpy).toHaveBeenCalled();
-    //   // Other assertions depending on what initializeDataFetch does
-    // });
-
     xit('should return an empty array if tokenEmail is falsy', () => {
-      // Override mockApi for this specific test
       const mockApiWithFalsyToken = {
         ...mockApiService,
-        tokenEmail$: of(null), // Emitting a falsy value
+        tokenEmail$: of(null),
       };
 
-      // Create a new instance of the service with the overridden mockApi
       const serviceWithFalsyToken = new MoneyService(
         mockApiWithFalsyToken,
         mockToastService as any
       );
 
-      // Test logic here
-      // You can use the approach suitable for your testing strategy (e.g., marbles, direct subscribe, etc.)
       serviceWithFalsyToken.initializeDataFetch();
       let money = serviceWithFalsyToken.money;
       console.log('[serviceWithFalsyToken]', money);
@@ -188,15 +171,15 @@ describe('MoneyService', () => {
     });
 
     it('should return current message$ value', () => {
-      service.updateMessage(mockMessage());
+      const mockMessage = 'mockMessage';
+      service.updateMessage(mockMessage);
 
       const message = service.message;
-      expect(message).toEqual(mockMessage());
+      expect(message).toEqual(mockMessage);
     });
 
     it('should fetch all data', async () => {
       const result = await service.fetchAll$().toPromise();
-      // Expectations for the processed data
       expect(result).toEqual(testMoneyData2);
     });
 
@@ -215,8 +198,6 @@ describe('MoneyService', () => {
 
     it('should emit unique categories', async () => {
       service.updateMoney(testMoneyData);
-      // const allYears = await service.allYears$.pipe(first()).toPromise();
-      // expect(allYears).toEqual([2020, 2021, 2022]);
       const categories = await service
         .getCategories$()
         .pipe(first())
@@ -238,7 +219,6 @@ describe('MoneyService', () => {
     });
 
     describe('create$', () => {
-      // const serviceURL = `${API_URL}/api/money`;
       it('should call api.post and handle success', () => {
         console.log('2<serviceURL>', serviceURL);
         const mockMoney: Partial<Money> = {
@@ -260,13 +240,11 @@ describe('MoneyService', () => {
         //   responseMoney.type
         // );
         // Check if updateMoney was called correctly
-        expect(service.money).toContain(responseMoney); // Assuming 'money' is accessible for testing
+        expect(service.money).toContain(responseMoney);
       });
 
       it('should handle errors on api.post', () => {
-        const mockMoney: Partial<Money> = {
-          /* ... */
-        };
+        const mockMoney: Partial<Money> = {};
         const error = new Error('Test error');
 
         mockApiService.post.mockReturnValue(throwError(error));
@@ -386,14 +364,12 @@ describe('MoneyService', () => {
           price: 199,
         };
 
-        // Setup mock return values
         mockApiService.tokenEmail$.mockReturnValue(
           of({ token: 'mockToken', email: '' })
         );
         mockApiService.get.mockReturnValue(of([mockMoney]));
         mockApiService.delete.mockReturnValue(of(mockMoney));
 
-        // Spy on updateMoney method
         const updateMoneySpy = jest.spyOn(service, 'updateMoney');
 
         service.delete$(mockId).subscribe();
@@ -497,8 +473,4 @@ export function mockYearFilter() {
     year: 2023,
   };
   return filter1;
-}
-
-function mockMessage() {
-  return 'mockMessage';
 }

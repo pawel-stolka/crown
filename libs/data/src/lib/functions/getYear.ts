@@ -9,9 +9,9 @@ export function getYear(dateString: string | Date): number {
     throw new Error('Invalid date format');
   }
 
-  // if (isNaN(date.getTime())) {
-  //   console.log('Invalid date', dateString);
-  // }
+  if (isNaN(date.getTime())) {
+    console.log('Invalid date', dateString);
+  }
 
   return date.getFullYear();
 }
