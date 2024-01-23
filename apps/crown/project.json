@@ -29,8 +29,9 @@
       },
       "configurations": {
         "production": {
-          "sourceMap": true,
-          "namedChunks": true,
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
           "budgets": [
             {
               "type": "initial",
