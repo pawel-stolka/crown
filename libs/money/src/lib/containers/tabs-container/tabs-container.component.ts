@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
 import { Money, MonthsCategories } from '@crown/data';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
-import { ChartComponent } from '../../components/chart/chart.component';
-import { ChartDemoComponent } from '../../components/chart-demo/chart-demo.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { AccordionModule } from 'primeng/accordion';
+import { DoughnutComponent } from '../../components/doughnut/doughnut.component';
 
 @Component({
   selector: 'crown-tabs-container',
@@ -13,10 +13,10 @@ import { MatTabsModule } from '@angular/material/tabs';
   imports: [
     CommonModule,
     MatTabsModule,
+    AccordionModule,
     GroupsTabComponent,
     DetailsTabComponent,
-    ChartComponent,
-    ChartDemoComponent,
+    DoughnutComponent,
   ],
   templateUrl: './tabs-container.component.html',
   styleUrl: './tabs-container.component.scss',

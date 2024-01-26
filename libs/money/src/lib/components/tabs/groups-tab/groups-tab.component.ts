@@ -1,9 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-} from '@angular/core';
-import { CommonModule,  } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PriceByTypePipe, SumByMonthPipe } from '@crown/data';
 import { DoughnutComponent } from '../../doughnut/doughnut.component';
 import { BudgetComponent } from '../../budget/budget.component';
@@ -11,12 +7,18 @@ import { BudgetComponent } from '../../budget/budget.component';
 @Component({
   selector: 'crown-groups-tab',
   standalone: true,
-  imports: [CommonModule, SumByMonthPipe, PriceByTypePipe, DoughnutComponent, BudgetComponent],
+  imports: [
+    CommonModule,
+    SumByMonthPipe,
+    PriceByTypePipe,
+    DoughnutComponent,
+    BudgetComponent,
+  ],
   templateUrl: './groups-tab.component.html',
   styleUrl: './groups-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupsTabComponent {
-  // @Input() data!: any; // TODO: no any
+  // TODO: no any
   @Input() data: any;
 }
