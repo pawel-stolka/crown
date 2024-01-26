@@ -19,11 +19,13 @@ import { TodoService } from '@crown/todo';
 export class TodoContainerComponent {
   isAdmin$ = this.todoService.isAdmin$;
   all$ = this.todoService.todos$.pipe(
-    map((todos) => todos.sort(compareBy('priority')))
+    map((todos) => todos.sort(compareBy('priority'))),
+    map((todos) => todos.sort(compareBy('status')))
   );
 
   todos$ = this.all$.pipe(
-    map((all) => all.filter((todo) => todo.status === Status.TO_DO))
+    map((all) => all.filter((todo) => todo.status === Status.TO_DO)),
+
   );
 
   inProgress$ = this.all$.pipe(
