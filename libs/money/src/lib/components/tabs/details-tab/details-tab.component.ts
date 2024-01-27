@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Money, dialogConfig } from '@crown/data';
+import { Colors, Money, dialogConfig } from '@crown/data';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -48,6 +48,8 @@ export class CustomMatPaginatorIntl extends MatPaginatorIntl {
 }
 
 const COLUMNS_RENDERED = [
+  // TODO: additional users make optional
+  'userId',
   'createdAt',
   'type',
   'price',
@@ -99,14 +101,11 @@ export class DetailsTabComponent {
 
   getClass(text: string) {
     return {
-      border: `3px solid ${getColorFromText(text)}`,
+      border: `2px solid ${getColorFrom(text)}`,
+      'background-color': `${getColorFrom(text, 0.5)}`,
       'border-radius': '10px',
       padding: '5px',
     };
-  }
-
-  getColorFrom(text: string) {
-    return getColorFromText(text);
   }
 
   add() {
@@ -141,10 +140,6 @@ export class DetailsTabComponent {
   }
 }
 
-function getColorFromText(text: string) {
-  const hashValue = hash(text);
-  let res = new TinyColor({ h: hashValue % 360, s: 100, l: 50 }).toHexString();
-  console.log('getColorFromText', res);
-
-  return res;
+function getColorFrom(text: string, alpha = 1) {
+  return new TinyColor({ h: hash(text) % 360, s: 100, l: 50, a: alpha });
 }
