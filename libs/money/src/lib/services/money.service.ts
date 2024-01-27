@@ -81,10 +81,10 @@ export class MoneyService {
   }
 
   constructor(private api: ApiService, private toast: ToastService) {
-    this.initializeDataFetch().subscribe();
+    this.initializeDataFetch$().subscribe();
   }
 
-  initializeDataFetch() {
+  initializeDataFetch$() {
     return this.api.tokenEmail$.pipe(
       switchMap((tokenEmail) => {
         if (tokenEmail) {
@@ -110,12 +110,12 @@ export class MoneyService {
       // TODO: isDeleted toggle for admin?
       // map((money: Money[]) => money.filter((x) => !x.isDeleted)),
       map((money: Money[]) => money.sort(compareBy('period', false))),
-      map((money) => {
-        return money.map((m) => ({
+      map((money) =>
+        money.map((m) => ({
           ...m,
           type: m.type?.toLowerCase(),
-        }));
-      }),
+        }))
+      ),
       // tap(() => this._pendingFetchSubj.next(false)),
       tap((money: Money[]) => this.updateMoney(money))
     );

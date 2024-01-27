@@ -90,7 +90,7 @@ describe('MoneyService', () => {
       const mockFetchAll$ = jest.fn().mockReturnValue(of(mockedMoneys));
       service.fetchAll$ = mockFetchAll$;
 
-      service.initializeDataFetch().subscribe();
+      service.initializeDataFetch$().subscribe();
 
       expect(mockFetchAll$).toHaveBeenCalled();
     });
@@ -101,7 +101,7 @@ describe('MoneyService', () => {
       const mockFetchAll$ = jest.fn().mockReturnValue(of([]));
       service.fetchAll$ = mockFetchAll$;
 
-      service.initializeDataFetch().subscribe((result) => {
+      service.initializeDataFetch$().subscribe((result) => {
         expect(result).toEqual([]);
       });
 
@@ -119,7 +119,7 @@ describe('MoneyService', () => {
         mockToastService as any
       );
 
-      serviceWithFalsyToken.initializeDataFetch();
+      serviceWithFalsyToken.initializeDataFetch$();
       let money = serviceWithFalsyToken.money;
       console.log('[serviceWithFalsyToken]', money);
       expect(serviceWithFalsyToken.money).toBe([]);
