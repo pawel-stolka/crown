@@ -1,3 +1,5 @@
+@import '@colors';
+
 .actions {
   padding: 5px 0;
   display: flex;
@@ -9,4 +11,21 @@
     justify-content: space-between;
     align-items: center;
   }
+}
+
+.date-selectors {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.filters-message {
+  padding: 10px;
+  border: 3px solid $demo-danger2;
+  border-radius: 5px;
+  background-color: $demo-accent1;
+  color: $demo-danger2;
+  font-size: larger;
 }

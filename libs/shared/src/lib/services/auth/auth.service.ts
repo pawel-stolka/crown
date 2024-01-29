@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
 import { BehaviorSubject, Observable, map, tap, take } from 'rxjs';
 
-const TEMP_ADMIN_FLAG = false;
+const TEMP_ADMIN_FLAG = true;
 @Injectable({
   providedIn: 'root',
 })

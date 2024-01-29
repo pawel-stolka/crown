@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { ApiService, AuthService, ToastService } from '@crown/shared';
 import {
   API_URL,
   Status,
@@ -17,7 +18,6 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { ApiService, AuthService, ToastService } from '@crown/shared';
 
 @Injectable({
   providedIn: 'root',
