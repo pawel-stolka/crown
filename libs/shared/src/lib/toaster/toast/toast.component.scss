@@ -1,48 +1,90 @@
+@import '@colors';
+
+$top-margin: 50px;
+$toast-height: 74px;
+$spacing: 10px;
+$max-toasts: 10;
 
 :host {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  // left: 50%;
-  transform: translateX(-50%);
-  z-index: 1050;
-  /* other styles */
-
+  position: absolute;
+  max-width: 390px;
+  height: auto;
+  z-index: 4000;
+  right: 10vw;
 }
+
 .toast {
-  /* Add your styling here */
-  border: 2px solid rgba(0, 128, 0, 0.74);
-  border-radius: 10px;
-  background-color: greenyellow;
-  opacity: 85%;
-  padding: 10px;
+  animation: toastIn 1s;
+  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  height: $toast-height;
+  transform: translateX(0);
+  opacity: 0.95;
+  border: 3px solid $white;
+
+  &.info {
+    background-color: $demo-accent1;
+    color: $white;
+  }
+
+  &.success {
+    background-color: $success;
+    color: $white;
+  }
+
+  &.error {
+    background-color: $warn;
+    color: $white;
+  }
+
+  &.warning {
+    background-color: $warn-light;
+    color: $white;
+  }
+
+  .icon {
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+  }
+
+  .content {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    .title {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .message {
+      font-size: 0.875rem;
+      font-weight: normal;
+      word-break: break-word;
+      padding-right: 5px;
+      overflow: hidden;
+      display: block;
+      max-height: 50px;
+    }
+  }
+
+  .close {
+    display: flex;
+    border-left: 1px solid $white;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    color: $white;
+  }
 }
 
-
-:host:nth-of-type(1) {
-  top: 10px;
+@for $i from 1 through $max-toasts {
+  :host:nth-of-type(#{$i}) {
+    top: $top-margin + ($toast-height + $spacing) * ($i - 1);
+  }
 }
-
-:host:nth-of-type(2) {
-  top: 110px; /* Adjust this value based on your toast height */
-}
-
-:host:nth-of-type(3) {
-  top: 210px; /* Adjust this value based on your toast height */
-}
-
-:host:nth-of-type(4) {
-  top: 310px;
-}
-
-:host:nth-of-type(5) {
-  top: 410px; /* Adjust this value based on your toast height */
-}
-
-:host:nth-of-type(6) {
-  top: 260px; /* Adjust this value based on your toast height */
-}
-
-/* Add more if you expect more than 3 toasts at once */

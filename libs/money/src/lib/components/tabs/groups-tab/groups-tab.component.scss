@@ -1,114 +1,91 @@
 @import '@colors';
+@import '@styles';
 
 :host {
-  // display: flex;
-  // justify-content: center;
-  // border: 2px dotted;
   display: flex;
   flex-direction: column;
-
-  .query-result {
-    display: flex;
-    flex-direction: column;
-    // align-content: center;
-    // justify-content:space-around;
-    justify-items: center;
-    margin: 10px 0;
-  }
+  background-color: $white;
+  padding: $padding;
 }
 
 .table {
-  width: 95%;
   margin-top: 20px;
 
-  // tr > th:first-child
-  .mobile {
-    // border: 5px solid brown;
-    // display: none;
-    visibility: hidden;
+  @for $i from 2 through 12 {
+    tr:nth-child(#{$i}) {
+      @if $i % 2 == 0 {
+        background-color: $row10;
+      } @else {
+        background-color: $row11;
+      }
+    }
   }
 
-  tr > th:not(:first-child) {
-    // tr > th {
+  tr > th:not(:first-child):not(:last-child) {
     border: 1px solid $danger;
     text-align: center;
     background-color: $demo-accent1;
+    background-color: $header-background;
   }
+
+  tr > th:last-child {
+    background: $demo-basic;
+    border: none;
+  }
+
   tr > td {
     text-align: center;
     height: 40px;
     border: 1px dotted $blue;
-    background-color: $demo-primary-0;
   }
 
   tr > td:first-child {
-    padding: 0 10px;
+    width: 80px;
     font-weight: 700;
     text-transform: uppercase;
-  }
-
-  tr > td:last-child {
-    background-color: lightgray;
     border: 3px solid $blue;
-    font-size: 1.2rem;
-  }
-  tr:last-child > td:last-child {
-    border: 3px solid $warn;
-    background-color: $demo-accent2;
   }
 
-  tr:last-child > td:first-child {
-    background-color: $demo-primary-background;
-    border: 1px solid $demo-primary-background;
-    color: $blue;
-    // border: 1px solid red;
+  // SUMMARY COLUMN
+  tr > td:last-child {
+    width: 80px;
+    border: 3px solid $dark-blue;
+    font-size: 1.2rem;
+    border: 5px solid $dark-blue;
   }
 
   // SUMMARY ROW
-  tr:last-child > td:not(:first-child):not(:last-child) {
-    background-color: $demo-accent1;
-    border: 2px solid $black;
+  tr:last-child {
+    color: $white;
+    background-color: $footer-background;
+    border: 3px solid $dark-blue;
   }
 
-  .period {
-    border: 5px dotted;
+  // first cell
+  tr:last-child > td:first-child {
+    border: none;
+    background-color: $white;
+  }
+
+  // last cell
+  tr:last-child > td:last-child {
+    border: 5px solid $dark-blue;
   }
 
   .summary {
     font-size: 1.2rem;
     background-color: lightgray;
-    border: 3px solid dodgerblue;
   }
 }
 
 .last {
   font-size: 1.3rem;
-  // border: 2px solid $black;
-  // background-color: $white;
-  // font-weight: bolder;
 }
 
-/* Responsive styles for mobile */
-@media screen and (max-width: 600px) {
-  .table {
-    /* Adjustments for smaller screens */
-    border: 10px dotted;
-    .mobile {
-      visibility: visible;
-      display: block;
-      border: 5px solid brown;
-    }
-  }
-
-
-  .period,
-  .summary {
-    display: none; /* Example: hide certain columns on mobile */
-
-    &-mobile {
-      display: block;
-    }
-  }
-
-  /* Additional styles for mobile view */
+.trim-text {
+  padding: 2px;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

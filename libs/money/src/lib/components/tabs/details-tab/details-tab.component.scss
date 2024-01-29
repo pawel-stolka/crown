@@ -1,47 +1,49 @@
-.mat-column-createdAt,
-.mat-column-type,
-.mat-column-price,
-.mat-column-fromWho,
-.mat-column-isVat,
-.mat-column-updatedAt,
-.mat-column-action {
-  flex: 1 1 auto; /* Flex-grow, Flex-shrink, Flex-basis */
-  text-align: center;
-}
+@import '@styles';
+@import '@colors';
 
-.mat-column-type {
-  width: 25%;
-}
-
-.mat-column-price {
-  width: 5%;
-}
-
-.mat-column-action {
-  width: 20%;
-}
-
-.mat-mdc-form-field {
-  margin: 10px 0;
-  font-size: 24px;
-  width: 100%;
-}
-
-
-// ??
-::ng-deep .mat-sort-header-container {
-  padding-left: 12px;
-  justify-content: center;
-}
-
-.table .mat-cell {
-  text-align: center;
-  flex: 1 1 auto;
+:host {
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  flex-direction: column;
+  padding: $padding;
+  background-color: $white;
 
-.table .mat-table .mat-header-row {
-  display: flex;
+  .table {
+    border: 1px dotted $border-color;
+  }
+
+  .bold {
+    font-weight: 'bold';
+  }
+
+  .blue {
+    color: $blue;
+  }
+
+  .mat-mdc-header-row {
+    background-color: $header-background;
+    font-weight: bolder;
+  }
+
+  mat-paginator {
+    color: $white;
+    background-color: $footer-background;
+  }
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: $white;
+    border-radius: 5px;
+  }
+
+  ::ng-deep .mat-paginator .mat-select .mat-select-trigger {
+    color: $footer-background;
+    fill: $white;
+  }
+
+  ::ng-deep .mat-mdc-tooltip-trigger {
+    fill: $white;
+  }
+
+  ::ng-deep .mat-mdc-paginator-icon {
+    fill: $white;
+  }
 }

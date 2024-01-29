@@ -16,7 +16,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+} from '@angular/material/core';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -26,11 +31,27 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MAT_MOMENT_DATE_FORMATS,
+} from '@angular/material-moment-adapter';
 
 @NgModule({
   imports: [CommonModule],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'pl' },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ],
   exports: [
     MatInputModule,
     MatIconModule,
@@ -54,11 +75,12 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatRadioModule,
     MatTooltipModule,
     MatGridListModule,
-    // MatLegacyChipsModule,
     ScrollingModule,
     MatPaginatorModule,
     MatSortModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSlideToggleModule,
+    MatExpansionModule,
   ],
 })
 export class MaterialModule {}

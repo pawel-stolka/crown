@@ -1,18 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MoneyService } from '../../../services/money.service';
 import { DeleteDialogComponent } from './delete-money-dialog.component';
+import { Money } from '@crown/data';
 
 describe('DeleteDialogComponent', () => {
   let component: DeleteDialogComponent;
-  let fixture: ComponentFixture<DeleteDialogComponent>;
+  let mockDialogRef: jest.Mocked<MatDialogRef<DeleteDialogComponent>>;
+  let mockMoneyService: jest.Mocked<MoneyService>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DeleteDialogComponent],
-    }).compileComponents();
+  beforeEach(() => {
+    mockDialogRef = { close: jest.fn() } as unknown as jest.Mocked<
+      MatDialogRef<DeleteDialogComponent>
+    >;
+    mockMoneyService = {
+      delete$: jest.fn(),
+    } as unknown as jest.Mocked<MoneyService>;
 
-    fixture = TestBed.createComponent(DeleteDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = new DeleteDialogComponent(
+      mockDialogRef,
+      mockMoneyService,
+      {} as Money
+    );
   });
 
   it('should create', () => {

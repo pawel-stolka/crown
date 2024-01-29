@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TodoService } from '../../../services/todo.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
   AUTH_TOKEN_EMAIL,
@@ -18,6 +17,7 @@ import {
   Todo,
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
+import { TodoService } from '@crown/todo';
 
 @Component({
   selector: 'crown-add-todo',
@@ -56,9 +56,8 @@ export class AddTodoComponent {
   save() {
     const changes: Partial<Todo> = this.form.value;
 
-    this.todoService.create(changes).subscribe(() => {
+    this.todoService.create$(changes).subscribe(() => {
       this.dialogRef.close();
-      // this.toast('Dodałeś rachunek...')
     });
   }
 

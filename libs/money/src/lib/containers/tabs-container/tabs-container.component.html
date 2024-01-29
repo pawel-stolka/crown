@@ -1,76 +1,14 @@
-<div class="actions">
-  <div class="filters">
-    <crown-year-filter
-      [availableYears]="availableYears$ | async"
-      (currentYear)="changeYear($event)"
-    ></crown-year-filter>
-    <crown-data-filter (filter)="applyFilter($event)"></crown-data-filter>
-    <button mat-fab color="primary" (click)="add()">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
-</div>
+<mat-tab-group>
+  <mat-tab label="MIESIĘCZNIE">
+    <crown-groups-tab [data]="data"></crown-groups-tab>
+  </mat-tab>
+  <mat-tab label="SZCZEGÓŁY">
+    <crown-details-tab [money]="money"></crown-details-tab>
+  </mat-tab>
+</mat-tab-group>
 
-<ng-container *ngIf="yearMonthsData$ | async as money; else NO_DATA">
-  <ng-container *ngIf="money.total > 0; then DATA; else EMPTY"> </ng-container>
-</ng-container>
-
-<ng-template #DATA>
-  <div class="index">
-    <button (click)="prevCurrentIndex()">prev</button>
-    <button (click)="nextCurrentIndex()">next</button>
-  </div>
-
-  <ng-container *ngIf="subColumns$ | async as all">
-    <div class="all">
-      <pre *ngFor="let sub of all">{{ sub | json }}</pre>
-    </div>
-  </ng-container>
-  <div class="in-vis">
-    <ng-container *ngIf="visibleColumns2$ | async as visible">
-      <div class="hop">
-        <h2>visible</h2>
-        <pre>{{ visible | json }}</pre>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="invisibleColumns$ | async as invisible">
-      <div class="hop">
-        <h2>invisible</h2>
-        <pre>{{ invisible | json }}</pre>
-      </div>
-    </ng-container>
-  </div>
-  <hr />
-
-  <mat-tab-group (selectedIndexChange)="tabChange($event)">
-    <mat-tab label="{{ GROUPS_LABEL }}">
-      <!-- <crown-groups-tab
-        [data]="yearMonthsData$ | async"
-        [filtered]="!!(filterPhrase$ | async)"
-      ></crown-groups-tab> -->
-      <crown-groups-tab
-        [data]="displayedData$ | async"
-        [filtered]="!!(filterPhrase$ | async)"
-      ></crown-groups-tab>
-    </mat-tab>
-    <mat-tab label="{{ DETAILS_LABEL }}">
-      <crown-details-tab
-        [money]="(yearMoney$ | async) || undefined"
-        [filter]="this.dataSource.filter"
-      ></crown-details-tab>
-    </mat-tab>
-  </mat-tab-group>
-</ng-template>
-
-<ng-template #EMPTY>
-  <div class="empty">
-    <span class="title">Nic.</span>
-  </div>
-</ng-template>
-
-<ng-template #NO_DATA>
-  <div class="no-data">
-    <span class="title">Nic tu jeszcze nie ma</span>
-    <span class="subtitle">Dodaj coś ☝️ (+)</span>
-  </div>
-</ng-template>
+<p-accordion>
+  <p-accordionTab header="wykres">
+    <crown-doughnut [dataset]="data"></crown-doughnut>
+  </p-accordionTab>
+</p-accordion>

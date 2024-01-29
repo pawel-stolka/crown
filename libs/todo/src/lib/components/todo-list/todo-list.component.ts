@@ -6,9 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TodoService } from '../../services/todo.service';
 import { Todo } from '@crown/data';
-import { AddTodoComponent } from '../dialogs/add-todo/add-todo.component';
 import { TodoComponent } from '../todo/todo.component';
 import { MaterialModule } from '@crown/material';
 

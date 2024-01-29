@@ -21,16 +21,15 @@ import { PRIORITIES, Priority, SHOW_PRIORITY } from '@crown/data';
   styleUrl: './todo-priority.component.scss',
 })
 export class TodoPriorityComponent {
-  @Input() priority!: Priority;// | undefined;// Priority.UNDEFINED;
+  @Input() priority!: Priority;
   @Output() selectionChange = new EventEmitter();
 
+  priorities = PRIORITIES;
+  showPriority = SHOW_PRIORITY(this.priority);
+
   onSelectionChange(event: any) {
-    console.log('[onSelectionChange]', event.value);
-
-    this.selectionChange.emit(event.value)
+    this.selectionChange.emit(event.value);
   }
-  priorities = PRIORITIES
-  showPriorities = (priority: Priority) => SHOW_PRIORITY(priority);
 
-  showPriority = SHOW_PRIORITY(this.priority)
+  showPriorities = (priority: Priority) => SHOW_PRIORITY(priority);
 }

@@ -5,25 +5,20 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  // flex-wrap: wrap;
 }
 .message {
   margin: 5px;
-  // border: 2px solid dodgerblue;
   padding: 10px 0;
-  //   border-radius: 4px;
-  //   padding: 5px;
 }
 
 .inline {
   display: flex;
   flex-wrap: wrap;
-  // flex-direction: row;
   gap: 5px;
 }
 
 .chip {
-  border: 2px solid dodgerblue;
+  border: 2px solid $blue;
   border-radius: 20px;
   padding: 5px;
 }

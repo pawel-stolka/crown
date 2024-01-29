@@ -1,8 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { MaterialModule } from '@crown/material';
-import { EMPTY_STRING, lowIt } from '@crown/data';
+import { EMPTY_STRING } from '@crown/data';
 
 @Component({
   selector: 'crown-data-filter',
@@ -10,25 +15,40 @@ import { EMPTY_STRING, lowIt } from '@crown/data';
   imports: [CommonModule, MaterialModule],
   templateUrl: './data-filter.component.html',
   styleUrl: './data-filter.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataFilterComponent {
+  expanded = false;
+  clearClicked = false;
+  @Output() filter = new EventEmitter();
+
   private _filterSubj = new BehaviorSubject<string>(EMPTY_STRING);
   filterValue$ = this._filterSubj.asObservable();
 
-  @Output() filter = new EventEmitter();
+  hasContent: boolean = false;
+
   filterValue: any;
 
-  applyFilter({ target }: Event) {
-    const input = target as HTMLInputElement;
-    const filterValue = input ? lowIt(input.value) : EMPTY_STRING;
-
-    this.filterValue = lowIt(filterValue);
+  applyFilter(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const filterValue = inputElement
+      ? inputElement.value.trim().toLowerCase()
+      : EMPTY_STRING;
+    this.filterValue = filterValue.trim().toLowerCase();
     this._filterSubj.next(filterValue);
+
     this.filter.emit(filterValue);
+
+    this.hasContent = filterValue !== EMPTY_STRING;
   }
-  clearFilter() {
+
+  clearSearch(event: MouseEvent) {
+    event.stopPropagation();
+    this.clearClicked = true;
+
     this.filterValue = EMPTY_STRING;
-    this.filter.emit(this.filterValue);
     this._filterSubj.next(this.filterValue);
+    this.filter.emit(this.filterValue);
+    this.hasContent = this.filterValue !== EMPTY_STRING;
   }
 }

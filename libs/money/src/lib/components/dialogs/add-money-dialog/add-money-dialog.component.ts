@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -21,8 +20,7 @@ import {
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith } from 'rxjs';
-import { ToastService } from '@crown/ui';
-import { MoneyService } from '@crown/money';
+import { MoneyService } from '../../../services/money.service';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -37,14 +35,16 @@ import { MoneyService } from '@crown/money';
   templateUrl: './add-money-dialog.component.html',
   styleUrl: './add-money-dialog.component.scss',
 })
-export class AddDialogComponent {
+export class AddDialogComponent implements OnInit {
   title = 'Dodaj rachunek';
-  form: FormGroup;
+  form!: FormGroup;
 
   private getCategories$ = this.moneyService.getCategories$();
-  categoriesFiltered$!: Observable<string[]>;
+  filteredCategories$: Observable<string[]> | undefined;
 
-  typeControl = new FormControl<string>(EMPTY_STRING);
+  get date() {
+    return this.form.get('createdAt');
+  }
 
   get type() {
     return this.form.get('type');
@@ -61,9 +61,10 @@ export class AddDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
-    private moneyService: MoneyService,
-    private toastService: ToastService
-  ) {
+    private moneyService: MoneyService
+  ) {}
+
+  ngOnInit() {
     const currentUser = localStorage.getItem(AUTH_TOKEN_EMAIL) ?? null;
     const email: string | null = currentUser
       ? JSON.parse(currentUser).email
@@ -90,33 +91,28 @@ export class AddDialogComponent {
       isVat: [false],
       isDeleted: [false],
       fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
-      createdAt: [new Date(), [Validators.required]],
+      createdAt: [null, [Validators.required]],
     });
-  }
 
-  ngOnInit() {
-    this.categoriesFiltered$ = combineLatest([
+    this.filteredCategories$ = combineLatest([
       this.getCategories$,
-      this.typeControl.valueChanges.pipe(startWith(EMPTY_STRING)),
+      this.type
+        ? this.type.valueChanges.pipe(startWith(EMPTY_STRING))
+        : EMPTY_STRING,
     ]).pipe(
       map(([categories, input]) =>
-        categories.filter((c) =>
-          c.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
+        categories.filter((category) =>
+          category.toLowerCase().includes((input || EMPTY_STRING).toLowerCase())
         )
       )
     );
   }
 
-  toast(message = 'Coś udało się zrobić, pytanie co??? :D') {
-    this.toastService.showToast('Sukces', message, 'icon-class', 5000);
-  }
-
   save() {
     const changes: Partial<Money> = this.form.value;
 
-    this.moneyService.create(changes).subscribe(() => {
+    this.moneyService.create$(changes).subscribe(() => {
       this.dialogRef.close();
-      // TODO(toast): this.toast('Dodałeś rachunek...');
     });
   }
 

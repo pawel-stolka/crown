@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MoneyService } from '../../../services/money.service';
 import { MaterialModule } from '@crown/material';
 import { Money } from '@crown/data';
+import { MoneyService } from '../../../services/money.service';
 
 @Component({
   selector: 'crown-delete-dialog',
@@ -24,12 +24,12 @@ export class DeleteDialogComponent {
     this.data = data;
   }
 
-  close() {
+  delete() {
+    this.moneyService.delete$(this.data?.id).subscribe();
     this.dialogRef.close();
   }
 
-  delete() {
-    this.moneyService.delete(this.data?.id).subscribe();
+  close() {
     this.dialogRef.close();
   }
 }

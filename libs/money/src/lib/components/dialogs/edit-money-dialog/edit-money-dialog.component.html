@@ -20,10 +20,12 @@
     <mat-datepicker #myDatepicker></mat-datepicker>
   </mat-form-field>
 
+  <!-- {{ price | json }} -->
   <span class="inline">
     <mat-form-field appearance="outline">
       <mat-label>cena</mat-label>
       <input matInput formControlName="price" dotNumber />
+      
       @if (price?.hasError('required')) {
       <mat-error> Podaj cenę! </mat-error>
       } @if (price?.hasError('min')) {
@@ -69,7 +71,7 @@
     }
   </mat-form-field>
 
-  <div class="divider">opcjonalnie</div>
+  <div class="divider">dla chętnych</div>
 
   <mat-form-field appearance="outline">
     <mat-label>info</mat-label>
@@ -77,26 +79,12 @@
       matInput
       formControlName="fromWho"
       placeholder="np. sklep, adres, itp."
+      lowercase
     />
     @if (fromWho?.hasError('maxlength')) {
     <mat-error> Za długo!</mat-error>
     }
   </mat-form-field>
-
-  <!-- <mat-form-field appearance="outline">
-    <mat-label>Cena</mat-label>
-    <input matInput formControlName="price" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Sklep</mat-label>
-    <input matInput formControlName="fromWho" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Kategoria</mat-label>
-    <input matInput formControlName="type" />
-  </mat-form-field> -->
 </mat-dialog-content>
 
 <mat-dialog-actions class="actions">

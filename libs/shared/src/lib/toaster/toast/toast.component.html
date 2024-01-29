@@ -1,9 +1,25 @@
-<div class="toast" [@fadeInOut] [style.top.px]="position">
-  <!-- <i class="{{ icon }}"></i> -->
-  <mat-icon>{{icon}}</mat-icon>
-  <!-- <mat-icon>warning</mat-icon>
-  <strong>{{ title }}</strong>
-  <mat-icon>priority_high</mat-icon>
-  <mat-icon>check</mat-icon> -->
-  <div>{{ message }}</div>
+<div class="toast" [ngClass]="type" [@fadeInOut] [style.top.px]="position">
+  <div class="icon">
+    <mat-icon>{{ iconName }}</mat-icon>
+  </div>
+  <div class="content">
+    <div class="title">{{ title }}</div>
+    <div class="message" *ngIf="message">{{ message }}</div>
+  </div>
+  <div class="close">
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 </div>
+
+<!-- <div class="toast" [ngClass]="type" (animationend)="animationDone($event)">
+  <div class="icon"><mat-icon>{{ iconName }}</mat-icon></div>
+  <div class="content">
+    <div class="title">{{ title }}</div>
+    <div class="message" *ngIf="message"> {{ message }}</div>
+  </div>
+  <div class="close">
+    <button mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
+  </div>
+</div> -->

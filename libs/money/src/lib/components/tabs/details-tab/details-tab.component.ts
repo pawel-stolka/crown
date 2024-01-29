@@ -1,23 +1,51 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  Inject,
+  Injectable,
   Input,
-  OnChanges,
+  LOCALE_ID,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatPaginator } from '@angular/material/paginator';
+import { Money, dialogConfig } from '@crown/data';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Money, dialogConfig, NoYearPipe, EMPTY_STRING } from '@crown/data';
-import { MaterialModule } from '@crown/material';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { filter } from 'rxjs';
 import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
-import { filter } from 'rxjs';
+import { MaterialModule } from '@crown/material';
+import hash from 'string-hash';
+import { TinyColor } from '@ctrl/tinycolor';
+
+@Injectable()
+export class CustomMatPaginatorIntl extends MatPaginatorIntl {
+  constructor() {
+    super();
+    this.firstPageLabel = 'Pierwsza strona';
+    this.lastPageLabel = 'Ostatnia strona';
+    this.itemsPerPageLabel = 'Pozycji na stronie';
+  }
+  override getRangeLabel = (page: number, pageSize: number, length: number) => {
+    if (length === 0 || pageSize === 0) {
+      return `0 z ${length}`;
+    }
+
+    length = Math.max(length, 0);
+
+    const startIndex = page * pageSize;
+    const endIndex =
+      startIndex < length
+        ? Math.min(startIndex + pageSize, length)
+        : startIndex + pageSize;
+
+    return `${startIndex + 1} - ${endIndex} z ${length} wpisów`;
+  };
+}
 
 const COLUMNS_RENDERED = [
   'createdAt',
@@ -29,37 +57,56 @@ const COLUMNS_RENDERED = [
   'action',
 ];
 
+const COLUMNS_WIDTHS = {
+  narrow: '5%',
+  wide: '15%',
+};
+
 @Component({
   selector: 'crown-details-tab',
   standalone: true,
-  imports: [CommonModule, MaterialModule, NoYearPipe],
+  imports: [CommonModule, MaterialModule],
+  providers: [{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }],
   templateUrl: './details-tab.component.html',
   styleUrl: './details-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailsTabComponent implements AfterViewInit, OnChanges {
-  @Input() money!: Money[] | undefined;
-  @Input() filter = EMPTY_STRING;
+export class DetailsTabComponent {
+  @Input() money: Money[] | undefined;
 
   dataSource!: MatTableDataSource<Money>;
 
-  pageSizeOptions = [5, 10, 25];
-  pageSize = this.pageSizeOptions[0];
+  pageSizeOptions = [5, 10, 25, 100];
+  pageSize = this.pageSizeOptions[1];
   COLUMNS = COLUMNS_RENDERED;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    @Inject(LOCALE_ID) public locale: string
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource = new MatTableDataSource(this.money);
-    this.dataSource.filter = this.filter;
     this.updateSortPag();
   }
 
   ngAfterViewInit(): void {
     this.updateSortPag();
+  }
+
+  getClass(text: string) {
+    return {
+      border: `3px solid ${getColorFromText(text)}`,
+      'border-radius': '10px',
+      padding: '5px',
+    };
+  }
+
+  getColorFrom(text: string) {
+    return getColorFromText(text);
   }
 
   add() {
@@ -92,4 +139,12 @@ export class DetailsTabComponent implements AfterViewInit, OnChanges {
         // this.toast();
       });
   }
+}
+
+function getColorFromText(text: string) {
+  const hashValue = hash(text);
+  let res = new TinyColor({ h: hashValue % 360, s: 100, l: 50 }).toHexString();
+  console.log('getColorFromText', res);
+
+  return res;
 }

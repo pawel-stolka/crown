@@ -13,6 +13,7 @@ import {
   Priority,
   SHOW_PRIORITY,
   EMPTY_STRING,
+  Icon,
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { TodoPriorityComponent } from '../todo-priority/todo-priority.component';
@@ -34,40 +35,20 @@ export class TodoComponent {
 
   Status = Status;
 
-  getIconName(status: string): string {
-    switch (status) {
-      case Status.DONE:
-        return 'done_outline';
-      case Status.IN_PROGRESS:
-        return 'hourglass_empty';
-      case Status.TO_DO:
-        return 'priority_high'; // Replace 'todo_icon' with the actual icon name for 'TODO'
-      default:
-        return 'priority_high';
-    }
-  }
-
-  edit() {
-    // console.log('edit', this.todo);
-    this.editting.emit(this.todo);
-  }
-
   showPriority = (priority: Priority | undefined) => SHOW_PRIORITY(priority);
 
   getPriorityIcon(priority: Priority | undefined): string {
     switch (priority) {
       case Priority.URGENT:
-        return 'error';
-        return 'priority_high';
+        return Icon.ERROR_HIGH;
       case Priority.HIGH:
-        return 'error_outline';
+        return Icon.ERROR;
       case Priority.MEDIUM:
-        return 'warning';
-        return 'error_outline';
+        return Icon.WARNING;
       case Priority.LOW:
-        return 'bug_report';
+        return Icon.LOW;
       case Priority.WHO_CARES:
-        return 'info';
+        return Icon.INFO;
       default:
         return EMPTY_STRING;
     }
@@ -76,28 +57,26 @@ export class TodoComponent {
   getClass(priority: Priority | undefined) {
     switch (priority) {
       case Priority.URGENT:
+        return 'priority-critical t-center';
       case Priority.HIGH:
-        return 'priority-high';
+        return 'priority-high t-center';
 
       case Priority.MEDIUM:
-        return 'priority-medium';
+        return 'priority-medium t-center';
 
       case Priority.LOW:
-        return 'priority-low';
+        return 'priority-low t-center';
       case Priority.WHO_CARES:
-        return 'priority-very-low';
+        return 'priority-very-low t-center';
 
       default:
-        return 'priority-unknown';
-        return 'priority-minor';
+        return 'priority-unknown t-center';
     }
   }
 
-  // onPriorityChange(priority: number) {
-  //   const { id } = this.todo;
-  //   console.log('[this.onPriorityChange]', priority);
-  //   this.priority.emit({ id, priority });
-  // }
+  edit() {
+    this.editting.emit(this.todo);
+  }
 
   upgrade() {
     const { id } = this.todo;

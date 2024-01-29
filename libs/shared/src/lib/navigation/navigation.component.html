@@ -1,43 +1,39 @@
-<!-- <div class="title"> -->
-<button
-  class="title"
-  mat-button
-  routerLink=""
-  routerLinkActive="active-link"
-  [routerLinkActiveOptions]="{ exact: true }"
-  (click)="openRoutes()"
->
-  CROWN
-</button>
-<!-- </div> -->
-
-<div class="routes" *ngIf="isLoggedIn$ | async">
+<div class="routes">
   <button
+    *ngIf="isLoggedIn$ | async"
     mat-stroked-button
     routerLink="money"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="openRoutes()"
+    (click)="toggleNav()"
   >
     Wydatki
   </button>
-  <div class="divider">o</div>
-  <!-- <button mat-mini-fab color="primary" (click)="toggleTodos()"> -->
-  <button mat-stroked-button color="primary" (click)="toggleTodos()">
-    <mat-icon>info</mat-icon>błędy
-  </button>
-</div>
-<div class="admin">
   <button
     mat-stroked-button
+    routerLink="sandbox"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="toggleNav()"
+  >
+    sandbox
+  </button>
+</div>
+<div class="info">
+  <button mat-flat-button color="primary" (click)="toggleTodos()">
+    <mat-icon>info</mat-icon>błędy
+  </button>
+
+  <button
+    *ngIf="isLoggedIn$ | async"
+    mat-flat-button
     routerLink="admin"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
-    (click)="openRoutes()"
+    (click)="toggleNav()"
+    color="warn"
   >
-    Admin
+    admin
   </button>
-  <div class="info">
-    <crown-app-info></crown-app-info>
-  </div>
+  <crown-app-info></crown-app-info>
 </div>

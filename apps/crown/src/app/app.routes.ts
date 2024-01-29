@@ -8,6 +8,11 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     component: HomeComponent,
   },
+  // {
+  //   path: 'auth',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: () => import('@crown/auth').then((m) => m.AuthModule),
+  // },
   {
     path: 'auth/login',
     loadComponent: () => import('@crown/auth').then((m) => m.LoginComponent),
@@ -19,13 +24,18 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'todo',
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('@crown/todo').then((m) => m.TodoContainerComponent),
   },
+  // {
+  //   path: 'admin',
+  //   canActivate: [AdminGuard],
+  //   loadChildren: () => import('@crown/admin').then((m) => m.AdminModule),
+  // },
   {
-    path: 'admin',
-    canActivate: [AdminGuard],
-    loadChildren: () => import('@crown/admin').then((m) => m.AdminModule),
+    path: 'sandbox',
+    loadComponent: () => import('@crown/sandbox').then((m) => m.SandboxComponent),
   },
   {
     path: 'not-authorized',

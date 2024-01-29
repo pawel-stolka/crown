@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditDialogComponent } from './edit-dialog.component';
+import { EditMoneyDialog } from './edit-money-dialog.component';
 
-describe('EditDialogComponent', () => {
-  let component: EditDialogComponent;
-  let fixture: ComponentFixture<EditDialogComponent>;
+describe('EditMoneyDialog', () => {
+  let component: EditMoneyDialog;
+  let fixture: ComponentFixture<EditMoneyDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditDialogComponent],
+      imports: [EditMoneyDialog],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EditDialogComponent);
+    fixture = TestBed.createComponent(EditMoneyDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

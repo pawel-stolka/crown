@@ -10,6 +10,7 @@ import { MonthsCategories } from '@crown/data';
   styleUrl: './search-results.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+// TODO: check if can be used
 export class SearchResultsComponent {
   @Input() results: MonthsCategories | null | any;
 }

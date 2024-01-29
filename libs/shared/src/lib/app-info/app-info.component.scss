@@ -1,0 +1,21 @@
+@import '@colors';
+
+:host {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px;
+  gap: 5px;
+
+  #v {
+    color: $blue;
+    border: 1px solid $demo-accent1;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  #build {
+    font-size: smaller;
+    color: $grey;
+  }
+}

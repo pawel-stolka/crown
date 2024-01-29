@@ -18,8 +18,8 @@ import {
   Todo,
 } from '@crown/data';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TodoService } from '../../../services/todo.service';
 import { MaterialModule } from '@crown/material';
+import { TodoService } from '@crown/todo';
 
 @Component({
   selector: 'crown-edit-todo',
@@ -58,7 +58,7 @@ export class EditTodoComponent {
       title: [title, Validators.required],
       description: [description, Validators.required],
       status: [status ?? EMPTY_STRING, Validators.required],
-      priority: [priority ?? 0], //, Validators.min(0), Validators.max(5)],
+      priority: [priority ?? 0],
       createdAt: [createdAt],
     });
   }
@@ -69,7 +69,7 @@ export class EditTodoComponent {
   save() {
     const changes: Partial<Todo> = this.form.value;
 
-    this.todoService.edit(this.todo.id, changes).subscribe((res) => {
+    this.todoService.edit$(this.todo.id, changes).subscribe((res) => {
       this.dialogRef.close(res);
     });
   }

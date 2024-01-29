@@ -1,24 +1,18 @@
-@import '@colors';
-
 :host {
   width: 100%;
-  margin: 0 20px 0;
-
+  margin: 10px 0;
+  height: 56px;
   mat-icon {
     cursor: pointer;
   }
+}
 
-  mat-form-field {
-    width: 80px; /* Set your minimum width */
-    height: 56px;
-    background: transparent;
-    transition: border 0.3s ease, width 0.3s ease, background 0.3s ease;
-    border-radius: 4px;
-  }
+mat-form-field {
+  width: 90px;
+  width: 50%;
+}
 
-  .active-field {
-    width: 100%;
-    font-size: larger;
-    background: $white;
-  }
+.activeSearch {
+  background-color: white;
+  height: 56px;
 }

@@ -3,39 +3,36 @@
 :host {
   display: flex;
   flex-direction: column;
-  // border: 5px dotted magenta;
   height: 100vh;
-  // background-color: $demo-primary-background;
   align-content: space-between;
-  // align-items: center;
+  background-color: $demo-basic;
 }
 
 .title {
-  // border: 5px dotted;
   display: flex;
-  justify-content:space-around;
-  // align-items: center;
+  justify-content: space-around;
+}
+
+.active-link {
+  border: 3px solid $blue;
 }
 
 .routes {
-  border: 3px dotted dodgerblue;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  margin: 10px 0;
+  height: 100vh;
 
-  .active-link {
-    text-underline-position: under;
-    background: rgba(255, 255, 255, 0.2);
-  }
+  padding: 100px 0;
+  gap: 20px;
 }
 
-.admin {
-  border: 3px dotted dodgerblue;
+.info {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: space-around;
-  height: 10%;
 
+  button {
+    margin: 10px 0;
+  }
 }

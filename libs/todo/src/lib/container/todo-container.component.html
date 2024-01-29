@@ -1,57 +1,75 @@
 <div class="top">
   <div class="title">znane błędy</div>
-  <div class="actions">
-    <ng-container *ngIf="(accessRole$ | async) === 'admin'">
+  <ng-container *ngIf="isAdmin$ | async; then isAdmin; else reader">
+  </ng-container>
+
+  <ng-template #isAdmin>
+    <div class="actions">
       <button mat-fab color="primary" (click)="add()">
         <mat-icon>add</mat-icon>
       </button>
-    </ng-container>
-  </div>
+    </div>
 
-  <div class="divider">todo</div>
+    <div class="divider">todo</div>
 
-  <!-- TODO: refactor: template -->
-  <ng-container *ngIf="todos$ | async as todos">
-    <!-- <crown-todo-list
+    <crown-todo-list
+      *ngIf="todos$ | async as todos"
       [todos]="todos"
-      (edit)="editTodo($event)"
+      (edit)="edit($event)"
       (update)="updateTodo($event)"
       (priority)="updatePriority($event)"
-    ></crown-todo-list> -->
-    <crown-todo-list [todos]="todos"></crown-todo-list>
-  </ng-container>
+    ></crown-todo-list>
 
-  <div class="divider">w trakcie</div>
+    <div class="divider">w trakcie</div>
 
-  <ng-container *ngIf="inProgress$ | async as inProgress">
-    <!-- <crown-todo-list
+    <crown-todo-list
+      *ngIf="inProgress$ | async as inProgress"
       [todos]="inProgress"
-      (edit)="editTodo($event)"
+      (edit)="edit($event)"
       (update)="updateTodo($event)"
-    ></crown-todo-list> -->
-    <crown-todo-list [todos]="inProgress"></crown-todo-list>
-  </ng-container>
+      (priority)="updatePriority($event)"
+    ></crown-todo-list>
 
-  <div class="divider">gotowe</div>
+    <div class="divider">gotowe</div>
 
-  <ng-container *ngIf="done$ | async as done">
-    <!-- <crown-todo-list
+    <crown-todo-list
+      *ngIf="done$ | async as done"
       [todos]="done"
-      (edit)="editTodo($event)"
+      (edit)="edit($event)"
       (update)="updateTodo($event)"
-    ></crown-todo-list> -->
-    <crown-todo-list [todos]="done"></crown-todo-list>
-  </ng-container>
+      (priority)="updatePriority($event)"
+    ></crown-todo-list>
+  </ng-template>
+
+  <!-- ------------- -->
+  <ng-template #reader>
+    <div class="title">tylko od odczytu</div>
+
+    <div class="divider">todo</div>
+    <crown-todo-list
+      *ngIf="todos$ | async as todos"
+      [todos]="todos"
+    ></crown-todo-list>
+
+    <div class="divider">w trakcie</div>
+
+    <crown-todo-list
+      *ngIf="inProgress$ | async as inProgress"
+      [todos]="inProgress"
+    ></crown-todo-list>
+
+    <div class="divider">gotowe</div>
+
+    <crown-todo-list
+      *ngIf="done$ | async as done"
+      [todos]="done"
+    ></crown-todo-list>
+  </ng-template>
 </div>
 
 <div class="bottom">
   <ng-container *ngIf="closed$ | async as closed">
     <div class="divider">zamknięte</div>
-    <!-- <crown-todo-list
-      [closed]="true"
-      [todos]="closed"
-      (update)="updateTodo($event)"
-    ></crown-todo-list> -->
     <crown-todo-list [closed]="true" [todos]="closed"></crown-todo-list>
   </ng-container>
 </div>

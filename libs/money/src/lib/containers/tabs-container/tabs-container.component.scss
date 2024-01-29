@@ -1,73 +1,59 @@
-.index {
-  border: 3px dotted;
-}
-.all {
-  border: 5px dotted magenta;
-  display: flex;
-  // flex-direction: row;
-  justify-content: space-between;
-  display: none;
-}
+@import '@colors';
+@import '@styles';
 
-.in-vis {
-  border: 5px dotted dodgerblue;
-  display: flex;
-  justify-content: space-between;
-  gap: 5px;
-  width: 100%;
-  display: none;
+// --------------- OVERRIDE MATERIAL ---------------
+$inactive-tab-font-size: 12px;
 
-  div {
-    width: 100%;
-    background-color: palegreen;
+:host {
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
+    font-size: $inactive-tab-font-size;
+    border-bottom: $border-width solid $border-color;
+  }
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-1 {
+    font-size: $inactive-tab-font-size;
+    border-bottom: $border-width solid $border-color;
+  }
 
-    h2 {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+  ::ng-deep .mat-mdc-tab-group-stretch-tabs {
+    border-bottom: $border-width solid $border-color;
+  }
+
+  ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    border-left: $border-width solid $border-color;
+    border-right: $border-width solid $border-color;
+  }
+
+  ::ng-deep .mdc-tab--active {
+    background-color: $active-tab;
+    border-top: $border-width solid $border-color;
+    border-left: $border-width solid $border-color;
+    border-right: $border-width solid $border-color;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    border-bottom: none;
+
+    color: $dark-blue;
+    font-size: larger;
+  }
+
+  ::ng-deep .mdc-tab:not(.mdc-tab--active) {
+    background-color: $inactive-tab;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+
+  ::ng-deep
+    .mat-mdc-focus-indicator:not(.mdc-tab-indicator--active)#mat-tab-label-0-0 {
+    border-bottom: $border-width solid $border-color;
+  }
+
+  ::ng-deep .mdc-tab .mdc-tab-indicator {
+    display: none;
   }
 }
 
-.actions {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 15px 0;
-
-  .filters {
-    // border: 5px dotted;
-    display: flex;
-    width: 100%;
-    height: 56px;
-    justify-content: space-between;
-    gap: 10px;
-    align-content: center;
-    margin: 10px 50px;
-    font-size: 14px;
-
-    // .data-filter {
-    //   width: 30%;
-    // }
-  }
-}
-
-.mat-mdc-form-field {
+p-accordion {
   margin: 10px;
-  font-size: 14px;
-  width: 100%;
-}
-
-.no-data {
-  width: 100%;
-  height: 50vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .title {
-    font-size: large;
-    margin: 20px 0;
-  }
 }

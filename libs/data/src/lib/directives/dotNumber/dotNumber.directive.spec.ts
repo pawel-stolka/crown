@@ -2,9 +2,10 @@ import { ElementRef } from '@angular/core';
 import { DotNumberDirective } from './dotNumber.directive';
 
 describe('DotNumberDirective', () => {
+  let ref: ElementRef = {} as ElementRef;
+
   it('should create an instance', () => {
-    let el: ElementRef = {} as ElementRef;
-    const directive = new DotNumberDirective(el);
+    const directive = new DotNumberDirective(ref);
     expect(directive).toBeTruthy();
   });
 });
