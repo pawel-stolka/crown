@@ -1,0 +1,74 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  engineType    = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Money {
+  id        String    @id @default(uuid())
+  userId    String
+  type      String?
+  price     Decimal   @db.Decimal(9, 2)
+  fromWho   String?
+  details   String?
+  extra     String?
+  isDeleted Boolean?
+  isVat     Boolean?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model User {
+  id        String        @id @default(uuid())
+  email     String        @unique
+  password  String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  settings  UserSettings?
+  budgets   Json          @default("[]") // Default value set as empty JSON array
+}
+
+model UserSettings {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  notifications Boolean?
+  // Add your settings fields here
+  otherUserIds  Json     @default("[]")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Todo {
+  id          String   @id @default(uuid())
+  userId      String?
+  title       String
+  description String?
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  changedBy   String?
+  priority    Int?
+  isDeleted   Boolean?
+}
+
+model UserList {
+  id     String @id @default(uuid())
+  userId String // assuming you have a User model, you can also set up a relation here
+  name   String
+  items  Item[] // Relation to items
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String
+  userListId  String // Foreign key to UserList
+  userList    UserList @relation(fields: [userListId], references: [id]) // Relation back to UserList
+}

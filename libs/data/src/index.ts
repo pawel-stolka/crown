@@ -10,6 +10,7 @@ export * from './lib/interfaces/MonthsCategories';
 export * from './lib/interfaces/Method';
 export * from './lib/interfaces/NotificationMessage';
 
+export * from './lib/configs/URLs';
 export * from './lib/configs/constants';
 export * from './lib/configs/Colors';
 export * from './lib/configs/dialogConfig';

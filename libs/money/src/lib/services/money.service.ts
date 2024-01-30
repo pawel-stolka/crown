@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ApiService, ToastService } from '@crown/shared';
 import {
   API_URL,
@@ -76,15 +76,23 @@ export class MoneyService {
     return this._filterSubj.value;
   }
 
+  get currentYear() {
+    return this._currentYearSubj.value;
+  }
+
   get message() {
     return this._messageSubj.value;
   }
 
   constructor(private api: ApiService, private toast: ToastService) {
-    this.initializeDataFetch().subscribe();
+    this.initializeDataFetch$().subscribe();
   }
 
-  initializeDataFetch() {
+  get yearFilterOn() {
+    return !!this.filters.year;
+  }
+
+  initializeDataFetch$() {
     return this.api.tokenEmail$.pipe(
       switchMap((tokenEmail) => {
         if (tokenEmail) {
@@ -110,12 +118,12 @@ export class MoneyService {
       // TODO: isDeleted toggle for admin?
       // map((money: Money[]) => money.filter((x) => !x.isDeleted)),
       map((money: Money[]) => money.sort(compareBy('period', false))),
-      map((money) => {
-        return money.map((m) => ({
+      map((money) =>
+        money.map((m) => ({
           ...m,
           type: m.type?.toLowerCase(),
-        }));
-      }),
+        }))
+      ),
       // tap(() => this._pendingFetchSubj.next(false)),
       tap((money: Money[]) => this.updateMoney(money))
     );
@@ -225,13 +233,87 @@ export class MoneyService {
 
   filterMoney(data: Money[], filter: MoneyFilter): Money[] {
     return data.filter((item) => {
+      const itemDate = new Date(item.createdAt);
+      let afterStartDate = true;
+      let beforeEndDate = true;
+
+      const startDateWithTime = filter.startDate
+        ? new Date(filter.startDate)
+        : new Date();
+      startDateWithTime.setHours(12, 0, 0, 0);
+
+      afterStartDate = !filter.startDate || itemDate >= startDateWithTime;
+
+      const endDateWithTime = filter.endDate
+        ? new Date(filter.endDate)
+        : new Date();
+      endDateWithTime.setHours(23, 59, 59, 999);
+      beforeEndDate = itemDate <= endDateWithTime;
+
+      const yearMatch = !filter.year || itemDate.getFullYear() === filter.year;
+
+      return afterStartDate && beforeEndDate && yearMatch;
+    });
+  }
+
+  __filterMoney(data: Money[], filter: MoneyFilter): Money[] {
+    console.log('%c[this.filterMoney]', Colors.RED, filter);
+
+    return data.filter((item) => {
+      const itemDate = new Date(item.createdAt);
+
+      const afterStartDate =
+        !filter.startDate || itemDate >= new Date(filter.startDate);
+
+      let beforeEndDate = true;
+      if (filter.endDate) {
+        console.log('%c[filter.endDate]', Colors.MAG, filter.endDate);
+
+        if (filter.endDate instanceof Date) {
+          const endDateWithTime = new Date(filter.endDate);
+          endDateWithTime.setHours(23, 59, 59, 999);
+          beforeEndDate = itemDate <= endDateWithTime;
+        } else {
+          console.log('filter.endDate is not a Date object', filter.endDate);
+          try {
+            const endDateWithTime = new Date(filter.endDate);
+            endDateWithTime.setHours(23, 59, 59, 999);
+            beforeEndDate = itemDate <= endDateWithTime;
+            console.log(
+              '%c[endDateWithTime]',
+              Colors.BLACK,
+              endDateWithTime,
+              beforeEndDate
+            );
+          } catch (error) {
+            console.log(error);
+          }
+          beforeEndDate = false;
+        }
+      }
+
+      const typeMatch = !filter.type || item.type?.includes(filter.type);
+
+      const yearMatch = !filter.year || itemDate.getFullYear() === filter.year;
+
+      return afterStartDate && beforeEndDate && typeMatch && yearMatch;
+    });
+  }
+
+  _filterMoney(data: Money[], filter: MoneyFilter): Money[] {
+    console.log('%c[this.filterMoney]', Colors.RED, filter);
+    return data.filter((item) => {
+      // console.log('[filterMoney]', item);
+
       const afterStartDate =
         !filter.startDate || new Date(item.createdAt) >= filter.startDate;
+
+      console.log('B4 endDate', !!filter.endDate);
 
       const beforeEndDate =
         !filter.endDate ||
         new Date(item.createdAt) <=
-          new Date(filter.endDate.setHours(23, 59, 59, 999));
+          new Date(filter?.endDate?.setHours(23, 59, 59, 999));
 
       const typeMatch = !filter.type || item.type?.includes(filter.type);
 

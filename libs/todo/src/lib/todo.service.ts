@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { ApiService, AuthService, ToastService } from '@crown/shared';
 import {
   API_URL,
   Status,
@@ -13,17 +14,16 @@ import {
   tap,
   BehaviorSubject,
   Observable,
-  filter,
   shareReplay,
   of,
+  switchMap,
 } from 'rxjs';
-import { ApiService, AuthService, ToastService } from '@crown/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
-  private http = inject(ApiService);
+  private api = inject(ApiService);
   private authService = inject(AuthService);
   private toast = inject(ToastService);
 
@@ -43,24 +43,25 @@ export class TodoService {
   }
 
   constructor() {
-    this.data$().subscribe();
+    this.initializeDataFetch$().subscribe();
   }
 
-  data$() {
-    return this.authService.tokenEmail$.pipe(
-      catchError((err) => {
-        console.log('Could not get token', err);
-        this.toast.showError('Błąd autoryzacji', 'Could not get token');
-
-        return throwError(err);
+  initializeDataFetch$() {
+    return this.api.tokenEmail$.pipe(
+      switchMap((tokenEmail) => {
+        if (tokenEmail) {
+          return this.fetchAll$();
+        } else {
+          return of([]);
+        }
       }),
-      filter((x) => !!x)
+      shareReplay()
     );
   }
 
   fetchAll$() {
     if (!this.dataLoaded) {
-      return this.http.get<Todo[]>(this.URL).pipe(
+      return this.api.get<Todo[]>(this.URL).pipe(
         tap(() => (this.dataLoaded = true)),
         tap((todos: Todo[]) => this._todosSubj.next(todos)),
         shareReplay(1)
@@ -70,7 +71,7 @@ export class TodoService {
   }
 
   create$(changes?: Partial<Todo>) {
-    return this.http.post<Todo>(this.URL, changes).pipe(
+    return this.api.post<Todo>(this.URL, changes).pipe(
       tap((todo) => {
         const todos: Todo[] = [...this._todosSubj.value, todo];
         this._todosSubj.next(todos);
@@ -89,7 +90,7 @@ export class TodoService {
     newTodos[index] = newTodo;
     this._todosSubj.next(newTodos);
 
-    return this.http.put<Todo>(`${this.URL}/${id}`, changes).pipe(
+    return this.api.put<Todo>(`${this.URL}/${id}`, changes).pipe(
       catchError((err) => {
         const message = `Could not edit Todo: ${changes.id}`;
         this.toast.showError('Błąd edycji', `Nie poszło z ${changes.title}`);

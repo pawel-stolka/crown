@@ -3,17 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { DetailsTabComponent } from '../../components/tabs/details-tab/details-tab.component';
 import { GroupsTabComponent } from '../../components/tabs/groups-tab/groups-tab.component';
-import {
-  EMPTY_STRING,
-  Money,
-  MoneyFilter,
-  MoneyGroup,
-  MonthsCategories,
-  compareBy,
-  dialogConfig,
-  groupTypePrices,
-  uniqueCategories,
-} from '@crown/data';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -27,6 +16,18 @@ import { DeleteDialogComponent } from '../../components/dialogs/delete-money-dia
 import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit-money-dialog.component';
 import { TabsContainerComponent } from '../tabs-container/tabs-container.component';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
+import { DateRangeComponent } from '../../components/date-range/date-range.component';
+import {
+  EMPTY_STRING,
+  Money,
+  MoneyFilter,
+  MoneyGroup,
+  MonthsCategories,
+  compareBy,
+  dialogConfig,
+  groupTypePrices,
+  uniqueCategories,
+} from '@crown/data';
 
 @Component({
   selector: 'crown-money-container',
@@ -38,6 +39,7 @@ import { DataFilterComponent } from '../../components/data-filter/data-filter.co
     GroupsTabComponent,
     DetailsTabComponent,
     YearSelectorComponent,
+    DateRangeComponent,
     DataFilterComponent,
   ],
   templateUrl: './money-container.component.html',
@@ -74,6 +76,10 @@ export class MoneyContainerComponent {
       this.dataSource.paginator = this.paginator;
     })
   );
+
+  get currentYear() {
+    return this.moneyService.currentYear;
+  }
 
   // TODO: to children?
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
@@ -144,11 +150,15 @@ export class MoneyContainerComponent {
   }
 
   filterBy(filter: MoneyFilter) {
-    let currFilters = {
-      ...this.currentFilters,
-      filter,
-    };
-    this.moneyService.updateFilters(currFilters);
+    if (!filter.startDate && !filter.endDate) {
+      filter.year = this.currentYear ?? undefined;
+    }
+
+    this.moneyService.updateFilters(filter);
+  }
+
+  yearFilterOn() {
+    return !!this.moneyService.yearFilterOn;
   }
 
   // --- CRUD ---

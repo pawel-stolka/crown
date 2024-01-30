@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChartComponent } from './chart.component';
+import { DateRangeComponent } from './date-range.component';
 
-xdescribe('ChartComponent', () => {
-  let component: ChartComponent;
-  let fixture: ComponentFixture<ChartComponent>;
+describe('DateRangeComponent', () => {
+  let component: DateRangeComponent;
+  let fixture: ComponentFixture<DateRangeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChartComponent],
+      imports: [DateRangeComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ChartComponent);
+    fixture = TestBed.createComponent(DateRangeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
