@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Money" ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP NOT NULL;

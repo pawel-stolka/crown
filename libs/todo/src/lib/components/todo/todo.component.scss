@@ -60,7 +60,7 @@ mat-card {
   justify-content: center;
 
   &-critical {
-    color: red;
+    color: $error;
     font-weight: bold;
   }
   &-high {
@@ -69,20 +69,21 @@ mat-card {
   }
 
   &-medium {
-    color: rgb(255, 136, 0);
+    color: $warn-light;
   }
 
   &-unknown {
-    color: white;
+    // color: white;
     font-size: 0.85em;
   }
 
   &-low {
-    color: grey;
+    color: $grey;
   }
 
   &-very-low {
     color: rgb(175, 175, 175);
+    color: $row2;
   }
 }
 
@@ -119,14 +120,6 @@ mat-card-content {
   margin: 10px;
 }
 
-.todo {
-  color: $danger;
-
-  &-layer {
-    background-color: $demo-primary-background;
-  }
-}
-
 .edit {
   display: flex;
   padding: 0 5px;
@@ -140,10 +133,19 @@ mat-card-content {
   }
 }
 
+.todo {
+  color: $danger;
+
+  &-layer {
+    background-color: $demo-primary-background;
+  }
+}
+
 .in_progress {
   color: $warning;
   &-layer {
-    background-color: $warning;
+    background-color: $demo-secondary;
+    background-color: $demo-accent1;
   }
 }
 
@@ -151,6 +153,7 @@ mat-card-content {
   color: $success;
   &-layer {
     background-color: $demo-accent1;
+    background-color: $success;
   }
 }
 

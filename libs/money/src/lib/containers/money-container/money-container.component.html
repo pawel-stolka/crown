@@ -1,27 +1,13 @@
 <div class="actions">
   <div class="row">
-    <div class="filters">
-      <div class="dateRange">
-        <ng-container *ngIf="!dateRanged; then year; else range">
-        </ng-container>
-      </div>
-
-      <!-- <div class="type-filter">
-        <crown-data-filter (filter)="applyDataFilter($event)"></crown-data-filter>
-      </div> -->
-
-      <ng-template #year>
-        <div class="dateRange2" *ngIf="allYears$ | async as allYears">
-          <crown-year-selector
-            *ngIf="allYears.length"
-            [year]="currentYear$ | async"
-            [allYears]="allYears"
-            (currentYear)="filterByYear($event)"
-          ></crown-year-selector>
-        </div>
-      </ng-template>
-
-      <ng-template #range>TODO: #range...</ng-template>
+    <div class="date-selectors" *ngIf="allYears$ | async as allYears">
+      <crown-year-selector
+        *ngIf="yearFilterOn() && allYears.length"
+        [year]="currentYear$ | async"
+        [allYears]="allYears"
+        (currentYear)="filterByYear($event)"
+      ></crown-year-selector>
+      <crown-date-range *ngIf="allYears.length" (dateRange)="filterBy($event)"></crown-date-range>
     </div>
 
     <div class="add">
@@ -30,10 +16,29 @@
       </button>
     </div>
   </div>
+
+  <ng-container *ngIf="filters$ | async as filters">
+    <div class="filters-message" *ngIf="filters.startDate || filters.endDate">
+      <span *ngIf="filters.startDate && !filters.endDate"
+        >Wszystko od: <b>{{ filters.startDate | date : 'dd.MM.yyyy' }}</b></span
+      >
+      <span *ngIf="!filters.startDate && filters.endDate"
+        >Wszystko do: <b>{{ filters.endDate | date : 'dd.MM.yyyy' }}</b></span
+      >
+      <span *ngIf="filters.startDate && filters.endDate"
+        >Pomiędzy <b>{{ filters.startDate | date : 'dd.MM.yyyy' }}</b> a
+        <b>{{ filters.endDate | date : 'dd.MM.yyyy' }}</b></span
+      >
+    </div>
+  </ng-container>
 </div>
 
+<ng-container *ngIf="monthsData$ | async as data">
+  <crown-tabs-container
+    *ngIf="data.total; else nothing"
+    [data]="data"
+    [money]="(filteredMoney$ | async) || undefined"
+  ></crown-tabs-container>
+</ng-container>
 
-<crown-tabs-container
-  [data]="monthsData$ | async"
-  [money]="(filteredMoney$ | async) || undefined"
-></crown-tabs-container>
+<ng-template #nothing> Nic nie znaleziono. </ng-template>
