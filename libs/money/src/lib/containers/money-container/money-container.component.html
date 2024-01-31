@@ -7,7 +7,10 @@
         [allYears]="allYears"
         (currentYear)="filterByYear($event)"
       ></crown-year-selector>
-      <crown-date-range *ngIf="allYears.length" (dateRange)="filterBy($event)"></crown-date-range>
+      <crown-date-range
+        *ngIf="allYears.length"
+        (dateRange)="filterBy($event)"
+      ></crown-date-range>
     </div>
 
     <div class="add">
@@ -16,6 +19,14 @@
       </button>
     </div>
   </div>
+  <ng-container *ngIf="allUsers$ | async as totalUsers">
+    <div *ngIf="totalUsers.length > 1" class="row">
+      <crown-active-users-selector
+        [users]="totalUsers"
+        (currentUser)="filterByUser($event)"
+      ></crown-active-users-selector>
+    </div>
+  </ng-container>
 
   <ng-container *ngIf="filters$ | async as filters">
     <div class="filters-message" *ngIf="filters.startDate || filters.endDate">

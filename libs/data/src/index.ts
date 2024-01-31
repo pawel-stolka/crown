@@ -44,3 +44,4 @@ export * from './lib/functions/uniqueCategories';
 export * from './lib/functions/groupTypePrices';
 export * from './lib/functions/chartColors';
 export * from './lib/functions/convertHexToRGBA';
+export * from './lib/functions/getColorFrom';

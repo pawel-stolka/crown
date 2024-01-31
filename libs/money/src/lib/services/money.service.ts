@@ -42,11 +42,26 @@ export class MoneyService {
     new BehaviorSubject<MoneyFilter>({});
   private _messageSubj = new BehaviorSubject(EMPTY_STRING);
   private _currentYearSubj = new BehaviorSubject<number | null>(null);
+  private _activeUsersSubj = new BehaviorSubject<string[]>([]);
 
   money$ = this._moneySubj.asObservable();
   filters$ = this._filterSubj.asObservable();
   currentYear$ = this._currentYearSubj.asObservable();
   message$ = this._messageSubj.asObservable();
+
+  allUsers$ = this.money$.pipe(
+    map((money) => [...new Set(money.map((m) => m.userId))]),
+    tap((users) => console.log('[allUsers]', users)),
+    shareReplay()
+  );
+
+  activeUsers$: Observable<string[]> = this._activeUsersSubj.asObservable();
+
+  setActiveUsers(users: string[]) {
+    console.log('[setActiveUsers]', users);
+
+    this._activeUsersSubj.next(users);
+  }
 
   allYears$ = this.money$.pipe(
     map((money) => [
@@ -61,8 +76,20 @@ export class MoneyService {
 
   filteredMoney$: Observable<Money[]> = combineLatest([
     this.money$,
+    this.activeUsers$,
     this.filters$,
-  ]).pipe(map(([data, filters]) => this.filterMoney(data, filters)));
+  ]).pipe(map(([data, users, filters]) => {
+    let usersData = data.filter(d => {
+      // console.log('[users]', users);
+
+      let res = users?.includes(d.userId)
+      console.log('%c[users, d.userId, res]', Colors.ORANGERED, users, d.userId, res);
+
+      return res
+    })
+    let money = this.filterMoney(usersData, filters)
+    return money
+  }));
 
   moneyGroups$: Observable<MoneyGroup[]> = this.filteredMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))

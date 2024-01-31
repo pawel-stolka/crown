@@ -17,6 +17,7 @@ import { EditMoneyDialog } from '../../components/dialogs/edit-money-dialog/edit
 import { TabsContainerComponent } from '../tabs-container/tabs-container.component';
 import { DataFilterComponent } from '../../components/data-filter/data-filter.component';
 import { DateRangeComponent } from '../../components/date-range/date-range.component';
+import { ActiveUsersSelectorComponent } from '../../components/active-users-selector/active-users-selector.component';
 import {
   EMPTY_STRING,
   Money,
@@ -41,13 +42,14 @@ import {
     YearSelectorComponent,
     DateRangeComponent,
     DataFilterComponent,
+    ActiveUsersSelectorComponent,
   ],
   templateUrl: './money-container.component.html',
   styleUrl: './money-container.component.scss',
 })
 export class MoneyContainerComponent {
-  @Input() data: MonthsCategories | null = {} as MonthsCategories;
-  @Input() money: any;
+  data: MonthsCategories | null = {} as MonthsCategories;
+  money!: Money;
 
   dataSource!: MatTableDataSource<Money>;
 
@@ -67,6 +69,8 @@ export class MoneyContainerComponent {
 
   allYears$ = this.moneyService.allYears$;
   currentYear$ = this.moneyService.currentYear$;
+
+  allUsers$ = this.moneyService.allUsers$;
 
   moneyGroups$ = this.moneyService.moneyGroups$;
   filteredMoney$ = this.moneyService.filteredMoney$.pipe(
@@ -88,6 +92,12 @@ export class MoneyContainerComponent {
   applyDataFilter(event: any) {
     console.log('[TODO: this.applyDataFilter]', event);
     // this.moneyService.updateFilters({type: event})
+  }
+
+  filterByUser(users: any) {
+    console.log('[filterByUser]', users);
+
+    this.moneyService.setActiveUsers(users);
   }
 
   constructor(

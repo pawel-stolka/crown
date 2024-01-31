@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Colors, Money, dialogConfig } from '@crown/data';
+import { Colors, Money, dialogConfig, getColorFrom } from '@crown/data';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -19,8 +19,7 @@ import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dia
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
 import { MaterialModule } from '@crown/material';
-import hash from 'string-hash';
-import { TinyColor } from '@ctrl/tinycolor';
+
 
 @Injectable()
 export class CustomMatPaginatorIntl extends MatPaginatorIntl {
@@ -140,6 +139,4 @@ export class DetailsTabComponent {
   }
 }
 
-function getColorFrom(text: string, alpha = 1) {
-  return new TinyColor({ h: hash(text) % 360, s: 100, l: 50, a: alpha });
-}
+

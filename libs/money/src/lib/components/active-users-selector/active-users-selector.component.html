@@ -1,0 +1,10 @@
+<p>active-users-selector works!</p>
+<mat-form-field appearance="outline">
+  <mat-label>user</mat-label>
+  <mat-select [value]="user" (selectionChange)="changeUser($event)">
+    @for (user of users; track user) {
+    <mat-option [value]="user">{{ user }}</mat-option>
+    }
+    <mat-option [value]="users">wszyscy </mat-option>
+  </mat-select>
+</mat-form-field>
