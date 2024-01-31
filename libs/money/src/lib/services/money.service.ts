@@ -32,9 +32,6 @@ import {
   providedIn: 'root',
 })
 export class MoneyService {
-  // TODO: fix tests to inject these:
-  // private api = inject(ApiService);
-  // private toast = inject(ToastService);
   private URL = `${API_URL}/api/money`;
 
   private _moneySubj = new BehaviorSubject<Money[]>([]);
@@ -50,18 +47,10 @@ export class MoneyService {
   message$ = this._messageSubj.asObservable();
 
   allUsers$ = this.money$.pipe(
-    map((money) => [...new Set(money.map((m) => m.userId))]),
-    tap((users) => console.log('[allUsers]', users)),
-    shareReplay()
+    map((money) => [...new Set(money.map((m) => m.userId))])
   );
 
   activeUsers$: Observable<string[]> = this._activeUsersSubj.asObservable();
-
-  setActiveUsers(users: string[]) {
-    console.log('[setActiveUsers]', users);
-
-    this._activeUsersSubj.next(users);
-  }
 
   allYears$ = this.money$.pipe(
     map((money) => [
@@ -78,18 +67,14 @@ export class MoneyService {
     this.money$,
     this.activeUsers$,
     this.filters$,
-  ]).pipe(map(([data, users, filters]) => {
-    let usersData = data.filter(d => {
-      // console.log('[users]', users);
-
-      let res = users?.includes(d.userId)
-      console.log('%c[users, d.userId, res]', Colors.ORANGERED, users, d.userId, res);
-
-      return res
+  ]).pipe(
+    map(([data, users, filters]) => {
+      let usersData = users.length
+        ? data.filter((d) => users?.includes(d.userId))
+        : data;
+      return this.filterMoney(usersData, filters);
     })
-    let money = this.filterMoney(usersData, filters)
-    return money
-  }));
+  );
 
   moneyGroups$: Observable<MoneyGroup[]> = this.filteredMoney$.pipe(
     map((data: Money[]) => this.groupMoney(data).sort(compareBy('period')))
@@ -111,12 +96,12 @@ export class MoneyService {
     return this._messageSubj.value;
   }
 
-  constructor(private api: ApiService, private toast: ToastService) {
-    this.initializeDataFetch$().subscribe();
-  }
-
   get yearFilterOn() {
     return !!this.filters.year;
+  }
+
+  constructor(private api: ApiService, private toast: ToastService) {
+    this.initializeDataFetch$().subscribe();
   }
 
   initializeDataFetch$() {
@@ -154,6 +139,10 @@ export class MoneyService {
       // tap(() => this._pendingFetchSubj.next(false)),
       tap((money: Money[]) => this.updateMoney(money))
     );
+  }
+
+  setActiveUsers(users: string[]) {
+    this._activeUsersSubj.next(users);
   }
 
   updateMoney(money: Money[]) {
@@ -241,7 +230,6 @@ export class MoneyService {
       tap((money: Money) => {
         const newMoneyList = this.money.filter((x) => x.id !== money.id);
         this.toast.showSuccess('Usunięcie', `${money.type} ${money.price}`);
-        // this._moneySubj.next(newMoneyList);
         this.updateMoney(newMoneyList);
       })
     );
@@ -280,74 +268,6 @@ export class MoneyService {
       const yearMatch = !filter.year || itemDate.getFullYear() === filter.year;
 
       return afterStartDate && beforeEndDate && yearMatch;
-    });
-  }
-
-  __filterMoney(data: Money[], filter: MoneyFilter): Money[] {
-    console.log('%c[this.filterMoney]', Colors.RED, filter);
-
-    return data.filter((item) => {
-      const itemDate = new Date(item.createdAt);
-
-      const afterStartDate =
-        !filter.startDate || itemDate >= new Date(filter.startDate);
-
-      let beforeEndDate = true;
-      if (filter.endDate) {
-        console.log('%c[filter.endDate]', Colors.MAG, filter.endDate);
-
-        if (filter.endDate instanceof Date) {
-          const endDateWithTime = new Date(filter.endDate);
-          endDateWithTime.setHours(23, 59, 59, 999);
-          beforeEndDate = itemDate <= endDateWithTime;
-        } else {
-          console.log('filter.endDate is not a Date object', filter.endDate);
-          try {
-            const endDateWithTime = new Date(filter.endDate);
-            endDateWithTime.setHours(23, 59, 59, 999);
-            beforeEndDate = itemDate <= endDateWithTime;
-            console.log(
-              '%c[endDateWithTime]',
-              Colors.BLACK,
-              endDateWithTime,
-              beforeEndDate
-            );
-          } catch (error) {
-            console.log(error);
-          }
-          beforeEndDate = false;
-        }
-      }
-
-      const typeMatch = !filter.type || item.type?.includes(filter.type);
-
-      const yearMatch = !filter.year || itemDate.getFullYear() === filter.year;
-
-      return afterStartDate && beforeEndDate && typeMatch && yearMatch;
-    });
-  }
-
-  _filterMoney(data: Money[], filter: MoneyFilter): Money[] {
-    console.log('%c[this.filterMoney]', Colors.RED, filter);
-    return data.filter((item) => {
-      // console.log('[filterMoney]', item);
-
-      const afterStartDate =
-        !filter.startDate || new Date(item.createdAt) >= filter.startDate;
-
-      console.log('B4 endDate', !!filter.endDate);
-
-      const beforeEndDate =
-        !filter.endDate ||
-        new Date(item.createdAt) <=
-          new Date(filter?.endDate?.setHours(23, 59, 59, 999));
-
-      const typeMatch = !filter.type || item.type?.includes(filter.type);
-
-      const yearMatch =
-        !filter.year || new Date(item.createdAt).getFullYear() === filter.year;
-
-      return afterStartDate && beforeEndDate && typeMatch && yearMatch;
     });
   }
 

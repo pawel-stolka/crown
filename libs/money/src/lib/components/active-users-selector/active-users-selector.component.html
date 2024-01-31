@@ -1,7 +1,6 @@
-<p>active-users-selector works!</p>
 <mat-form-field appearance="outline">
   <mat-label>user</mat-label>
-  <mat-select [value]="user" (selectionChange)="changeUser($event)">
+  <mat-select [value]="currentUser$ | async" (selectionChange)="changeUser($event)">
     @for (user of users; track user) {
     <mat-option [value]="user">{{ user }}</mat-option>
     }

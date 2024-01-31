@@ -4,7 +4,7 @@ import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
 import { BehaviorSubject, Observable, map, tap, take } from 'rxjs';
 
 const TEMP_ADMIN_FLAG = true;
-                           @Injectable({
+@Injectable({
   providedIn: 'root',
 })
 export class AuthService {
@@ -45,6 +45,10 @@ export class AuthService {
   logout() {
     this._tokenEmailSubj.next(null);
     localStorage.removeItem(AUTH_TOKEN_EMAIL);
+  }
+
+  getCurrentUser() {
+    return this._tokenEmailSubj.value;
   }
 
   private getApiService() {

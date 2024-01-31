@@ -95,8 +95,6 @@ export class MoneyContainerComponent {
   }
 
   filterByUser(users: any) {
-    console.log('[filterByUser]', users);
-
     this.moneyService.setActiveUsers(users);
   }
 

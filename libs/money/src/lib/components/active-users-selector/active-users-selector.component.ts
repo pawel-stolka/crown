@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -11,6 +10,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { EMPTY_STRING } from '@crown/data';
+import { AuthService } from '@crown/shared';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'crown-active-users-selector',
@@ -21,8 +22,6 @@ import { EMPTY_STRING } from '@crown/data';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActiveUsersSelectorComponent implements OnChanges {
-
-  // @Input() users: string[] = []
   private _users: string[] = [];
   @Input() set users(value: string[]) {
     this.user = value[0];
@@ -31,25 +30,22 @@ export class ActiveUsersSelectorComponent implements OnChanges {
   get users() {
     return this._users;
   }
+
   @Input() user: string = EMPTY_STRING;
   @Output() currentUser = new EventEmitter();
 
-  extendedUsers = [];
-  // extendedUsers = this.users.length > 1
-  //   ? this.users
+  currentUser$ = this.auth.tokenEmail$.pipe(
+    map((tokenEmail) => tokenEmail?.email)
+  );
+
+  constructor(private auth: AuthService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-    console.log('[this.users | this.user]', this.users, this.user);
-    // this.user = this.users[0];
-    // this.changeUser(this.user);
     this.currentUser.emit(this.user);
   }
 
   changeUser(event: any) {
     this.user = event.value;
-    console.log('[changeUser]', this.user);
     this.currentUser.emit(this.user);
   }
 }
