@@ -129,13 +129,13 @@ export class MoneyContainerComponent {
     this.filters.valueChanges
       .pipe(
         tap((filters) => {
-          let mf: MoneyFilter = {
+          let filter: MoneyFilter = {
             startDate: filters.startDate
               ? new Date(filters.startDate)
               : undefined,
             endDate: filters.endDate ? new Date(filters.endDate) : undefined,
           };
-          this.moneyService.updateFilters(mf);
+          this.moneyService.updateFilters(filter);
         })
       )
       .subscribe();

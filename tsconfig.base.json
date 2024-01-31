@@ -26,6 +26,7 @@
       "@crown/sandbox": ["libs/sandbox/src/index.ts"],
       "@crown/shared": ["libs/shared/src/index.ts"],
       "@crown/todo": ["libs/todo/src/index.ts"],
+      "@crown/user": ["libs/user/src/index.ts"],
       "@styles": ["apps/crown/src/styles/styles.scss"]
     }
   },

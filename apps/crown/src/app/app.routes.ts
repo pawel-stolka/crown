@@ -28,6 +28,12 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('@crown/todo').then((m) => m.TodoContainerComponent),
   },
+  {
+    path: 'user',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('@crown/user').then((m) => m.UserComponent),
+  },
   // {
   //   path: 'admin',
   //   canActivate: [AdminGuard],

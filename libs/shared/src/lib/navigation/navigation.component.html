@@ -11,6 +11,15 @@
   </button>
   <button
     mat-stroked-button
+    routerLink="user"
+    routerLinkActive="active-link"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="toggleNav()"
+  >
+    user
+  </button>
+  <button
+    mat-stroked-button
     routerLink="sandbox"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
