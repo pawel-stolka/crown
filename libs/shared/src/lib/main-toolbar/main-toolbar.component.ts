@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@crown/material';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'libs/shared/src/lib/services/auth/auth.service';
-import { ToastService } from '../toaster/service/toast.service';
-import { NotificationMessage, NotificationType } from '@crown/data';
 
 @Component({
   selector: 'crown-main-toolbar',
@@ -16,7 +14,6 @@ import { NotificationMessage, NotificationType } from '@crown/data';
 export class MainToolbarComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
-  private toast = inject(ToastService);
 
   tokenEmail$ = this.authService.tokenEmail$;
   isLoggedIn$ = this.authService.isLoggedIn$;

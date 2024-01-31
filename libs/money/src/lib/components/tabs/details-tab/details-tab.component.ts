@@ -48,7 +48,7 @@ export class CustomMatPaginatorIntl extends MatPaginatorIntl {
 
 const COLUMNS_RENDERED = [
   // TODO: additional users make optional
-  'userId',
+  // 'userId',
   'createdAt',
   'type',
   'price',

@@ -69,7 +69,7 @@ export class MoneyService {
     this.filters$,
   ]).pipe(
     map(([data, users, filters]) => {
-      let usersData = users.length
+      let usersData = users?.length
         ? data.filter((d) => users?.includes(d.userId))
         : data;
       return this.filterMoney(usersData, filters);
@@ -128,7 +128,7 @@ export class MoneyService {
         return throwError(err);
       }),
       // TODO: isDeleted toggle for admin?
-      // map((money: Money[]) => money.filter((x) => !x.isDeleted)),
+      map((money: Money[]) => money.filter((x) => !x.isDeleted)),
       map((money: Money[]) => money.sort(compareBy('period', false))),
       map((money) =>
         money.map((m) => ({

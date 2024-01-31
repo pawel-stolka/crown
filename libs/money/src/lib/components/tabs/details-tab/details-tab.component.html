@@ -9,19 +9,17 @@
     matSortDirection="asc"
     multiTemplateDataRows
   >
-  <ng-container matColumnDef="userId">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>user</th>
+    <ng-container matColumnDef="userId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>user</th>
 
-    <td mat-cell *matCellDef="let el">
+      <!-- <td mat-cell *matCellDef="let el">
       <span>{{ el.userId }}</span>
-      <!-- <span class="blue">{{ el.type | uppercase }}</span> -->
-    </td>
-  </ng-container>
+    </td> -->
+    </ng-container>
     <ng-container matColumnDef="createdAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>data zakupu</th>
       <td mat-cell *matCellDef="let el">
         {{ el.createdAt | date : 'dd.MM.yyyy' }}
-        <!-- {{ el.createdAt | noYear }} -->
       </td>
     </ng-container>
 
@@ -30,7 +28,6 @@
 
       <td mat-cell *matCellDef="let el">
         <span [ngStyle]="getClass(el.type)">{{ el.type }}</span>
-        <!-- <span class="blue">{{ el.type | uppercase }}</span> -->
       </td>
     </ng-container>
 
@@ -63,21 +60,18 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>data wpisu</th>
       <td mat-cell *matCellDef="let el">
         {{ el.updatedAt | date : 'dd.MM.yyyy' }}
-        <!-- {{ el.updatedAt | noYear }} -->
       </td>
     </ng-container>
 
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let el">
-        <!-- <div class="actions-buttons"> -->
         <button mat-flat-button (click)="edit(el)">
           <mat-icon color="primary">edit</mat-icon>
         </button>
         <button mat-flat-button (click)="remove(el)">
           <mat-icon color="warn">close</mat-icon>
         </button>
-        <!-- </div> -->
       </td>
     </ng-container>
 
