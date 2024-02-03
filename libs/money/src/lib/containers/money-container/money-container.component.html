@@ -28,6 +28,8 @@
     </div>
   </ng-container>
 
+  <crown-data-filter (filter)="applyDataFilter($event)"></crown-data-filter>
+
   <ng-container *ngIf="filters$ | async as filters">
     <div class="filters-message" *ngIf="filters.startDate || filters.endDate">
       <span *ngIf="filters.startDate && !filters.endDate"

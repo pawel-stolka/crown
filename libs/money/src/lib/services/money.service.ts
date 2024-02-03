@@ -267,7 +267,9 @@ export class MoneyService {
 
       const yearMatch = !filter.year || itemDate.getFullYear() === filter.year;
 
-      return afterStartDate && beforeEndDate && yearMatch;
+      const typeMatch = !filter.type || item.type?.includes(filter.type)
+
+      return afterStartDate && beforeEndDate && yearMatch && typeMatch;
     });
   }
 

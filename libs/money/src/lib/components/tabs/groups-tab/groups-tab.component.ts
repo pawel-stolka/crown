@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PriceByTypePipe, SumByMonthPipe } from '@crown/data';
+import { MonthsCategories, PriceByTypePipe, SumByMonthPipe } from '@crown/data';
 import { DoughnutComponent } from '../../doughnut/doughnut.component';
 import { BudgetComponent } from '../../budget/budget.component';
 
@@ -19,6 +19,5 @@ import { BudgetComponent } from '../../budget/budget.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupsTabComponent {
-  // TODO: no any
-  @Input() data: any;
+  @Input() data: MonthsCategories | null | undefined; // = {} as MonthsCategories;
 }

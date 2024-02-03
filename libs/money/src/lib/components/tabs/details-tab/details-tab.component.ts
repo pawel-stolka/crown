@@ -9,7 +9,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Colors, Money, dialogConfig, getColorFrom } from '@crown/data';
+import { Money, colorize, dialogConfig } from '@crown/data';
+import { MaterialModule } from '@crown/material';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,8 +19,6 @@ import { filter } from 'rxjs';
 import { AddDialogComponent } from '../../dialogs/add-money-dialog/add-money-dialog.component';
 import { DeleteDialogComponent } from '../../dialogs/delete-money-dialog/delete-money-dialog.component';
 import { EditMoneyDialog } from '../../dialogs/edit-money-dialog/edit-money-dialog.component';
-import { MaterialModule } from '@crown/material';
-
 
 @Injectable()
 export class CustomMatPaginatorIntl extends MatPaginatorIntl {
@@ -58,11 +57,6 @@ const COLUMNS_RENDERED = [
   'action',
 ];
 
-const COLUMNS_WIDTHS = {
-  narrow: '5%',
-  wide: '15%',
-};
-
 @Component({
   selector: 'crown-details-tab',
   standalone: true,
@@ -99,12 +93,7 @@ export class DetailsTabComponent {
   }
 
   getClass(text: string) {
-    return {
-      border: `2px solid ${getColorFrom(text)}`,
-      'background-color': `${getColorFrom(text, 0.5)}`,
-      'border-radius': '10px',
-      padding: '5px',
-    };
+    return colorize(text);
   }
 
   add() {
@@ -138,5 +127,3 @@ export class DetailsTabComponent {
       });
   }
 }
-
-

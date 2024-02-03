@@ -10,7 +10,6 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { ToastService } from '../../toaster/service/toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +18,6 @@ export class ApiService {
   private http = inject(HttpClient);
   private injector = inject(Injector);
   private authService!: AuthService;
-  private toast = inject(ToastService);
 
   tokenEmail$ = this.getAuthService();
 
@@ -66,7 +64,8 @@ export class ApiService {
               // this.toast.showError('Błąd sieci', message);
               console.log(`%c${message}`, Colors.RED, err);
               return throwError(err);
-            })
+            }),
+            shareReplay()
           );
       })
     );

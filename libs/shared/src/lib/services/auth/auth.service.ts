@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { API_URL, AUTH_TOKEN_EMAIL, TokenEmail } from '@crown/data';
-import { BehaviorSubject, Observable, map, tap, take } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap, take, shareReplay } from 'rxjs';
 import { ApiService } from '../api/api.service';
 
 const TEMP_ADMIN_FLAG = true;
@@ -38,7 +38,7 @@ export class AuthService {
           this._tokenEmailSubj.next(res);
 
           localStorage.setItem(AUTH_TOKEN_EMAIL, JSON.stringify(res));
-        })
+        }),
         // shareReplay()
       );
   }

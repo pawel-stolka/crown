@@ -27,3 +27,24 @@ mat-dialog-actions {
   align-items: baseline;
   padding: 10px 0;
 }
+
+.existingData {
+  border: 3px solid $warn;
+  background-color: $warn-lighter;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 5px;
+  }
+
+  .values {
+    align-items: flex-start;
+    font-weight: bolder;
+  }
+}

@@ -12,6 +12,7 @@ export const MIN_TEXT_LENGTH = 3;
 export const MAX_TEXT_LENGTH = 25;
 export const MIN_PRICE = 0.01;
 export const MAX_PRICE = 1_000_000;
+export const PRICE_MARGIN = 0.99;
 
 export const MY_DATE_FORMATS = {
   parse: {

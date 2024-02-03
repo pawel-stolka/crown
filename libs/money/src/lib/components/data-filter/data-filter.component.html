@@ -1,19 +1,17 @@
-<mat-form-field appearance="outline" class="all-width" [ngClass]="{'activeSearch': hasContent}">
+<mat-form-field
+  appearance="outline"
+  class="all-width"
+  [ngClass]="{ activeSearch: hasContent }"
+>
   <mat-icon matPrefix>search</mat-icon>
-  <!-- placeholder="filtr..." -->
   <mat-label>Filtruj</mat-label>
-  <!-- [class.white-background]="hasContent" -->
   <input
     matInput
     type="text"
-
     [value]="filterValue$ | async"
     (input)="applyFilter($event)"
   />
-  <mat-icon
-    matSuffix
-    *ngIf="filterValue$ | async"
-    (click)="clearSearch($event)"
+  <mat-icon matSuffix *ngIf="filterValue$ | async" (click)="clearSearch($event)"
     >close</mat-icon
   >
 </mat-form-field>

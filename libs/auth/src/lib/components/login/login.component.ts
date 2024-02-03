@@ -40,7 +40,7 @@ export class LoginComponent {
     const { email, password } = this.form.value;
     this.auth.login(email, password).subscribe(
       () => {
-        this.toast.showInfo('Super!', 'Witaj na pokładzie :)');
+        this.toast.showInfo('Super!', 'Witaj :)');
         this.router.navigateByUrl('/money'); // TODO
       },
       (err) => {

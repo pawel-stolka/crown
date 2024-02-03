@@ -10,7 +10,7 @@ $max-toasts: 10;
   max-width: 390px;
   height: auto;
   z-index: 4000;
-  right: 10vw;
+  right: 10px;
 }
 
 .toast {
@@ -26,21 +26,25 @@ $max-toasts: 10;
   &.info {
     background-color: $demo-accent1;
     color: $white;
+    color: $black;
   }
 
   &.success {
     background-color: $success;
     color: $white;
+    color: $black;
   }
 
   &.error {
     background-color: $warn;
     color: $white;
+    color: $black;
   }
 
   &.warning {
     background-color: $warn-light;
     color: $white;
+    color: $black;
   }
 
   .icon {
@@ -49,6 +53,7 @@ $max-toasts: 10;
     justify-content: center;
     align-items: center;
     color: $white;
+    color: $black;
   }
 
   .content {

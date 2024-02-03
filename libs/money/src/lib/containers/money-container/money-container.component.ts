@@ -19,12 +19,14 @@ import { DataFilterComponent } from '../../components/data-filter/data-filter.co
 import { DateRangeComponent } from '../../components/date-range/date-range.component';
 import { ActiveUsersSelectorComponent } from '../../components/active-users-selector/active-users-selector.component';
 import {
+  Colors,
   EMPTY_STRING,
   Money,
   MoneyFilter,
   MoneyGroup,
   MonthsCategories,
   compareBy,
+  compareMonthBy,
   dialogConfig,
   groupTypePrices,
   uniqueCategories,
@@ -90,8 +92,7 @@ export class MoneyContainerComponent {
   @ViewChild(MatSort, { static: false }) sort: MatSort = new MatSort();
 
   applyDataFilter(event: any) {
-    console.log('[TODO: this.applyDataFilter]', event);
-    // this.moneyService.updateFilters({type: event})
+    this.moneyService.updateFilters({type: event})
   }
 
   filterByUser(users: any) {
@@ -105,18 +106,19 @@ export class MoneyContainerComponent {
     private fb: FormBuilder
   ) {
     this.monthsData$ = this.moneyService.moneyGroups$.pipe(
-      map((groups) => groups.sort(compareBy('period', true))),
+      map((groups) => groups.sort(compareBy('period'))),//, true))),
       map((moneyGroups) => {
         const typePrices = groupTypePrices(moneyGroups);
 
         const summary: MoneyGroup = {
           period: EMPTY_STRING,
-          userId: EMPTY_STRING,
           typePrices,
         };
 
-        const months = [...moneyGroups, summary];
-        const categories = uniqueCategories(moneyGroups);
+        const _moneyGroups = moneyGroups.sort(compareMonthBy('period'))
+        const months = [..._moneyGroups, summary];
+
+        const categories = uniqueCategories(_moneyGroups);
 
         return {
           months,

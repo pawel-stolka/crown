@@ -5,6 +5,22 @@
 <messages></messages> -->
 
 <mat-dialog-content [formGroup]="form">
+  @if (form.hasError('existingData')) {
+  <mat-error> Podobne dane już istnieją!</mat-error>
+  <div class="existingData" *ngIf="existingData$ | async as data">
+    <div>
+      <span>data:</span>
+      <span style="padding: 5px 0">kategoria:</span>
+      <span>cena:</span>
+    </div>
+    <div class="values">
+      <span>{{ data.createdAt | date : 'dd.MM' }}</span>
+      <span [ngStyle]="getStyle(data.type)">{{ data.type }}</span>
+      <span>{{ data.price }}</span>
+    </div>
+  </div>
+
+  }
   <mat-form-field appearance="outline">
     <mat-label>data zakupu</mat-label>
     <input
@@ -95,6 +111,7 @@
 <mat-dialog-actions>
   <button mat-button (click)="close()">zamknij</button>
 
+  @if (!form.hasError('existingData')) {
   <button
     mat-raised-button
     color="primary"
@@ -104,4 +121,9 @@
   >
     dodaj
   </button>
+  } @if (form.hasError('existingData')) {
+  <button mat-raised-button color="warn" #saveButton (click)="save()">
+    Jest OK
+  </button>
+  }
 </mat-dialog-actions>

@@ -17,10 +17,12 @@ import {
   MIN_PRICE,
   MIN_TEXT_LENGTH,
   Money,
+  colorize,
 } from '@crown/data';
 import { MaterialModule } from '@crown/material';
 import { Observable, combineLatest, map, startWith } from 'rxjs';
 import { MoneyService } from '../../../services/money.service';
+import { UniqueMoneyValidator } from '../../../services/unique-money/unique-money.validator';
 
 @Component({
   selector: 'crown-add-money-dialog',
@@ -58,10 +60,17 @@ export class AddDialogComponent implements OnInit {
     return this.form.get('fromWho');
   }
 
+  get uniqueData() {
+    return this.form.get('uniqueData');
+  }
+
+  existingData$ = this.uniqueMoney.existingData$;
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddDialogComponent>,
-    private moneyService: MoneyService
+    private moneyService: MoneyService,
+    private uniqueMoney: UniqueMoneyValidator
   ) {}
 
   ngOnInit() {
@@ -70,29 +79,35 @@ export class AddDialogComponent implements OnInit {
       ? JSON.parse(currentUser).email
       : null;
 
-    this.form = this.fb.group({
-      userId: [email, [Validators.email, Validators.required]],
-      type: [
-        null,
-        [
-          Validators.minLength(MIN_TEXT_LENGTH),
-          Validators.maxLength(MAX_TEXT_LENGTH),
-          Validators.required,
+    this.form = this.fb.group(
+      {
+        userId: [email, [Validators.email, Validators.required]],
+        type: [
+          null,
+          [
+            Validators.minLength(MIN_TEXT_LENGTH),
+            Validators.maxLength(MAX_TEXT_LENGTH),
+            Validators.required,
+          ],
         ],
-      ],
-      price: [
-        null,
-        [
-          Validators.min(MIN_PRICE),
-          Validators.max(MAX_PRICE),
-          Validators.required,
+        price: [
+          null,
+          [
+            Validators.min(MIN_PRICE),
+            Validators.max(MAX_PRICE),
+            Validators.required,
+          ],
         ],
-      ],
-      isVat: [false],
-      isDeleted: [false],
-      fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
-      createdAt: [null, [Validators.required]],
-    });
+        isVat: [false],
+        isDeleted: [false],
+        fromWho: [null, [Validators.maxLength(MAX_TEXT_LENGTH)]],
+        createdAt: [null, [Validators.required]],
+      },
+      {
+        asyncValidators: this.uniqueMoney.validate.bind(this.uniqueMoney),
+        // updateOn: 'blur',
+      }
+    );
 
     this.filteredCategories$ = combineLatest([
       this.getCategories$,
@@ -118,5 +133,9 @@ export class AddDialogComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  getStyle(text: string | undefined) {
+    return colorize(text) ?? null;
   }
 }
