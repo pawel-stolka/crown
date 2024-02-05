@@ -17,14 +17,14 @@ import {
 } from '@crown/shared';
 
 @Component({
-  standalone: true,
-  imports: [
-    MainToolbarComponent,
-    NavigationComponent,
-    RouterModule,
-    MaterialModule,
-    TodoContainerComponent,
-  ],
+  // standalone: true,
+  // imports: [
+  //   MainToolbarComponent,
+  //   NavigationComponent,
+  //   RouterModule,
+  //   MaterialModule,
+  //   TodoContainerComponent,
+  // ],
 
   selector: 'crown-root',
   templateUrl: './app.component.html',
