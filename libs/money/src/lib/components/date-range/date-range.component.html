@@ -1,52 +1,40 @@
-<ng-container *ngIf="!dateRangeEnabled; then selectRange"></ng-container>
+<ng-container *ngIf="dateRangeEnabled; else selectRange">
+  <mat-form-field [ngStyle]="getStyle(startDate)" appearance="outline">
+    <mat-label>Od</mat-label>
+    <input
+      matInput
+      [matDatepicker]="startDatePicker"
+      [(ngModel)]="startDate"
+      (dateChange)="onStartDateChange()"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="startDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+  </mat-form-field>
 
-<mat-form-field
-*ngIf="dateRangeEnabled"
-[ngStyle]="getStyle(startDate)"
-  appearance="outline"
->
-  <mat-label>Od</mat-label>
-  <input
-    matInput
-    [matDatepicker]="startDatePicker"
-    [(ngModel)]="startDate"
-    (dateChange)="onStartDateChange()"
-  />
-  <mat-datepicker-toggle
-    matSuffix
-    [for]="startDatePicker"
-  ></mat-datepicker-toggle>
-  <mat-datepicker #startDatePicker></mat-datepicker>
-</mat-form-field>
-
-<mat-form-field
-*ngIf="dateRangeEnabled"
-[ngStyle]="getStyle(endDate)"
-  appearance="outline"
->
-  <mat-label>Do</mat-label>
-  <input
-    matInput
-    [matDatepicker]="endDatePicker"
-    [(ngModel)]="endDate"
-    (dateChange)="onEndDateChange()"
-  />
-  <mat-datepicker-toggle
-    matSuffix
-    [for]="endDatePicker"
-  ></mat-datepicker-toggle>
-  <mat-datepicker #endDatePicker></mat-datepicker>
-</mat-form-field>
-
-<ng-container *ngIf="!!startDate || !!endDate; then closeRange"></ng-container>
+  <mat-form-field [ngStyle]="getStyle(endDate)" appearance="outline">
+    <mat-label>Do</mat-label>
+    <input
+      matInput
+      [matDatepicker]="endDatePicker"
+      [(ngModel)]="endDate"
+      (dateChange)="onEndDateChange()"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="endDatePicker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="closeDateRange()">
+    Zamknij
+  </button>
+</ng-container>
 
 <ng-template #selectRange>
   <button mat-stroked-button color="primary" (click)="toggleDatePickers()">
     Zakres...
-  </button>
-</ng-template>
-<ng-template #closeRange>
-  <button mat-raised-button color="primary" (click)="closeDateRange()">
-    Zamknij
   </button>
 </ng-template>

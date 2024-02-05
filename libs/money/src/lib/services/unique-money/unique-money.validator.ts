@@ -4,7 +4,7 @@ import {
   AsyncValidator,
   ValidationErrors,
 } from '@angular/forms';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MoneyService } from '../money.service';
 import { Money, PRICE_MARGIN } from '@crown/data';
 
@@ -13,7 +13,8 @@ import { Money, PRICE_MARGIN } from '@crown/data';
 })
 export class UniqueMoneyValidator implements AsyncValidator {
   private _existingDataSubj = new BehaviorSubject<Partial<Money>>({});
-  existingData$: Observable<Partial<Money>> = this._existingDataSubj.asObservable();
+  existingData$: Observable<Partial<Money>> =
+    this._existingDataSubj.asObservable();
 
   get existingData() {
     return this._existingDataSubj.value;
@@ -31,12 +32,12 @@ export class UniqueMoneyValidator implements AsyncValidator {
       price: m.price,
       type: m.type,
       userId: m.userId,
-      fromWho: m.fromWho
+      fromWho: m.fromWho,
     }));
 
     const doesExist = existingMoney.some((money) => {
-      const existingCreatedAt = toDateString(money.createdAt)
-      const formCreatedAt = toDateString(createdAt)
+      const existingCreatedAt = toDateString(money.createdAt);
+      const formCreatedAt = toDateString(createdAt);
 
       const result =
         // money.userId === userId &&
@@ -51,16 +52,11 @@ export class UniqueMoneyValidator implements AsyncValidator {
       return result;
     });
 
-    const response: any = doesExist ? { existingData: this.existingData } : null;
+    const response: any = doesExist
+      ? { existingData: this.existingData }
+      : null;
 
-    return of(response).pipe(
-      // delay(500),
-      tap((validation) => {
-        if (validation) {
-          console.log('validation', validation);
-        }
-      })
-    );
+    return of(response);
   }
 
   registerOnValidatorChange?(fn: () => void): void {}
